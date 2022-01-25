@@ -101,6 +101,8 @@ export default class Lobby extends Vue {
   }
 
   setNewColor(color: string): void {
+    storage.data.color = color;
+    storage.saveData();
     this.$emit('set-new-color', this.currentName, color);
   }
 }

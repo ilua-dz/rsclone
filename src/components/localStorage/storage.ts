@@ -1,11 +1,12 @@
 class Storage {
   public data: {
     name: string;
+    color: string;
   };
 
   constructor() {
     if (!localStorage.getItem('game')) {
-      this.data = { name: '' };
+      this.data = { name: '', color: '' };
       localStorage.setItem('game', JSON.stringify(this.data));
     }
     this.data = JSON.parse(localStorage.getItem('game') as string);

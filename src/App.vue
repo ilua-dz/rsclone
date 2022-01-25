@@ -6,6 +6,7 @@
       @toggle-status="toggleStatus"
       @set-new-color="setColor"
     />
+    <Map />
   </div>
 </template>
 
@@ -13,15 +14,18 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import Lobby from './components/Lobby.vue';
+import Map from './components/Map/Map.vue';
+
 // import HelloWorld from './components/HelloWorld.vue';
 
 @Component({
   components: {
     Lobby,
+    Map,
     // HelloWorld,
   },
 
-  computed: { ...mapGetters(['getUsers', 'getColors']) },
+  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways']) },
 
   methods: {
     addUser(name: string, usedColors: string[]) {
