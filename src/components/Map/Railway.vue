@@ -4,7 +4,8 @@
     :transform="transform"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
-    :style="{ fill: isHover ? userColor : 'transparent' }"
+    :class="{ hovered: isHover }"
+    :style="{ '--user-color': userColor }"
   >
     <Train :key="train.x" v-for="train in railway.train" :train="train" />
   </g>
@@ -47,12 +48,6 @@ export default class Railway extends Vue {
     if (!color) color = '';
     return color;
   }
-
-  // storage = new Storage();
-
-  // get userColor(): string {
-  //   return this.storage.data.color;
-  // }
 }
 </script>
 
@@ -66,7 +61,9 @@ export default class Railway extends Vue {
   }
 }
 
-.hover {
-  fill: var(--userColor);
+.hovered {
+  fill: var(--user-color);
+  filter: drop-shadow(5px 5px 15px var(--user-color));
+  stroke: rgb(0, 0, 0);
 }
 </style>
