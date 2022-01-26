@@ -22,16 +22,21 @@
           @change-color="setNewColor"
         ></color-button>
         <p>{{ user.name }}</p>
-        <button
-          v-if="user.name === currentName"
-          :class="['btn', !user.ready ? 'btn-not' : 'btn-ready']"
-          @click="toggleStatus"
-        >
-          Ready
-        </button>
-        <p v-else :class="['status', !user.ready ? 'status-not' : 'status-ready']">
+        <p :class="['status', !user.ready ? 'status-not' : 'status-ready']">
           {{ user.ready ? 'Готов играть!' : 'Еще не готов...' }}
         </p>
+        <Btn
+          title="Готов"
+          v-show="user.name === currentName"
+          :class="[!user.ready ? 'btn-accept' : 'btn-decline']"
+          :method="toggleStatus"
+        />
+        <Btn
+          title="Покинуть лобби"
+          v-show="user.name === currentName"
+          class="btn-decline"
+          :method="quitLobby"
+        />
       </li>
     </ul>
     <p v-else>Игроков пока нет...</p>
@@ -43,12 +48,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ColorButton from './ColorButton/ColorButton.vue';
 import userInterface from './interface/user';
 import Storage from './localStorage/storage';
+import Btn from './Button/Btn.vue';
 
 const storage = new Storage();
 
 @Component({
   components: {
     'color-button': ColorButton,
+    Btn,
   },
 })
 export default class Lobby extends Vue {
@@ -105,6 +112,10 @@ export default class Lobby extends Vue {
     storage.saveData();
     this.$emit('set-new-color', this.currentName, color);
   }
+
+  quitLobby(): void {
+    this.$socket.emit('deleteUser', this.userName);
+  }
 }
 </script>
 
@@ -115,15 +126,20 @@ ul {
 }
 li {
   display: flex;
-  width: 600px;
+  width: 800px;
   gap: 50px;
   justify-content: start;
   margin: 10px 0 0 80px;
   font-weight: bold;
+  align-items: center;
 }
 
 .status {
   font-weight: normal;
+  display: block;
+  width: 150px;
+  text-align: center;
+
   &-not {
     color: #555;
   }
@@ -134,18 +150,5 @@ li {
 
 .my-name {
   color: teal;
-}
-.btn {
-  padding: 3px;
-  border-radius: 2px;
-  border: 2px solid teal;
-  cursor: pointer;
-
-  &-ready {
-    background-color: rgb(109, 245, 68);
-  }
-  &-not {
-    background-color: rgb(245, 218, 68);
-  }
 }
 </style>
