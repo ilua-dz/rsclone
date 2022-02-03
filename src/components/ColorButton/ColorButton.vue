@@ -1,19 +1,20 @@
 <template>
   <button
-    class="color-button"
-    :class="{ clickable: clickable }"
+    :class="[{ clickable: clickable }, showModal ? 'overlay' : 'color-button']"
     :style="{ backgroundColor: currentColor, cursor: clickable ? 'pointer' : 'unset' }"
     @click="open($event, usedColors, currentColor)"
   >
-    <color-box
-      :x="modalX"
-      :y="modalY"
-      :used-colors="usedColors"
-      :current-color="currentColor"
-      v-if="showModal"
-      @hide-modal="hideModal"
-      @change-color="changeColor"
-    ></color-box>
+    <transition name="fade-n-grow">
+      <color-box
+        :x="modalX"
+        :y="modalY"
+        :used-colors="usedColors"
+        :current-color="currentColor"
+        v-if="showModal"
+        @hide-modal="hideModal"
+        @change-color="changeColor"
+      ></color-box>
+    </transition>
   </button>
 </template>
 
@@ -43,10 +44,12 @@ export default class ColorButton extends Vue {
 
   open(e: MouseEvent): void {
     if (e.target instanceof Element) {
-      if (this.clickable && e.target.matches('.color-button')) {
-        this.modalX = e.offsetX;
-        this.modalY = e.offsetY;
+      if (this.clickable && e.target.matches('.color-button') && !this.showModal) {
+        this.modalX = e.pageX;
+        this.modalY = e.pageY;
         this.showModal = true;
+      } else if (this.clickable && e.target.matches('.overlay') && this.showModal) {
+        this.hideModal(this.currentColor);
       }
     }
   }
@@ -74,5 +77,27 @@ export default class ColorButton extends Vue {
 }
 .clickable {
   cursor: pointer;
+
+  &.overlay {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.356) !important;
+    border: none;
+  }
+}
+
+.fade-n-grow {
+  &-enter-active {
+    transition: all 0.3s ease-in-out;
+  }
+
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: scale(0.2) translate(-200%, -200%);
+  }
 }
 </style>

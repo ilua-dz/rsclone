@@ -6,5 +6,6 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 max_line_length = 100
 quote_type = single
-comma_dangle = never
+comma_dangle = always
+trailingComma = always
 trailing_comma = always

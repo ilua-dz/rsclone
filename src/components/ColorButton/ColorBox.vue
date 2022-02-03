@@ -4,6 +4,7 @@
       :key="i"
       v-for="(color, i) in colors"
       style="max-width: 40px; max-height: 40px; height: 30%; width: 30%"
+      class="color-box__button"
       :class="{ disabled: usedColors.includes(color) && color != currentColor }"
       :style="{
         backgroundColor: color,
@@ -85,6 +86,10 @@ export default class ColorBox extends Vue {
   justify-content: center;
   align-content: center;
   z-index: 5;
+
+  &__button {
+    box-sizing: border-box;
+  }
 }
 
 .disabled {

@@ -35,10 +35,10 @@ import Map from './components/Map/Map.vue';
       };
       this.$socket.emit('setUsers', user, usedColors);
     },
-    toggleStatus(name) {
+    toggleStatus(name: string) {
       this.$socket.emit('changeStatus', name);
     },
-    setColor(name, color) {
+    setColor(name: string, color: string) {
       this.$socket.emit('setNewColor', {
         name,
         color,

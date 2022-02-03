@@ -21,7 +21,7 @@
           :usedColors="usedColors"
           @change-color="setNewColor"
         ></color-button>
-        <p>{{ user.name }}</p>
+        <p class="username">{{ user.name }}</p>
         <p :class="['status', !user.ready ? 'status-not' : 'status-ready']">
           {{ user.ready ? 'Готов играть!' : 'Еще не готов...' }}
         </p>
@@ -150,5 +150,10 @@ li {
 
 .my-name {
   color: teal;
+
+  .username {
+    display: inline-block;
+    margin-left: auto;
+  }
 }
 </style>
