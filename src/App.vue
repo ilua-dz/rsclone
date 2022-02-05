@@ -5,8 +5,9 @@
       @add-new-user="addUser"
       @toggle-status="toggleStatus"
       @set-new-color="setColor"
+      v-show="!getGameStatus"
     />
-    <Map />
+    <Map v-show="getGameStatus" />
   </div>
 </template>
 
@@ -25,7 +26,7 @@ import Map from './components/Map/Map.vue';
     // HelloWorld,
   },
 
-  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways']) },
+  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways', 'getGameStatus']) },
 
   methods: {
     addUser(name: string, usedColors: string[]) {
@@ -45,6 +46,16 @@ import Map from './components/Map/Map.vue';
       });
     },
   },
+
+  watch: {
+    /*
+    getGameStatus() {
+      if (this.getGameStatus) {
+        console.log('game started...');
+        this.$socket.emit('weReady');
+      }
+    }, */
+  },
 })
 export default class App extends Vue {}
 </script>
@@ -56,6 +67,5 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
