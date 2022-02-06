@@ -8,6 +8,7 @@
       v-show="!getGameStatus"
     />
     <Map v-show="getGameStatus" />
+    <modal-window v-if="getGameStatus && !getTurn" :timer="6" ></modal-window>
   </div>
 </template>
 
@@ -16,6 +17,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import Lobby from './components/Lobby.vue';
 import Map from './components/Map/Map.vue';
+import ModalWindow from './components/ModalWindow/ModalWindow.vue';
 
 // import HelloWorld from './components/HelloWorld.vue';
 
@@ -23,10 +25,11 @@ import Map from './components/Map/Map.vue';
   components: {
     Lobby,
     Map,
+    ModalWindow,
     // HelloWorld,
   },
 
-  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways', 'getGameStatus']) },
+  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways', 'getGameStatus', 'getTurn']) },
 
   methods: {
     addUser(name: string, usedColors: string[]) {
@@ -61,11 +64,23 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+@import './style/base/base';
+@import './style/base/normalize';
+
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 2rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 </style>

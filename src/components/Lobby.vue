@@ -120,6 +120,11 @@ export default class Lobby extends Vue {
 </script>
 
 <style scoped lang="scss">
+
+.lobby {
+  padding: 4rem;
+}
+
 ul {
   list-style-type: none;
   padding: 0;

@@ -13,7 +13,8 @@
         v-if="showModal"
         @hide-modal="hideModal"
         @change-color="changeColor"
-      ></color-box>
+      >
+      </color-box>
     </transition>
   </button>
 </template>
