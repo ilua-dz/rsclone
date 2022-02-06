@@ -15,7 +15,7 @@
         :style="{
           width: `${timerWidth}%`, backgroundColor: `hsl(${110-timerWidth}, 82%, 39%)`
           }"></div>
-        <slot name="content">Default content</slot>
+        <slot>Default content</slot>
       </div>
     </div>
   </transition>

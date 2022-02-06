@@ -8,7 +8,9 @@
       v-show="!getGameStatus"
     />
     <Map v-show="getGameStatus" />
-    <modal-window v-if="getGameStatus && !getTurn" :timer="6" ></modal-window>
+    <modal-window v-if="getGameStatus && !getTurn" :timer="25" >
+      <prepare  @discard-route="discardRoute" />
+    </modal-window>
   </div>
 </template>
 
@@ -18,18 +20,53 @@ import { mapGetters } from 'vuex';
 import Lobby from './components/Lobby.vue';
 import Map from './components/Map/Map.vue';
 import ModalWindow from './components/ModalWindow/ModalWindow.vue';
-
-// import HelloWorld from './components/HelloWorld.vue';
+import Prepare from './components/Game/Prepare.vue';
 
 @Component({
   components: {
     Lobby,
     Map,
     ModalWindow,
+    Prepare,
     // HelloWorld,
   },
 
-  computed: { ...mapGetters(['getUsers', 'getColors', 'getRailways', 'getGameStatus', 'getTurn']) },
+  computed: {
+    ...mapGetters([
+      'getUsers',
+      'getColors',
+      'getRailways',
+      'getGameStatus',
+      'getTurn',
+    ]),
+
+    /* nice try
+
+    currentUser: function getCurrentUser(): userInterface {
+      const storage = new Storage();
+      const { name } = storage.data;
+      const usersList: userInterface[] = this.$store.state.user.users;
+      return usersList.filter((user) => user.name === name)[0];
+    },
+
+    longRoute: function getLongRoute(): number | undefined {
+      const user: userInterface = this.currentUser;
+      return user.hand.longRoute;
+    },
+
+    shortRoute: function getShortRoute(): number[] | undefined {
+      const user: userInterface = this.currentUser;
+      return user.hand.shortRoute;
+    },
+
+    cards: function getCards() {
+      const user: userInterface = this.currentUser;
+      return user.hand.cards;
+    },
+
+    */
+
+  },
 
   methods: {
     addUser(name: string, usedColors: string[]) {
@@ -46,6 +83,12 @@ import ModalWindow from './components/ModalWindow/ModalWindow.vue';
       this.$socket.emit('setNewColor', {
         name,
         color,
+      });
+    },
+    discardRoute(array: Array<string|number>) {
+      array.forEach((route) => {
+        if (route === 'long') this.$socket.emit('discardLongRoute');
+        else this.$socket.emit('discardShortRoute', route);
       });
     },
   },

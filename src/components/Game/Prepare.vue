@@ -1,0 +1,110 @@
+<template>
+  <div class="content">
+    <h3>Подготовка</h3>
+    <h5>Вы можете сбросить маршруты, но должны оставить минимум 2</h5>
+    <ul class="route-list" @click="markToDiscard">
+      <li class="route route__long"
+      >Маршрут номер {{ longRoute }}</li>
+      <li class="route" :key="route"
+      v-for="route in shortRoute"
+      :data-route="route"
+      >Маршрут номер {{ route }}</li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import {
+  Component, Vue,
+} from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
+import userInterface from '../interface/user';
+import Storage from '../localStorage/storage';
+
+@Component({
+  computed: {
+    ...mapGetters(['getUsers']),
+  },
+  components: {},
+})
+export default class Prepare extends Vue {
+  getUsers!: userInterface[];
+
+  storage = new Storage();
+
+  userName = this.storage.data.name;
+
+  discard: Array<string|number> = [];
+
+  get currentUser(): userInterface {
+    return this.getUsers.filter((user) => user.name === this.userName)[0];
+  }
+
+  get longRoute(): number | undefined {
+    return this.currentUser.hand.longRoute;
+  }
+
+  get shortRoute(): number[] {
+    return this.currentUser.hand.shortRoute;
+  }
+
+  get cards(): Record<string, number> {
+    return this.currentUser.hand.cards;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  markToDiscard(e: MouseEvent): void {
+    if (e.target instanceof Element) {
+      const { target } = e;
+      if (target.classList.contains('discard')) {
+        target.classList.remove('discard');
+        if (target.classList.contains('route__long')) {
+          const index = this.discard.indexOf('long');
+          this.discard.splice(index, 1);
+        } else {
+          const value = Number(target.getAttribute('data-route'));
+          const index = this.discard.indexOf(value);
+          this.discard.splice(index, 1);
+        }
+      } else if (this.discard.length < 2) {
+        target.classList.add('discard');
+        if (target.classList.contains('route__long')) {
+          this.discard.push('long');
+        } else {
+          const value = Number(target.getAttribute('data-route'));
+          this.discard.push(value);
+        }
+      }
+      this.$emit('discard-route', this.discard);
+    }
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+
+.route-list{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.route{
+  font-size: 1.6rem;
+  width: 22%;
+  background-color: rgb(129, 129, 129);
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &__long{
+    background-color: rgb(91, 144, 204);
+  }
+
+  &.discard{
+    filter: blur(.3rem);
+  }
+}
+
+</style>
