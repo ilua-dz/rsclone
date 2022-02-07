@@ -8,8 +8,8 @@
       v-show="!getGameStatus"
     />
     <Map v-show="getGameStatus" />
-    <modal-window v-if="getGameStatus && !getTurn" :timer="25" >
-      <prepare  @discard-route="discardRoute" />
+    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
+      <prepare :timer="prepareTimer"  @get-discarded="discardRoute"/>
     </modal-window>
   </div>
 </template>
@@ -39,71 +39,49 @@ import Prepare from './components/Game/Prepare.vue';
       'getGameStatus',
       'getTurn',
     ]),
-
-    /* nice try
-
-    currentUser: function getCurrentUser(): userInterface {
-      const storage = new Storage();
-      const { name } = storage.data;
-      const usersList: userInterface[] = this.$store.state.user.users;
-      return usersList.filter((user) => user.name === name)[0];
-    },
-
-    longRoute: function getLongRoute(): number | undefined {
-      const user: userInterface = this.currentUser;
-      return user.hand.longRoute;
-    },
-
-    shortRoute: function getShortRoute(): number[] | undefined {
-      const user: userInterface = this.currentUser;
-      return user.hand.shortRoute;
-    },
-
-    cards: function getCards() {
-      const user: userInterface = this.currentUser;
-      return user.hand.cards;
-    },
-
-    */
-
   },
 
   methods: {
-    addUser(name: string, usedColors: string[]) {
-      const user = {
-        name,
-        ready: false,
-      };
-      this.$socket.emit('setUsers', user, usedColors);
-    },
-    toggleStatus(name: string) {
-      this.$socket.emit('changeStatus', name);
-    },
-    setColor(name: string, color: string) {
-      this.$socket.emit('setNewColor', {
-        name,
-        color,
-      });
-    },
-    discardRoute(array: Array<string|number>) {
-      array.forEach((route) => {
-        if (route === 'long') this.$socket.emit('discardLongRoute');
-        else this.$socket.emit('discardShortRoute', route);
-      });
-    },
   },
 
   watch: {
-    /*
-    getGameStatus() {
-      if (this.getGameStatus) {
-        console.log('game started...');
-        this.$socket.emit('weReady');
-      }
-    }, */
+
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  prepareTimer = 25;
+
+  currentName = '';
+
+  addUser(name: string, usedColors: string[]): void {
+    const user = {
+      name,
+      ready: false,
+    };
+    this.currentName = name;
+    this.$socket.emit('setUsers', user, usedColors);
+  }
+
+  toggleStatus(name: string): void {
+    this.$socket.emit('changeStatus', name);
+  }
+
+  setColor(name: string, color: string): void {
+    this.$socket.emit('setNewColor', {
+      name,
+      color,
+    });
+  }
+
+  discardRoute(array: Array<string|number>):void {
+    array.forEach((route) => {
+      if (route === 'long') this.$socket.emit('discardLongRoute', this.currentName);
+      else this.$socket.emit('discardShortRoute', this.currentName, route);
+    });
+    this.$socket.emit('userPrepared');
+  }
+}
+
 </script>
 
 <style lang="scss">

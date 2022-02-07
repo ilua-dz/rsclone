@@ -64,6 +64,7 @@ export default class Map extends Vue {
     max-width: 98vw;
     height: min-content;
     width: 100%;
+    max-height: 80vh;
   }
 }
 </style>

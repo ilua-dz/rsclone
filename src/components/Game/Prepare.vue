@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import {
-  Component, Vue,
+  Component, Vue, Prop,
 } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
@@ -28,6 +28,10 @@ import Storage from '../localStorage/storage';
   components: {},
 })
 export default class Prepare extends Vue {
+  @Prop({ default: 0 }) private timer!: number;
+
+  currentTimer = 0;
+
   getUsers!: userInterface[];
 
   storage = new Storage();
@@ -35,6 +39,17 @@ export default class Prepare extends Vue {
   userName = this.storage.data.name;
 
   discard: Array<string|number> = [];
+
+  mounted(): void {
+    if (this.timer) this.currentTimer = this.timer;
+    const prepareTimer = setInterval(() => {
+      this.currentTimer -= 0.1;
+      if (this.currentTimer <= 0.1) {
+        clearInterval(prepareTimer);
+        this.$emit('get-discarded', this.discard);
+      }
+    }, 100);
+  }
 
   get currentUser(): userInterface {
     return this.getUsers.filter((user) => user.name === this.userName)[0];
@@ -75,7 +90,6 @@ export default class Prepare extends Vue {
           this.discard.push(value);
         }
       }
-      this.$emit('discard-route', this.discard);
     }
   }
 }

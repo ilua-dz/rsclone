@@ -40,17 +40,20 @@ export default class ModalWindow extends Vue {
 
   mounted(): void {
     if (this.timer) this.currentTimer = this.timer;
-    console.log(this.currentTimer);
     if (this.currentTimer > 0) {
-      setInterval(() => {
+      const modalTimer = setInterval(() => {
         this.currentTimer -= 0.1;
+        if (this.currentTimer <= 0) {
+          clearInterval(modalTimer);
+          this.closeModal();
+        }
       }, 100);
     }
   }
 
-  @Watch('currentTimer') onTimerChange(): void {
-    if (this.currentTimer <= 0) this.closeModal();
-  }
+  // @Watch('currentTimer') onTimerChange(): void {
+  //   if (this.currentTimer <= 0) this.closeModal();
+  // }
 
   get timerWidth(): number {
     const percent = this.timer / 100;
