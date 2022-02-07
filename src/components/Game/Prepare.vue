@@ -10,6 +10,11 @@
       :data-route="route"
       >Маршрут номер {{ route }}</li>
     </ul>
+    <p>Примечание: за невыполненные карточки вы получите штраф.</p>
+    <Btn title="Применить"
+      class="btn-accept btn-prepare"
+      :method="acceptDiscard"
+      />
   </div>
 </template>
 
@@ -19,13 +24,16 @@ import {
 } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
+import Btn from '../Button/Btn.vue';
 import Storage from '../localStorage/storage';
 
 @Component({
   computed: {
     ...mapGetters(['getUsers']),
   },
-  components: {},
+  components: {
+    Btn,
+  },
 })
 export default class Prepare extends Vue {
   @Prop({ default: 0 }) private timer!: number;
@@ -67,7 +75,11 @@ export default class Prepare extends Vue {
     return this.currentUser.hand.cards;
   }
 
-  // eslint-disable-next-line class-methods-use-this
+  acceptDiscard(): void {
+    this.currentTimer = 0.1;
+    this.$emit('close-modal');
+  }
+
   markToDiscard(e: MouseEvent): void {
     if (e.target instanceof Element) {
       const { target } = e;
@@ -119,6 +131,10 @@ export default class Prepare extends Vue {
   &.discard{
     filter: blur(.3rem);
   }
+}
+
+.btn-prepare{
+  margin: 1rem auto;
 }
 
 </style>

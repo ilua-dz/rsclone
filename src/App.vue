@@ -9,7 +9,9 @@
     />
     <Map v-show="getGameStatus" />
     <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
-      <prepare :timer="prepareTimer"  @get-discarded="discardRoute"/>
+      <prepare :timer="prepareTimer"
+      @get-discarded="discardRoute"
+      @close-modal="prepareTimer = 0.1"/>
     </modal-window>
   </div>
 </template>
