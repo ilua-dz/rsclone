@@ -7,7 +7,8 @@
       @set-new-color="setColor"
       v-show="!getGameStatus"
     />
-    <div v-show="getGameStatus">
+    <div v-show="getGameStatus" class="game">
+      <user-side  />
       <Map  />
     </div>
     <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
@@ -26,6 +27,7 @@ import Lobby from './components/Lobby.vue';
 import Map from './components/Map/Map.vue';
 import ModalWindow from './components/ModalWindow/ModalWindow.vue';
 import Prepare from './components/Game/Prepare.vue';
+import UserSide from './components/UI/UserSide.vue';
 
 @Component({
   components: {
@@ -33,6 +35,7 @@ import Prepare from './components/Game/Prepare.vue';
     Map,
     ModalWindow,
     Prepare,
+    UserSide,
     // HelloWorld,
   },
 
@@ -110,5 +113,9 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.game {
+  display: flex;
 }
 </style>
