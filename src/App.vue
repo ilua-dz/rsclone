@@ -10,6 +10,7 @@
     <div v-show="getGameStatus" class="game">
       <user-side  />
       <Map  />
+      <deck-side  />
     </div>
     <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
       <prepare
@@ -28,6 +29,7 @@ import Map from './components/Map/Map.vue';
 import ModalWindow from './components/ModalWindow/ModalWindow.vue';
 import Prepare from './components/Game/Prepare.vue';
 import UserSide from './components/UI/UserSide.vue';
+import DeckSide from './components/UI/DeckSide.vue';
 
 @Component({
   components: {
@@ -36,6 +38,7 @@ import UserSide from './components/UI/UserSide.vue';
     ModalWindow,
     Prepare,
     UserSide,
+    DeckSide,
     // HelloWorld,
   },
 
@@ -68,7 +71,6 @@ export default class App extends Vue {
       ready: false,
     };
     this.$store.commit('setCurrentName', name);
-    console.log(this.getCurrentName);
     this.$socket.emit('setUsers', user, usedColors);
   }
 

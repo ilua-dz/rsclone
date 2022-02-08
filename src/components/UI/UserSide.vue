@@ -66,6 +66,7 @@ export default class UserSide extends Vue {
   gap: 2rem;
   align-items: stretch;
   padding: 1rem;
+  list-style: none;
 }
 .user-item {
   padding: 2rem;
