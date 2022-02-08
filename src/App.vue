@@ -7,9 +7,12 @@
       @set-new-color="setColor"
       v-show="!getGameStatus"
     />
-    <Map v-show="getGameStatus" />
+    <div v-show="getGameStatus">
+      <Map  />
+    </div>
     <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
-      <prepare :timer="prepareTimer"
+      <prepare
+      :timer="prepareTimer"
       @get-discarded="discardRoute"
       @close-modal="prepareTimer = 0.1"/>
     </modal-window>
@@ -40,6 +43,7 @@ import Prepare from './components/Game/Prepare.vue';
       'getRailways',
       'getGameStatus',
       'getTurn',
+      'getCurrentName',
     ]),
   },
 
@@ -51,16 +55,17 @@ import Prepare from './components/Game/Prepare.vue';
   },
 })
 export default class App extends Vue {
-  prepareTimer = 25;
+  getCurrentName!: string;
 
-  currentName = '';
+  prepareTimer = 25;
 
   addUser(name: string, usedColors: string[]): void {
     const user = {
       name,
       ready: false,
     };
-    this.currentName = name;
+    this.$store.commit('setCurrentName', name);
+    console.log(this.getCurrentName);
     this.$socket.emit('setUsers', user, usedColors);
   }
 
@@ -77,8 +82,8 @@ export default class App extends Vue {
 
   discardRoute(array: Array<string|number>):void {
     array.forEach((route) => {
-      if (route === 'long') this.$socket.emit('discardLongRoute', this.currentName);
-      else this.$socket.emit('discardShortRoute', this.currentName, route);
+      if (route === 'long') this.$socket.emit('discardLongRoute', this.getCurrentName);
+      else this.$socket.emit('discardShortRoute', this.getCurrentName, route);
     });
     this.$socket.emit('userPrepared');
   }
