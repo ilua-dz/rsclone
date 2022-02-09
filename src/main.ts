@@ -6,10 +6,15 @@ import store from './store/index';
 
 Vue.config.productionTip = false;
 
+const URL = {
+  heroku: 'https://sleepy-eyrie-63882.herokuapp.com/',
+  local: 'http://localhost:3000/',
+};
+
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: SocketIO('https://sleepy-eyrie-63882.herokuapp.com/'),
+    connection: SocketIO(URL.local),
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
