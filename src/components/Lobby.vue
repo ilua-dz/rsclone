@@ -1,6 +1,6 @@
 <template>
   <div class="lobby-container">
-    <img src="../../public/logo_.png" alt="Ticket to Ride" class="logo-img" />
+    <img src="../../public/assets/lobby/logo_.png" alt="Ticket to Ride" class="logo-img" />
     <div class="new-user">
       <transition name="fade" mode="out-in">
         <div v-if="!arrayNames.includes(currentName)" class="input-field" key="edit">
@@ -138,14 +138,13 @@ export default class Lobby extends Vue {
 
   clearInput(): void {
     this.userName = '';
+    storage.data.name = this.userName;
+    storage.saveData();
   }
 }
 </script>
 
 <style scoped lang="scss">
-@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
-@import url(https://pro.fontawesome.com/releases/v6.0.0-beta2/css/all.css);
-
 .fade-enter-active,
 .fade-leave-active {
   transition: 0.2s;
@@ -164,7 +163,7 @@ export default class Lobby extends Vue {
   justify-content: flex-start;
   row-gap: 2rem;
   font-family: 'Poiret One', cursive;
-  background: url('../../public/start-page-bg.jpg') center;
+  background: url('../../public/assets/lobby/start-page-bg.jpg') center;
 }
 
 .logo-img {
