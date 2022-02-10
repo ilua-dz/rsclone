@@ -15,11 +15,12 @@
       </div>
       <player-side  />
     </div>
-    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
+    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer">
       <prepare
-      :timer="prepareTimer"
-      @get-discarded="discardRoute"
-      @close-modal="prepareTimer = 0.1"/>
+        :timer="prepareTimer"
+        @get-discarded="discardRoute"
+        @close-modal="prepareTimer = 0.1"
+      />
     </modal-window>
   </div>
 </template>
@@ -59,12 +60,9 @@ import Storage from './components/localStorage/storage';
     ]),
   },
 
-  methods: {
-  },
+  methods: {},
 
-  watch: {
-
-  },
+  watch: {},
 })
 export default class App extends Vue {
   getCurrentName!: string;
@@ -98,7 +96,7 @@ export default class App extends Vue {
     });
   }
 
-  discardRoute(array: Array<string|number>):void {
+  discardRoute(array: Array<string | number>): void {
     array.forEach((route) => {
       if (route === 'long') this.$socket.emit('discardLongRoute', this.getCurrentName);
       else this.$socket.emit('discardShortRoute', this.getCurrentName, route);
@@ -106,12 +104,12 @@ export default class App extends Vue {
     this.$socket.emit('userPrepared');
   }
 }
-
 </script>
 
 <style lang="scss">
 @import './style/base/base';
 @import './style/base/normalize';
+@import './style/base/_typography.scss';
 
 body {
   width: 100vw;
