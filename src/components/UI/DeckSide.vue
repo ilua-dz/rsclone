@@ -49,7 +49,8 @@ getCardDeck!: number[];
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4rem;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 .deck {
   width: 80%;
