@@ -7,16 +7,18 @@ export default {
     gameDeck: {},
   },
   mutations: {
-    SOCKET_createApp(state: {
-      gameStatus: boolean,
-      gameTurn: number,
-      gameDeck: gameDeckInterface,
-    },
-    data: {
-        gameStatus: boolean,
-        gameTurn: number,
-        gameDeck: gameDeckInterface,
-      }): void {
+    SOCKET_createApp(
+      state: {
+        gameStatus: boolean;
+        gameTurn: number;
+        gameDeck: gameDeckInterface;
+      },
+      data: {
+        gameStatus: boolean;
+        gameTurn: number;
+        gameDeck: gameDeckInterface;
+      },
+    ): void {
       state.gameStatus = data.gameStatus;
       state.gameTurn = data.gameTurn;
       state.gameDeck = data.gameDeck;

@@ -4,6 +4,7 @@
     :style="{ backgroundColor: currentColor, cursor: clickable ? 'pointer' : 'unset' }"
     @click="open($event, usedColors, currentColor)"
   >
+    {{ clickable ? 'Выбрать цвет' : '' }}
     <transition name="fade-n-grow">
       <color-box
         :x="modalX"
@@ -70,7 +71,7 @@ export default class ColorButton extends Vue {
 
 <style lang="scss" scoped>
 .color-button {
-  width: 35px;
+  width: 100%;
   height: 35px;
   border: 2px solid rgb(160, 160, 160);
   margin-right: 20px;
