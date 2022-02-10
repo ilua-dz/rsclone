@@ -7,7 +7,7 @@
       @set-new-color="setColor"
       v-show="!getGameStatus"
     />
-    <div v-show="getGameStatus" class="game">
+    <div v-if="getGameStatus" class="game">
       <div class="game-main">
         <user-side  />
         <Map  />
