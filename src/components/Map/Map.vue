@@ -11,7 +11,7 @@
       viewBox="0 0 2048 1380"
     >
       <image
-        xlink:href="gamefield.jpg"
+        xlink:href="assets/map/gamefield.jpg"
         id="image17"
         width="2048"
         height="1380"
