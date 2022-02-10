@@ -29,7 +29,7 @@ export default class Btn extends Vue {
   outline: none;
 
   &-accept {
-    background-color: #4c6fd6;
+    background-color: #00912b;
     color: #ece0d7;
 
     &:hover {
@@ -38,7 +38,7 @@ export default class Btn extends Vue {
   }
 
   &-decline {
-    background-color: #4a5268;
+    background-color: #a00101;
     color: #ece0d7;
     &:hover {
       background-color: #7783a3;
