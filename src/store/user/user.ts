@@ -5,6 +5,7 @@ export default {
   state: {
     users: [],
     currentName: '',
+    currentColor: '',
   },
   mutations: {
     SOCKET_createApp(
@@ -16,12 +17,21 @@ export default {
       if (storage.data.name) state.currentName = storage.data.name;
     },
 
-    SOCKET_updateUsers(state: { users: [userInterface] }, users: [userInterface]): void {
+    SOCKET_updateUsers(state: {
+      users: [userInterface],
+      currentColor: string,
+      currentName: string,
+    }, users: [userInterface]): void {
       state.users = users;
+      state.currentColor = state.users.find((u) => u.name === state.currentName)?.color || '';
     },
 
     setCurrentName(state: { users: [userInterface], currentName: string }, name: string): void {
       state.currentName = name;
+    },
+
+    setCurrentColor(state: { users: [userInterface], currentColor: string }, color: string): void {
+      state.currentColor = color;
     },
   },
   actions: {

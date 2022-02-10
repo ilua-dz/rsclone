@@ -8,9 +8,12 @@
       v-show="!getGameStatus"
     />
     <div v-show="getGameStatus" class="game">
-      <user-side  />
-      <Map  />
-      <deck-side  />
+      <div class="game-main">
+        <user-side  />
+        <Map  />
+        <deck-side  />
+      </div>
+      <player-side  />
     </div>
     <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer" >
       <prepare
@@ -30,6 +33,8 @@ import ModalWindow from './components/ModalWindow/ModalWindow.vue';
 import Prepare from './components/Game/Prepare.vue';
 import UserSide from './components/UI/UserSide.vue';
 import DeckSide from './components/UI/DeckSide.vue';
+import PlayerSide from './components/UI/PlayerSide.vue';
+import Storage from './components/localStorage/storage';
 
 @Component({
   components: {
@@ -39,6 +44,7 @@ import DeckSide from './components/UI/DeckSide.vue';
     Prepare,
     UserSide,
     DeckSide,
+    PlayerSide,
     // HelloWorld,
   },
 
@@ -64,6 +70,13 @@ export default class App extends Vue {
   getCurrentName!: string;
 
   prepareTimer = 25;
+
+  storage = new Storage();
+
+  created(): void {
+    if (this.storage.data.name) this.$store.commit('setCurrentName', this.storage.data.name);
+    if (this.storage.data.color) this.$store.commit('setCurrentColor', this.storage.data.color);
+  }
 
   addUser(name: string, usedColors: string[]): void {
     const user = {
@@ -117,7 +130,8 @@ body {
   height: 100%;
 }
 
-.game {
+.game-main {
   display: flex;
 }
+
 </style>

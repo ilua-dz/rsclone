@@ -66,7 +66,7 @@ export default class ColorBox extends Vue {
       if (targetColor === this.currentColor) {
         this.select = targetColor;
       }
-
+      this.$store.commit('setCurrentColor', this.select);
       this.$emit('change-color', this.select);
     }
   }
