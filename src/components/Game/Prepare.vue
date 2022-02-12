@@ -1,11 +1,13 @@
 <template>
   <div class="content">
     <h3>Подготовка</h3>
-    <h5>Вы можете сбросить маршруты, но должны оставить минимум 2</h5>
+    <h5>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</h5>
     <ul class="route-list" @click="markToDiscard">
       <li class="route route__long"
+      v-if="!checkPickRoute"
       >Маршрут номер {{ longRoute }}</li>
-      <li class="route" :key="route"
+      <li
+      class="route" :key="route"
       v-for="route in shortRoute"
       :data-route="route"
       >Маршрут номер {{ route }}</li>
@@ -38,7 +40,9 @@ import Storage from '../localStorage/storage';
 export default class Prepare extends Vue {
   @Prop({ default: 0 }) private timer!: number;
 
-  currentTimer = 0;
+  @Prop({ default: Array }) private pickedRoutes!: number[];
+
+  currentTimer = this.timer || 0;
 
   getUsers!: userInterface[];
 
@@ -48,15 +52,21 @@ export default class Prepare extends Vue {
 
   discard: Array<string|number> = [];
 
+  prepareTimer = setInterval(() => {
+    this.currentTimer -= 0.1;
+    if (this.currentTimer <= 0.1) {
+      this.acceptDiscard();
+    }
+  }, 100);
+
   mounted(): void {
-    if (this.timer) this.currentTimer = this.timer;
-    const prepareTimer = setInterval(() => {
-      this.currentTimer -= 0.1;
-      if (this.currentTimer <= 0.1) {
-        clearInterval(prepareTimer);
-        this.$emit('get-discarded', this.discard);
-      }
-    }, 100);
+    if (this.checkPickRoute) {
+      this.$socket.emit('addShortRoute', this.userName, this.pickedRoutes);
+    }
+  }
+
+  get checkPickRoute(): boolean {
+    return this.pickedRoutes.length > 0;
   }
 
   get currentUser(): userInterface {
@@ -68,7 +78,7 @@ export default class Prepare extends Vue {
   }
 
   get shortRoute(): number[] {
-    return this.currentUser.hand.shortRoute;
+    return this.checkPickRoute ? this.pickedRoutes : this.currentUser.hand.shortRoute;
   }
 
   get cards(): Record<string, number> {
@@ -76,13 +86,21 @@ export default class Prepare extends Vue {
   }
 
   acceptDiscard(): void {
-    this.currentTimer = 0.1;
+    clearInterval(this.prepareTimer);
+    this.$emit('get-discarded', this.discard);
     this.$emit('close-modal');
   }
 
   markToDiscard(e: MouseEvent): void {
     if (e.target instanceof Element) {
       const { target } = e;
+      const length = target.parentNode?.children.length || 0;
+      let numOfDiscard: number;
+      if (length <= 3) {
+        numOfDiscard = length - 1;
+      } else {
+        numOfDiscard = 2;
+      }
       if (target.classList.contains('discard')) {
         target.classList.remove('discard');
         if (target.classList.contains('route__long')) {
@@ -93,7 +111,7 @@ export default class Prepare extends Vue {
           const index = this.discard.indexOf(value);
           this.discard.splice(index, 1);
         }
-      } else if (this.discard.length < 2) {
+      } else if (this.discard.length < numOfDiscard) {
         target.classList.add('discard');
         if (target.classList.contains('route__long')) {
           this.discard.push('long');
