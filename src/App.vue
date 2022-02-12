@@ -15,7 +15,10 @@
       </div>
       <player-side  />
     </div>
-    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer">
+    <modal-window
+    v-if="getGameStatus && getTurn === -1"
+    :timer="prepareTimer"
+    >
       <prepare
         :timer="prepareTimer"
         @get-discarded="discardRoute"
@@ -26,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import Lobby from './components/Lobby.vue';
 import Map from './components/Map/Map.vue';
@@ -67,9 +70,17 @@ import Storage from './components/localStorage/storage';
 export default class App extends Vue {
   getCurrentName!: string;
 
-  prepareTimer = 25;
+  getTurn!:number;
+
+  prepareTimer = 30;
+
+  closeModal = false;
 
   storage = new Storage();
+
+  @Watch('getTurn') onTurnChange(): void {
+    if (this.getTurn === -1) this.prepareTimer = 30;
+  }
 
   created(): void {
     if (this.storage.data.name) this.$store.commit('setCurrentName', this.storage.data.name);
