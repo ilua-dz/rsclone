@@ -5,6 +5,7 @@ export default {
     gameStatus: false,
     gameTurn: -1,
     gameDeck: {},
+    turnWeight: 0,
   },
   mutations: {
     SOCKET_createApp(
@@ -12,22 +13,28 @@ export default {
         gameStatus: boolean;
         gameTurn: number;
         gameDeck: gameDeckInterface;
+        turnWeight: number;
       },
       data: {
         gameStatus: boolean;
         gameTurn: number;
         gameDeck: gameDeckInterface;
+        turnWeight: number;
       },
     ): void {
       state.gameStatus = data.gameStatus;
       state.gameTurn = data.gameTurn;
       state.gameDeck = data.gameDeck;
+      state.turnWeight = data.turnWeight;
     },
     SOCKET_updateGameStatus(state: { gameStatus: boolean }, gameStatus: boolean): void {
       state.gameStatus = gameStatus;
     },
     SOCKET_updateGameTurn(state: { gameTurn: number }, gameTurn: number): void {
       state.gameTurn = gameTurn;
+    },
+    SOCKET_updateTurnWeight(state: { turnWeight: number }, turnWeight: number): void {
+      state.turnWeight = turnWeight;
     },
     SOCKET_preTurn(state: { gameDeck: gameDeckInterface }, gameDeck: gameDeckInterface): void {
       state.gameDeck = gameDeck;
