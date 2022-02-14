@@ -15,6 +15,12 @@
       class="deck"
       :data-color="card"
       :data-index="index"
+      :style="{
+          background:
+            'center / contain no-repeat url(/assets/game/wagon_cards/' +
+            card.split('-')[0] +
+            '.avif)',
+        }"
       >
         <div class="deck-back">{{ card }}</div>
         <div class="deck-action"
@@ -64,41 +70,41 @@ import Prepare from '../Game/Prepare.vue';
     Prepare,
   },
 })
-
 export default class DeckSide extends Vue {
-getCardTable!: string[];
+  getCardTable!: string[];
 
-getRouteDeck!: number[];
+  getRouteDeck!: number[];
 
-getCardDeck!: number[];
+  getCardDeck!: number[];
 
-getTurn!: number;
+  getTurn!: number;
 
 getTurnWeight!: number;
 
 getUsers!:userInterface[];
 
-getCurrentName!: string;
 
-showRoutesModal = false;
+  getCurrentName!: string;
 
-modalTimer = 10;
+  showRoutesModal = false;
 
-routesToChoose: number[] = [];
+  modalTimer = 10;
 
-get checkActive(): boolean {
-  if (this.getTurn === -1) return false;
-  return this.getUsers[this.getTurn].name === this.getCurrentName;
-}
+  routesToChoose: number[] = [];
 
-pickRoute(): void {
-  if (this.getRouteDeck.length > 0) {
-    this.routesToChoose.push(...this.getRouteDeck.splice(-3));
-    this.showRoutesModal = true;
+  get checkActive(): boolean {
+    if (this.getTurn === -1) return false;
+    return this.getUsers[this.getTurn].name === this.getCurrentName;
   }
-  // TODO: socket emit split routes deck
-  // TODO: routes to choose ->> shortRoutes in hand (in Prepare)
-}
+
+  pickRoute(): void {
+    if (this.getRouteDeck.length > 0) {
+      this.routesToChoose.push(...this.getRouteDeck.splice(-3));
+      this.showRoutesModal = true;
+    }
+    // TODO: socket emit split routes deck
+    // TODO: routes to choose ->> shortRoutes in hand (in Prepare)
+  }
 
 discardRoute(array: Array<number>): void {
   this.routesToChoose.splice(0);
@@ -126,33 +132,35 @@ pickCardDeck(): void {
   this.$socket.emit('pickCardDeck', this.getCurrentName);
   if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
 }
+
 }
 </script>
 
 <style lang="scss" scoped>
-.deck-side{
-  max-width: 30rem;
-  width: 100%;
+.deck-side {
+  width: 30rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
-  justify-content: space-between;
   gap: 1.5rem;
 }
 .deck {
-  width: 80%;
+  width: 16.2rem;
+  height: 10rem;
   border-radius: 1rem;
   border: 0.1rem solid #0e2e3a;
-  height: 8rem;
   text-align: center;
   overflow: hidden;
   position: relative;
+  transition: 0.3s;
 
   &-back {
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 0;
+    background: center / contain no-repeat;
   }
   &-action {
     position: absolute;
@@ -165,6 +173,7 @@ pickCardDeck(): void {
     z-index: 1;
     transition: all .3s;
     cursor: pointer;
+
   }
   &-length {
     position: absolute;
@@ -175,13 +184,33 @@ pickCardDeck(): void {
     height: 100%;
     transform: translateY(100%);
     z-index: 1;
-    transition: all .3s;
-
+    transition: all 0.3s;
   }
 
   &:hover .deck-action,
   &:hover .deck-length {
     transform: translateY(0);
+  }
+
+  &:hover {
+    z-index: 5;
+    transform: rotate(-5deg) scale(1.05);
+    box-shadow: 0 0 1rem 0.3rem white;
+  }
+  &:active {
+    transform: rotate(5deg) scale(1.05);
+  }
+}
+
+.deck-route {
+  .deck-back {
+    background-image: url('/assets/game/route_cards/route-shirt.avif');
+  }
+}
+
+.deck-card {
+  .deck-back {
+    background-image: url('/assets/game/wagon_cards/wagon-shirt.avif');
   }
 }
 
@@ -191,6 +220,6 @@ pickCardDeck(): void {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem
+  row-gap: 0.3rem;
 }
 </style>

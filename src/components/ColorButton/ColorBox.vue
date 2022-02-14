@@ -2,16 +2,20 @@
   <div class="color-box" :style="{ top, left }">
     <div
       :key="i"
-      v-for="(color, i) in colors"
-      style="max-width: 40px; max-height: 40px; height: 30%; width: 30%"
+      v-for="(avatar, i) in avatars"
+      style="height: 32%; width: 32%"
       class="color-box__button"
-      :class="{ disabled: usedColors.includes(color) && color != currentColor }"
-      :style="{
-        backgroundColor: color,
-        cursor: usedColors.includes(color) ? 'unset' : 'pointer',
-        border: color === currentColor ? '2px solid hotpink' : '',
+      :class="{
+        disabled: usedColors.includes(avatar.color) && avatar.color != currentColor,
+        active: avatar.color === currentColor,
       }"
-      :data-color="color"
+      :style="{
+        background: 'center / contain no-repeat url(' + avatar.avatar + ')' + avatar.color,
+        cursor: usedColors.includes(avatar.color) ? 'unset' : 'pointer',
+        boxShadow: '0 0 0 1px ' + avatar.color,
+        border: '3px solid ' + avatar.color,
+      }"
+      :data-color="avatar.color"
       @click="
         changeColor($event);
         $emit('hide-modal', select);
@@ -22,6 +26,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import avatars from '../../enums/avatars';
 
 @Component
 export default class ColorBox extends Vue {
@@ -33,19 +38,9 @@ export default class ColorBox extends Vue {
 
   @Prop({ default: '' }) private currentColor!: string;
 
-  colors = [
-    '#F0EFEB',
-    '#43AA8C',
-    '#3A86FE',
-    '#D62828',
-    '#E36F6F',
-    '#8338EB',
-    '#FCBF4A',
-    '#3C3C3C',
-    '#48CAE4',
-  ];
-
   select = '';
+
+  avatars = avatars;
 
   get top(): string {
     return `${this.y}px`;
@@ -75,13 +70,12 @@ export default class ColorBox extends Vue {
 
 <style lang="scss" scoped>
 .color-box {
-  width: 120px;
-  height: 120px;
+  width: 30rem;
+  height: 30rem;
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
   position: absolute;
-  background-color: rgb(117, 161, 155);
   transform: translate(-50%, -50%);
   justify-content: center;
   align-content: center;
@@ -89,11 +83,19 @@ export default class ColorBox extends Vue {
 
   &__button {
     box-sizing: border-box;
+    transition: 0.3s;
+  }
+
+  &__button:hover {
+    z-index: 6;
+    border-radius: 50%;
+    transform: scale(1.3);
   }
 }
 
 .disabled {
   position: relative;
+  pointer-events: none;
   &:after {
     content: '';
     width: 2px;
@@ -105,5 +107,11 @@ export default class ColorBox extends Vue {
     left: 50%;
     cursor: unset;
   }
+}
+
+.active {
+  z-index: 5;
+  transform: scale(1.2);
+  border-radius: 50%;
 }
 </style>
