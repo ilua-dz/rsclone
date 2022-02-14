@@ -78,9 +78,8 @@ export default class UserSide extends Vue {
 
 <style lang="scss" scoped>
 .user-side {
-  max-width: 32rem;
-  width: 100%;
   padding-top: 3rem;
+  padding-left: 3rem;
 }
 .user-list {
   display: flex;
