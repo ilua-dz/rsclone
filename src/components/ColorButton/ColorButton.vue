@@ -93,6 +93,7 @@ export default class ColorButton extends Vue {
 
 .fade-n-grow {
   &-enter-active {
+    opacity: 1;
     transition: all 0.3s ease-in-out;
   }
 
