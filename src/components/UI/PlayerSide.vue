@@ -1,28 +1,44 @@
 <template>
-  <div class="game-player"
-    :style="{ '--user-color': currentColor }"
-  >
+  <div class="game-player" :style="{ '--user-color': currentColor }">
     <ul class="player-box player-route">
-      <li class="route route__long player-box__item" v-if="longRoute != -1"
-      >Маршрут номер {{ longRoute }}</li>
-      <li class="route player-box__item" :key="route"
-      v-for="route in shortRoute"
-      :data-route="route"
-      >Маршрут номер {{ route }}</li>
+      <li
+        class="route route__long player-box__item card"
+        v-if="longRoute != -1"
+        :style="{
+          background:
+            'center / contain no-repeat url(/assets/game/route_cards/' +
+            (+longRoute + 41) +
+            '.avif)',
+        }"
+      >
+        <!-- Маршрут номер {{ longRoute }} -->
+      </li>
+      <li
+        class="route player-box__item card"
+        :key="route"
+        v-for="route in shortRoute"
+        :data-route="route"
+        :style="{
+          background: 'center / contain no-repeat url(/assets/game/route_cards/' + route + '.avif)',
+        }"
+      >
+        <!-- Маршрут номер {{ route }} -->
+      </li>
     </ul>
     <ul class="player-box player-card">
       <li
-      class="player-box__item card"
-      :key="card[0]"
-      v-for="card in cardsInHand"
-       >
-       <div class="card-color">
-        {{ card[0] }}
-       </div>
-       <div class="card-value">
-        {{ card[1] }}
-       </div>
-       </li>
+        class="player-box__item card"
+        :key="card[0]"
+        v-for="card in cardsInHand"
+        :style="{
+          background:
+            'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+        }"
+      >
+        <div class="card-value">
+          {{ card[1] }}
+        </div>
+      </li>
     </ul>
   </div>
 </template>
@@ -34,19 +50,14 @@ import userInterface from '../interface/user';
 
 @Component({
   computed: {
-    ...mapGetters([
-      'getUsers',
-      'getCurrentName',
-    ]),
+    ...mapGetters(['getUsers', 'getCurrentName']),
   },
-  components: {
-  },
+  components: {},
 })
-
 export default class PlayerSide extends Vue {
   getCurrentName!: string;
 
-  getUsers!:userInterface[];
+  getUsers!: userInterface[];
 
   currentUser(): userInterface | undefined {
     return this.getUsers.find((u) => u.name === this.getCurrentName);
@@ -74,17 +85,16 @@ export default class PlayerSide extends Vue {
     return user ? user.color : '';
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-.game-player{
+.game-player {
   width: 100%;
   display: flex;
 }
 .player-box {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   flex-basis: 100%;
   padding: 2rem;
   border: 0.5rem solid var(--user-color);
@@ -99,5 +109,10 @@ export default class PlayerSide extends Vue {
   padding: 2rem;
   border: 0.1rem solid var(--user-color);
   border-radius: 1rem;
+}
+
+.card {
+  width: 16.2rem;
+  height: 10rem;
 }
 </style>

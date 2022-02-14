@@ -9,16 +9,13 @@
     />
     <div v-if="getGameStatus" class="game">
       <div class="game-main">
-        <user-side  />
-        <Map  />
-        <deck-side  />
+        <user-side />
+        <Map />
+        <deck-side />
       </div>
-      <player-side  />
+      <player-side />
     </div>
-    <modal-window
-    v-if="getGameStatus && getTurn === -1"
-    :timer="prepareTimer"
-    >
+    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer">
       <prepare
         :timer="prepareTimer"
         @get-discarded="discardRoute"
@@ -70,7 +67,7 @@ import Storage from './components/localStorage/storage';
 export default class App extends Vue {
   getCurrentName!: string;
 
-  getTurn!:number;
+  getTurn!: number;
 
   prepareTimer = 30;
 
@@ -140,7 +137,7 @@ body {
 }
 
 .game-main {
+  height: min-content;
   display: flex;
 }
-
 </style>

@@ -59,12 +59,14 @@ export default class Map extends Vue {
 
 <style lang="scss" scoped>
 .game-field {
-  width: 100%;
+  width: 70vw;
+  height: inherit;
   &__img {
-    max-width: 98vw;
-    height: min-content;
+    // max-width: 98vw;
+    // height: min-content;
     width: 100%;
-    max-height: 80vh;
+    height: 100%;
+    max-height: 82vh;
   }
 }
 </style>
