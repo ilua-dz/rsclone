@@ -184,7 +184,7 @@ export default class Lobby extends Vue {
 }
 
 .new-user {
-  height: 20vh;
+  height: 18rem;
   input {
     padding: 0.5rem;
     text-align: center;
