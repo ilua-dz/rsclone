@@ -1,31 +1,39 @@
 <template>
   <aside class="deck-side">
     <div class="deck deck-route">
-      <div class="deck-back"></div>
-      <div class="deck-action" v-if="checkActive && getRouteDeck.length" @click="pickRoute">
-        Выбрать маршруты
-      </div>
-      <div class="deck-length">{{ getRouteDeck.length }}</div>
+      <div class="deck-back">маршруты</div>
+      <div class="deck-action"
+      v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
+      @click="pickRoute"
+      >Выбрать маршруты</div>
+      <div class="deck-length"> {{ getRouteDeck.length }}</div>
     </div>
     <ul class="table-card">
       <li
-        :key="card"
-        v-for="card in getCardTable"
-        class="deck"
-        :style="{
+      :key="index"
+      v-for="(card, index) in getCardTable"
+      class="deck"
+      :data-color="card"
+      :data-index="index"
+      :style="{
           background:
             'center / contain no-repeat url(/assets/game/wagon_cards/' +
             card.split('-')[0] +
             '.avif)',
         }"
       >
-        <!-- {{ card }} -->
+        <div class="deck-back">{{ card }}</div>
+        <div class="deck-action"
+        v-if="checkActive && (card !== 'loco' || card === 'loco' && getTurnWeight === 0)"
+        @click="pickCardTable"
+        >Взять карту
+        </div>
       </li>
     </ul>
     <div class="deck deck-card">
-      <div class="deck-back"></div>
-      <div class="deck-action" v-if="checkActive">Взять карту</div>
-      <div class="deck-length">{{ getCardDeck.length }}</div>
+      <div class="deck-back">колода</div>
+      <div class="deck-action" v-if="checkActive" @click="pickCardDeck">Взять карту</div>
+      <div class="deck-length"> {{ getCardDeck.length }}</div>
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
       <Prepare
@@ -54,6 +62,7 @@ import Prepare from '../Game/Prepare.vue';
       'getCardDeck',
       'getCardTable',
       'getCurrentName',
+      'getTurnWeight',
     ]),
   },
   components: {
@@ -70,7 +79,10 @@ export default class DeckSide extends Vue {
 
   getTurn!: number;
 
-  getUsers!: userInterface[];
+getTurnWeight!: number;
+
+getUsers!:userInterface[];
+
 
   getCurrentName!: string;
 
@@ -94,13 +106,33 @@ export default class DeckSide extends Vue {
     // TODO: routes to choose ->> shortRoutes in hand (in Prepare)
   }
 
-  discardRoute(array: Array<number>): void {
-    this.routesToChoose.splice(0);
-    array.forEach((route) => {
-      this.$socket.emit('discardShortRoute', this.getCurrentName, route);
-    });
-    this.$socket.emit('endOfTurn');
+discardRoute(array: Array<number>): void {
+  this.routesToChoose.splice(0);
+  array.forEach((route) => {
+    this.$socket.emit('discardShortRoute', this.getCurrentName, route);
+  });
+  this.$socket.emit('endOfTurn');
+}
+
+pickCardTable(e: MouseEvent): void {
+  if (e.target instanceof Element) {
+    const target = e.target.closest('.deck') || e.target;
+    const color = target.getAttribute('data-color');
+    if ((color === 'loco'
+    && this.getTurnWeight === 0)
+    || color !== 'loco') {
+      const cardIndex = Number(target.getAttribute('data-index'));
+      this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
+      if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+    }
   }
+}
+
+pickCardDeck(): void {
+  this.$socket.emit('pickCardDeck', this.getCurrentName);
+  if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+}
+
 }
 </script>
 
@@ -119,7 +151,6 @@ export default class DeckSide extends Vue {
   border-radius: 1rem;
   border: 0.1rem solid #0e2e3a;
   text-align: center;
-  cursor: pointer;
   overflow: hidden;
   position: relative;
   transition: 0.3s;
@@ -140,7 +171,9 @@ export default class DeckSide extends Vue {
     height: 100%;
     transform: translateY(100%);
     z-index: 1;
-    transition: all 0.3s;
+    transition: all .3s;
+    cursor: pointer;
+
   }
   &-length {
     position: absolute;
