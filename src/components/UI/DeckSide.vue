@@ -83,7 +83,6 @@ getTurnWeight!: number;
 
 getUsers!:userInterface[];
 
-
   getCurrentName!: string;
 
   showRoutesModal = false;
@@ -106,33 +105,32 @@ getUsers!:userInterface[];
     // TODO: routes to choose ->> shortRoutes in hand (in Prepare)
   }
 
-discardRoute(array: Array<number>): void {
-  this.routesToChoose.splice(0);
-  array.forEach((route) => {
-    this.$socket.emit('discardShortRoute', this.getCurrentName, route);
-  });
-  this.$socket.emit('endOfTurn');
-}
+  discardRoute(array: Array<number>): void {
+    this.routesToChoose.splice(0);
+    array.forEach((route) => {
+      this.$socket.emit('discardShortRoute', this.getCurrentName, route);
+    });
+    this.$socket.emit('endOfTurn');
+  }
 
-pickCardTable(e: MouseEvent): void {
-  if (e.target instanceof Element) {
-    const target = e.target.closest('.deck') || e.target;
-    const color = target.getAttribute('data-color');
-    if ((color === 'loco'
+  pickCardTable(e: MouseEvent): void {
+    if (e.target instanceof Element) {
+      const target = e.target.closest('.deck') || e.target;
+      const color = target.getAttribute('data-color');
+      if ((color === 'loco'
     && this.getTurnWeight === 0)
     || color !== 'loco') {
-      const cardIndex = Number(target.getAttribute('data-index'));
-      this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
-      if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+        const cardIndex = Number(target.getAttribute('data-index'));
+        this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
+        if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+      }
     }
   }
-}
 
-pickCardDeck(): void {
-  this.$socket.emit('pickCardDeck', this.getCurrentName);
-  if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
-}
-
+  pickCardDeck(): void {
+    this.$socket.emit('pickCardDeck', this.getCurrentName);
+    if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+  }
 }
 </script>
 
