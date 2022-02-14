@@ -47,5 +47,6 @@ export default {
     getRouteDeck: (state: { gameDeck: gameDeckInterface }): number[] => state.gameDeck.route,
     getCardDeck: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.deck,
     getCardTable: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.table,
+    getTurnWeight: (state: { turnWeight: number }): number => state.turnWeight,
   },
 };

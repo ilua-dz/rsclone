@@ -3,21 +3,30 @@
     <div class="deck deck-route">
       <div class="deck-back">маршруты</div>
       <div class="deck-action"
-      v-if="checkActive && getRouteDeck.length"
+      v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
       @click="pickRoute"
       >Выбрать маршруты</div>
       <div class="deck-length"> {{ getRouteDeck.length }}</div>
     </div>
     <ul class="table-card">
       <li
-      :key="card"
-      v-for="card in getCardTable"
+      :key="index"
+      v-for="(card, index) in getCardTable"
       class="deck"
-      > {{ card }} </li>
+      :data-color="card"
+      :data-index="index"
+      >
+        <div class="deck-back">{{ card }}</div>
+        <div class="deck-action"
+        v-if="checkActive && (card !== 'loco' || card === 'loco' && getTurnWeight === 0)"
+        @click="pickCardTable"
+        >Взять карту
+        </div>
+      </li>
     </ul>
     <div class="deck deck-card">
       <div class="deck-back">колода</div>
-      <div class="deck-action" v-if="checkActive">Взять карту</div>
+      <div class="deck-action" v-if="checkActive" @click="pickCardDeck">Взять карту</div>
       <div class="deck-length"> {{ getCardDeck.length }}</div>
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
@@ -32,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
@@ -47,6 +56,7 @@ import Prepare from '../Game/Prepare.vue';
       'getCardDeck',
       'getCardTable',
       'getCurrentName',
+      'getTurnWeight',
     ]),
   },
   components: {
@@ -63,6 +73,8 @@ getRouteDeck!: number[];
 getCardDeck!: number[];
 
 getTurn!: number;
+
+getTurnWeight!: number;
 
 getUsers!:userInterface[];
 
@@ -95,6 +107,25 @@ discardRoute(array: Array<number>): void {
   });
   this.$socket.emit('endOfTurn');
 }
+
+pickCardTable(e: MouseEvent): void {
+  if (e.target instanceof Element) {
+    const target = e.target.closest('.deck') || e.target;
+    const color = target.getAttribute('data-color');
+    if ((color === 'loco'
+    && this.getTurnWeight === 0)
+    || color !== 'loco') {
+      const cardIndex = Number(target.getAttribute('data-index'));
+      this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
+      if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+    }
+  }
+}
+
+pickCardDeck(): void {
+  this.$socket.emit('pickCardDeck', this.getCurrentName);
+  if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+}
 }
 </script>
 
@@ -114,7 +145,6 @@ discardRoute(array: Array<number>): void {
   border: 0.1rem solid #0e2e3a;
   height: 8rem;
   text-align: center;
-  cursor: pointer;
   overflow: hidden;
   position: relative;
 
@@ -134,7 +164,7 @@ discardRoute(array: Array<number>): void {
     transform: translateY(100%);
     z-index: 1;
     transition: all .3s;
-
+    cursor: pointer;
   }
   &-length {
     position: absolute;
