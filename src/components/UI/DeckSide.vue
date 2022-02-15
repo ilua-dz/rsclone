@@ -13,6 +13,7 @@
     </div>
     <ul class="table-card">
       <li
+<<<<<<< HEAD
         :key="index"
         v-for="(card, index) in getCardTable"
         class="deck"
@@ -20,6 +21,18 @@
         :data-index="index"
         :style="{
           background: 'center / contain no-repeat url(/assets/game/wagon_cards/' + card + '.avif)',
+=======
+      :key="index"
+      v-for="(card, index) in getCardTable"
+      class="deck"
+      :data-color="card"
+      :data-index="index"
+      :style="{
+          background:
+            'center / contain no-repeat url(/assets/game/wagon_cards/' +
+            card +
+            '.avif)',
+>>>>>>> refactor: background src and condition
         }"
       >
         <div class="deck-back"></div>
@@ -33,9 +46,17 @@
       </li>
     </ul>
     <div class="deck deck-card">
+<<<<<<< HEAD
       <div class="deck-back"></div>
       <div class="deck-action" v-if="checkActive" @click="pickCardDeck">Взять карту</div>
       <div class="deck-length">{{ getCardDeck.length }}</div>
+=======
+      <div class="deck-back">колода</div>
+      <div class="deck-action"
+      v-if="checkActive && getCardDeck.length > 0"
+      @click="pickCardDeck">Взять карту</div>
+      <div class="deck-length"> {{ getCardDeck.length }}</div>
+>>>>>>> refactor: background src and condition
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
       <Prepare
