@@ -16,6 +16,10 @@
         :railway="railway"
         :data-path="railway.id"
         :users="getUsers"
+        :class="{'route_available': !railway.status}"
+        :style="{fill: railway.status ?
+          getUsers.find((u) => u.name === railway.status).color
+          : ''}"
       />
     </svg>
     <modal-window v-if="showBuildWayModal"
@@ -23,6 +27,7 @@
     >
       <build-way
         :path="path"
+        @close-modal="showBuildWayModal = false"
       />
     </modal-window>
   </div>

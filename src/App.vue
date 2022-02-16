@@ -15,7 +15,11 @@
       </div>
       <player-side />
     </div>
-    <modal-window v-if="getGameStatus && getTurn === -1" :timer="prepareTimer">
+    <modal-window
+    v-if="showModal && getGameStatus && getTurn === -1"
+    :timer="prepareTimer"
+    @close-modalWindow="showModal = false"
+    >
       <prepare
         :timer="prepareTimer"
         @get-discarded="discardRoute"
@@ -71,7 +75,7 @@ export default class App extends Vue {
 
   prepareTimer = 30;
 
-  closeModal = false;
+  showModal = true;
 
   storage = new Storage();
 

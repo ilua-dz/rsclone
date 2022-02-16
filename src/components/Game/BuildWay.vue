@@ -3,12 +3,15 @@
     <h3>Постройка маршрута</h3>
     <p> {{ message }} </p>
     <Btn
+      v-if="message !== notEnoughMessage"
       title="Построить"
+      :method="acceptBuild"
       :class="[
         'btn-accept' ,
       ]"
     />
     <Btn
+      :method="declineBuild"
       title="Отмена"
       :class="[
         'btn-decline',
@@ -54,6 +57,14 @@ export default class BuildWay extends Vue {
 
   message = '';
 
+  notEnoughMessage= 'У вас не хватает вагонов для постройки маршрута';
+
+  playerHas = 0;
+
+  playerLoco = 0;
+
+  cardsToPay!: {color: typeOfCardsColor, value: number, loco: number} ;
+
   get currentWay(): railwayInfoInterface {
     return this.getRailwaysInfo.filter((route) => route.id === this.path)[0];
   }
@@ -72,17 +83,32 @@ export default class BuildWay extends Vue {
 
   mounted(): void {
     if (this.trainColor !== 'multi') {
-      const playerHas = this.currentUser.hand.cards[this.trainColor];
-      const playerLoco = this.currentUser.hand.cards.loco;
-      console.log(this.message);
-      if (playerHas >= this.trainsAmount) {
-        this.message = `У вас ${playerHas} вагонов нужного цвета. Построить путь, потратив ${this.trainsAmount}?`;
-      } else if (playerHas + playerLoco >= this.trainsAmount) {
-        this.message = `У вас ${playerHas} вагонов нужного цвета. Построить путь, потратив их и ${this.trainsAmount - playerHas} локомотив?`;
+      this.playerHas = this.currentUser.hand.cards[this.trainColor];
+      this.playerLoco = this.currentUser.hand.cards.loco;
+      if (this.playerHas >= this.trainsAmount) {
+        this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив ${this.trainsAmount}?`;
+        this.cardsToPay = { color: this.trainColor, value: this.trainsAmount, loco: 0 };
+      } else if (this.playerHas + this.playerLoco >= this.trainsAmount) {
+        this.cardsToPay = {
+          color: this.trainColor,
+          value: this.playerHas,
+          loco: this.trainsAmount - this.playerHas,
+        };
+        this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив их и ${this.cardsToPay.loco} локомотив?`;
       } else {
-        this.message = 'У вас не хватает вагонов для постройки маршрута';
+        this.message = this.notEnoughMessage;
       }
     }
+  }
+
+  declineBuild():void {
+    this.$emit('close-modal');
+  }
+
+  acceptBuild(): void {
+    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay);
+    this.$socket.emit('endOfTurn');
+    this.$emit('close-modal');
   }
 }
 </script>

@@ -16,9 +16,15 @@ export default {
       state.railways = data.railways;
     },
 
-    // SOCKET_updateUsers(state: { users: userInterface[] }, users: [userInterface]): void {
-    //   state.users = users;
-    // },
+    SOCKET_setRailwayStatus(
+      state: { railways: railwayInterface[] },
+      data: { path: string, currentName: string },
+    ): void {
+      const currentWay = state.railways.find((way) => way.id === data.path);
+      if (currentWay) {
+        currentWay.status = data.currentName;
+      }
+    },
   },
   actions: {
     // SOCKET_createApp(ctx: any, data: { users: []; gameStatus: boolean }) {
