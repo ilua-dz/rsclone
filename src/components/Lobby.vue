@@ -162,7 +162,6 @@ export default class Lobby extends Vue {
   align-items: center;
   justify-content: flex-start;
   row-gap: 2rem;
-  font-family: 'Poiret One', cursive;
   background: url('../../public/assets/lobby/start-page-bg.jpg') center;
 }
 

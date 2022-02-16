@@ -1,39 +1,44 @@
 <template>
   <aside class="deck-side">
     <div class="deck deck-route">
-      <div class="deck-back">маршруты</div>
-      <div class="deck-action"
-      v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
-      @click="pickRoute"
-      >Выбрать маршруты</div>
-      <div class="deck-length"> {{ getRouteDeck.length }}</div>
+      <div class="deck-back"></div>
+      <div
+        class="deck-action"
+        v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
+        @click="pickRoute"
+      >
+        Выбрать маршруты
+      </div>
+      <div class="deck-length">{{ getRouteDeck.length }}</div>
     </div>
     <ul class="table-card">
       <li
-      :key="index"
-      v-for="(card, index) in getCardTable"
-      class="deck"
-      :data-color="card"
-      :data-index="index"
-      :style="{
+        :key="index"
+        v-for="(card, index) in getCardTable"
+        class="deck"
+        :data-color="card"
+        :data-index="index"
+        :style="{
           background:
             'center / contain no-repeat url(/assets/game/wagon_cards/' +
             card.split('-')[0] +
             '.avif)',
         }"
       >
-        <div class="deck-back">{{ card }}</div>
-        <div class="deck-action"
-        v-if="checkActive && (card !== 'loco' || card === 'loco' && getTurnWeight === 0)"
-        @click="pickCardTable"
-        >Взять карту
+        <div class="deck-back"></div>
+        <div
+          class="deck-action"
+          v-if="checkActive && (card !== 'loco' || (card === 'loco' && getTurnWeight === 0))"
+          @click="pickCardTable"
+        >
+          Взять карту
         </div>
       </li>
     </ul>
     <div class="deck deck-card">
-      <div class="deck-back">колода</div>
+      <div class="deck-back"></div>
       <div class="deck-action" v-if="checkActive" @click="pickCardDeck">Взять карту</div>
-      <div class="deck-length"> {{ getCardDeck.length }}</div>
+      <div class="deck-length">{{ getCardDeck.length }}</div>
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
       <Prepare
@@ -79,9 +84,9 @@ export default class DeckSide extends Vue {
 
   getTurn!: number;
 
-getTurnWeight!: number;
+  getTurnWeight!: number;
 
-getUsers!:userInterface[];
+  getUsers!: userInterface[];
 
   getCurrentName!: string;
 
@@ -117,9 +122,7 @@ getUsers!:userInterface[];
     if (e.target instanceof Element) {
       const target = e.target.closest('.deck') || e.target;
       const color = target.getAttribute('data-color');
-      if ((color === 'loco'
-    && this.getTurnWeight === 0)
-    || color !== 'loco') {
+      if ((color === 'loco' && this.getTurnWeight === 0) || color !== 'loco') {
         const cardIndex = Number(target.getAttribute('data-index'));
         this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
         if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
@@ -136,12 +139,15 @@ getUsers!:userInterface[];
 
 <style lang="scss" scoped>
 .deck-side {
-  width: 30rem;
+  padding: 1rem 3rem 1rem 3rem;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
+  border: double;
+  border-radius: 2.5rem;
 }
 .deck {
   width: 16.2rem;
@@ -169,9 +175,8 @@ getUsers!:userInterface[];
     height: 100%;
     transform: translateY(100%);
     z-index: 1;
-    transition: all .3s;
+    transition: all 0.3s;
     cursor: pointer;
-
   }
   &-length {
     position: absolute;

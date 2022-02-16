@@ -1,40 +1,41 @@
 <template>
   <div class="game-player" :style="{ '--user-color': currentColor }">
     <ul class="player-box player-route">
-      <li
-        class="route route__long player-box__item card"
-        v-if="longRoute != -1"
-        :style="{
-          background:
-            'center / contain no-repeat url(/assets/game/route_cards/' +
-            (+longRoute + 41) +
-            '.avif)',
-        }"
-      >
-        <!-- Маршрут номер {{ longRoute }} -->
+      <li class="route route__long player-box__item" v-if="longRoute != -1">
+        <div
+          class="card"
+          :style="{
+            background:
+              'center / contain no-repeat url(/assets/game/route_cards/' +
+              (+longRoute + 41) +
+              '.avif)',
+          }"
+        ></div>
       </li>
       <li
-        class="route player-box__item card"
+        class="route player-box__item"
         :key="route"
         v-for="route in shortRoute"
         :data-route="route"
-        :style="{
-          background: 'center / contain no-repeat url(/assets/game/route_cards/' + route + '.avif)',
-        }"
       >
-        <!-- Маршрут номер {{ route }} -->
+        <div
+          class="card"
+          :style="{
+            background:
+              'center / contain no-repeat url(/assets/game/route_cards/' + (+route + 1) + '.avif)',
+          }"
+        ></div>
       </li>
     </ul>
     <ul class="player-box player-card">
-      <li
-        class="player-box__item card"
-        :key="card[0]"
-        v-for="card in cardsInHand"
-        :style="{
-          background:
-            'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-        }"
-      >
+      <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand">
+        <div
+          class="card"
+          :style="{
+            background:
+              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+          }"
+        ></div>
         <div class="card-value">
           {{ card[1] }}
         </div>
@@ -90,14 +91,18 @@ export default class PlayerSide extends Vue {
 <style lang="scss" scoped>
 .game-player {
   width: 100%;
+  height: 14rem;
+  margin-top: 0.5rem;
   display: flex;
+  justify-content: center;
 }
 .player-box {
   display: flex;
-  // flex-direction: column;
-  flex-basis: 100%;
-  padding: 2rem;
-  border: 0.5rem solid var(--user-color);
+  // flex-basis: 100%;
+  padding: 1.5rem;
+  border: double;
+  background: var(--user-color);
+  border-radius: 2.5rem;
   list-style: none;
   gap: 1rem;
 }
@@ -106,13 +111,45 @@ export default class PlayerSide extends Vue {
   flex-wrap: wrap;
 }
 .player-box__item {
-  padding: 2rem;
-  border: 0.1rem solid var(--user-color);
-  border-radius: 1rem;
+  width: 7rem;
 }
 
 .card {
   width: 16.2rem;
   height: 10rem;
+  border: 0.1rem solid black;
+  border-radius: 1rem;
+}
+.player-route {
+  width: 50%;
+  border-top-right-radius: unset;
+  border-bottom-right-radius: unset;
+  border-right: none;
+  .card {
+    transform: rotate(45deg);
+  }
+}
+.player-card {
+  width: 50%;
+  padding-right: 10.5rem;
+  justify-content: flex-end;
+  border-top-left-radius: unset;
+  border-bottom-left-radius: unset;
+  border-left: none;
+  .card {
+    transform: rotate(-45deg);
+  }
+}
+.card-value {
+  transform: rotate(0) translate(4.2rem, 0.7rem);
+  width: min-content;
+  min-width: 3.5rem;
+  padding: 0.2rem;
+  text-align: center;
+  border-radius: 2rem;
+  border: groove;
+  background: rgb(41, 41, 41);
+  color: yellow;
+  text-shadow: 0 0 3px white, 0 0 5px white;
 }
 </style>

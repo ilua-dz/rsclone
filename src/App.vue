@@ -120,8 +120,9 @@ export default class App extends Vue {
 @import './style/base/_typography.scss';
 
 body {
-  width: 100vw;
+  // width: 100vw;
   height: 100vh;
+  padding: 0.2rem;
 }
 
 #app {
@@ -137,7 +138,7 @@ body {
 }
 
 .game-main {
-  height: min-content;
   display: flex;
+  gap: 0.5rem;
 }
 </style>

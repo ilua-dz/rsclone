@@ -5,8 +5,6 @@
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       id="svg5"
-      width="2048"
-      height="1380"
       version="1.1"
       viewBox="0 0 2048 1380"
     >
@@ -15,9 +13,6 @@
         id="image17"
         width="2048"
         height="1380"
-        x="2.75"
-        y="1.375"
-        preserveAspectRatio="none"
         style="stroke-width: 3; stroke-miterlimit: 4; stroke-dasharray: none"
       />
       <Railway
@@ -59,14 +54,16 @@ export default class Map extends Vue {
 
 <style lang="scss" scoped>
 .game-field {
-  width: 70vw;
-  height: inherit;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 2rem;
+  border: 0.2rem solid rgb(139, 89, 24);
+  overflow: hidden;
   &__img {
     // max-width: 98vw;
     // height: min-content;
-    width: 100%;
-    height: 100%;
-    max-height: 82vh;
+    height: 81.5vh;
+    // max-height: 82vh;
   }
 }
 </style>
