@@ -61,7 +61,8 @@ export default class ModalWindow extends Vue {
   }
 
   closeModal(): void {
-    this.show = false;
+    // this.show = false;
+    this.$emit('close-modalWindow');
   }
 }
 </script>

@@ -7,6 +7,7 @@
       id="svg5"
       version="1.1"
       viewBox="0 0 2048 1380"
+      @click="pickWay"
     >
       <image xlink:href="assets/map/gamefield.jpg" id="image17" />
       <Railway
@@ -17,6 +18,13 @@
         :users="getUsers"
       />
     </svg>
+    <modal-window v-if="showBuildWayModal"
+      @close-modalWindow="showBuildWayModal = false"
+    >
+      <build-way
+        :path="path"
+      />
+    </modal-window>
   </div>
 </template>
 
@@ -25,12 +33,29 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
+import railwayInfoInterface from '../interface/railwayInfo';
+import userInterface from '../interface/user';
 import Railway from './Railway.vue';
+import ModalWindow from '../ModalWindow/ModalWindow.vue';
+import BuildWay from '../Game/BuildWay.vue';
 
 @Component({
-  computed: { ...mapGetters(['getRailways', 'getUsers']) },
+  computed: {
+    ...mapGetters([
+      'getRailways',
+      'getUsers',
+      'getRailwaysInfo',
+      'getUsers',
+      'getTurn',
+      'getTurnWeight',
+      'getCurrentName',
+    ]),
+  },
+
   components: {
     Railway,
+    ModalWindow,
+    BuildWay,
   },
 })
 export default class Map extends Vue {
@@ -38,11 +63,47 @@ export default class Map extends Vue {
   // get mapGetters('getRailways') ,
   getRailways!: railwayInterface[];
 
-  // railways = this.getRailways;
+  getRailwaysInfo!: railwayInfoInterface[];
 
-  // mounted(): void {
-  // console.log(this.getRailways);
-  // }
+  getTurn!: number;
+
+  getUsers!:userInterface[];
+
+  getCurrentName!: string;
+
+  getTurnWeight!: number;
+
+  path!: string;
+
+  showBuildWayModal = false;
+
+  get checkActive(): boolean {
+    if (this.getTurn === -1) return false;
+    return this.getUsers[this.getTurn].name === this.getCurrentName;
+  }
+
+  pickWay(e: MouseEvent):void {
+    if (this.checkActive && this.getTurnWeight === 0) {
+      if (e.target instanceof Element) {
+        const target = e.target.closest('.route');
+        if (target) {
+          this.path = target.getAttribute('data-path') || '';
+          if (this.path) {
+            const currentRoute = this.getRailwaysInfo.find((route) => route.id === this.path);
+            if (currentRoute) {
+              console.log(currentRoute.color);
+              console.log(currentRoute.trainsAmount);
+              this.showBuildWayModal = true;
+            } else {
+              console.log('Error: cant find this route in base');
+            }
+          } else {
+            console.log('Error: wrong path');
+          }
+        }
+      }
+    }
+  }
 }
 </script>
 

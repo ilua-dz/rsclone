@@ -104,7 +104,11 @@ export default class DeckSide extends Vue {
 
   getTurnWeight!: number;
 
+<<<<<<< HEAD
   getUsers!: userInterface[];
+=======
+  getUsers!:userInterface[];
+>>>>>>> feat: start implement buildWay logic
 
   getCurrentName!: string;
 
