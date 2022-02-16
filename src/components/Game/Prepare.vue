@@ -3,27 +3,18 @@
     <h3>Подготовка</h3>
     <h5>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</h5>
     <ul class="route-list" @click="markToDiscard">
-      <li class="route route__long"
-      v-if="!checkPickRoute"
-      >Маршрут номер {{ longRoute }}</li>
-      <li
-      class="route" :key="route"
-      v-for="route in shortRoute"
-      :data-route="route"
-      >Маршрут номер {{ route }}</li>
+      <li class="route route__long" v-if="!checkPickRoute">Маршрут номер {{ longRoute }}</li>
+      <li class="route" :key="route" v-for="route in shortRoute" :data-route="route">
+        Маршрут номер {{ route }}
+      </li>
     </ul>
     <p>Примечание: за невыполненные карточки вы получите штраф.</p>
-    <Btn title="Применить"
-      class="btn-accept btn-prepare"
-      :method="acceptDiscard"
-      />
+    <Btn title="Применить" class="btn-accept btn-prepare" :method="acceptDiscard" />
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Component, Vue, Prop,
-} from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import Btn from '../Button/Btn.vue';
@@ -50,7 +41,7 @@ export default class Prepare extends Vue {
 
   userName = this.storage.data.name;
 
-  discard: Array<string|number> = [];
+  discard: Array<string | number> = [];
 
   prepareTimer = setInterval(() => {
     this.currentTimer -= 0.1;
@@ -123,36 +114,33 @@ export default class Prepare extends Vue {
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-
-.route-list{
+.route-list {
   display: flex;
   width: 100%;
   justify-content: space-between;
   list-style: none;
 }
 
-.route{
+.route {
   font-size: 1.6rem;
   width: 22%;
   background-color: rgb(129, 129, 129);
   cursor: pointer;
   transition: all 0.3s;
 
-  &__long{
+  &__long {
     background-color: rgb(91, 144, 204);
   }
 
-  &.discard{
-    filter: blur(.3rem);
+  &.discard {
+    filter: blur(0.3rem);
   }
 }
 
-.btn-prepare{
+.btn-prepare {
   margin: 1rem auto;
 }
-
 </style>

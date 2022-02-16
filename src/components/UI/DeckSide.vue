@@ -19,10 +19,7 @@
         :data-color="card"
         :data-index="index"
         :style="{
-          background:
-            'center / contain no-repeat url(/assets/game/wagon_cards/' +
-            card.split('-')[0] +
-            '.avif)',
+          background: 'center / contain no-repeat url(/assets/game/wagon_cards/' + card + '.avif)',
         }"
       >
         <div class="deck-back"></div>

@@ -91,7 +91,7 @@ export default class PlayerSide extends Vue {
 <style lang="scss" scoped>
 .game-player {
   width: 100%;
-  height: 14rem;
+  height: 11rem;
   margin-top: 0.5rem;
   display: flex;
   justify-content: center;
@@ -111,7 +111,7 @@ export default class PlayerSide extends Vue {
   flex-wrap: wrap;
 }
 .player-box__item {
-  width: 7rem;
+  width: 6.5rem;
 }
 
 .card {
@@ -126,7 +126,7 @@ export default class PlayerSide extends Vue {
   border-bottom-right-radius: unset;
   border-right: none;
   .card {
-    transform: rotate(45deg);
+    transform: translateY(-2rem) rotateX(45deg) rotate(45deg);
   }
 }
 .player-card {
@@ -137,11 +137,11 @@ export default class PlayerSide extends Vue {
   border-bottom-left-radius: unset;
   border-left: none;
   .card {
-    transform: rotate(-45deg);
+    transform: translateY(-2rem) rotateX(45deg) rotate(-45deg);
   }
 }
 .card-value {
-  transform: rotate(0) translate(4.2rem, 0.7rem);
+  transform: rotate(0) translate(4.2rem, -3rem);
   width: min-content;
   min-width: 3.5rem;
   padding: 0.2rem;

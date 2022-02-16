@@ -8,13 +8,7 @@
       version="1.1"
       viewBox="0 0 2048 1380"
     >
-      <image
-        xlink:href="assets/map/gamefield.jpg"
-        id="image17"
-        width="2048"
-        height="1380"
-        style="stroke-width: 3; stroke-miterlimit: 4; stroke-dasharray: none"
-      />
+      <image xlink:href="assets/map/gamefield.jpg" id="image17" />
       <Railway
         :key="railway.id"
         v-for="railway in getRailways"
@@ -59,10 +53,11 @@ export default class Map extends Vue {
   border-radius: 2rem;
   border: 0.2rem solid rgb(139, 89, 24);
   overflow: hidden;
+  background: rgb(165, 165, 165);
   &__img {
     // max-width: 98vw;
     // height: min-content;
-    height: 81.5vh;
+    height: 85vh;
     // max-height: 82vh;
   }
 }
