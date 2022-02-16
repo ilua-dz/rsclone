@@ -101,7 +101,7 @@ export default class PlayerSide extends Vue {
   // flex-basis: 100%;
   padding: 1.5rem;
   border: double;
-  background: var(--user-color);
+  background: linear-gradient(180deg, #e6d16c, var(--user-color));
   border-radius: 2.5rem;
   list-style: none;
   gap: 1rem;

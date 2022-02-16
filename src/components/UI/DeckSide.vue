@@ -145,6 +145,7 @@ export default class DeckSide extends Vue {
   gap: 1rem;
   border: double;
   border-radius: 2.5rem;
+  background: rgb(212, 212, 212);
 }
 .deck {
   width: 16.2rem;

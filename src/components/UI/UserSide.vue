@@ -6,6 +6,9 @@
         v-for="user in getUsers"
         :class="{ active: user === activePlayer }"
         class="user-item"
+        :style="{
+          border: 'groove' + user.color,
+        }"
       >
         <div class="user-info">
           <div
@@ -83,12 +86,12 @@ export default class UserSide extends Vue {
   padding: 1rem;
   border: double;
   border-radius: 2.5rem;
+  background: rgb(212, 212, 212);
 }
 .user-list {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  align-items: stretch;
   padding: 1rem;
   list-style: none;
 }
@@ -96,14 +99,13 @@ export default class UserSide extends Vue {
   width: 35rem;
   padding: 1rem;
   border: 0.1rem solid rgb(139, 89, 24);
-  border-radius: 1rem;
+  border-radius: 2rem;
   display: flex;
   justify-content: center;
-  // transform: scale(0.9);
-
+  background: whitesmoke;
+  box-shadow: 0 0 1rem 0.3rem white;
   &.active {
-    // transform: scale(1);
-    box-shadow: 0 0 1rem 0.3rem rgb(139, 89, 24);
+    animation: blur 1.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
   }
 }
 .user-info {
@@ -154,5 +156,11 @@ export default class UserSide extends Vue {
 .stat-block:hover {
   z-index: 5;
   transform: scale(2) rotate(10deg);
+}
+
+@keyframes blur {
+  from {
+    box-shadow: 0 0 1rem 0.3rem rgb(58, 51, 51);
+  }
 }
 </style>
