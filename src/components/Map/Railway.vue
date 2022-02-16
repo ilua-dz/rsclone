@@ -1,6 +1,6 @@
 <template>
   <g
-    class="route route_available"
+    class="route"
     :transform="transform"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"

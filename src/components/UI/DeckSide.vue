@@ -33,9 +33,11 @@
       </li>
     </ul>
     <div class="deck deck-card">
-      <div class="deck-back"></div>
-      <div class="deck-action" v-if="checkActive" @click="pickCardDeck">Взять карту</div>
-      <div class="deck-length">{{ getCardDeck.length }}</div>
+      <div class="deck-back">колода</div>
+      <div class="deck-action"
+      v-if="checkActive && getCardDeck.length > 0"
+      @click="pickCardDeck">Взять карту</div>
+      <div class="deck-length"> {{ getCardDeck.length }}</div>
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
       <Prepare

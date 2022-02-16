@@ -1,9 +1,12 @@
 import userInterface from '@/components/interface/user';
 import railwayInterface from '@/components/interface/railway';
+import railwayInfoInterface from '@/components/interface/railwayInfo';
+import railwaysInfo from './railwaysInfo';
 
 export default {
   state: {
     railways: [],
+    railwaysInfo,
   },
   mutations: {
     SOCKET_createApp(
@@ -13,9 +16,15 @@ export default {
       state.railways = data.railways;
     },
 
-    // SOCKET_updateUsers(state: { users: userInterface[] }, users: [userInterface]): void {
-    //   state.users = users;
-    // },
+    SOCKET_setRailwayStatus(
+      state: { railways: railwayInterface[] },
+      data: { path: string, currentName: string },
+    ): void {
+      const currentWay = state.railways.find((way) => way.id === data.path);
+      if (currentWay) {
+        currentWay.status = data.currentName;
+      }
+    },
   },
   actions: {
     // SOCKET_createApp(ctx: any, data: { users: []; gameStatus: boolean }) {
@@ -26,6 +35,9 @@ export default {
   },
   getters: {
     getRailways: (state: { railways: railwayInterface[] }): railwayInterface[] => state.railways,
+
+    getRailwaysInfo: (state:
+      { railwaysInfo: railwayInfoInterface[] }): railwayInfoInterface[] => state.railwaysInfo,
     // getUsers: (state: { users: userInterface[] }): userInterface[] => state.users,
     // getColors: (state: { users: userInterface[] }): string[] => state.users.map((u) => u.color),
   },
