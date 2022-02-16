@@ -11,8 +11,14 @@ html {
   font-size: 62.5%; //1rem=10px;
   scroll-behavior: smooth;
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 1850px) {
     font-size: 50%;
+  }
+  @media only screen and (max-width: 1800px) {
+    font-size: 49%;
+  }
+  @media only screen and (max-width: 1750px) {
+    font-size: 47%;
   }
 }
 body {

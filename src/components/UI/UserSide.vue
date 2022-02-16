@@ -9,21 +9,24 @@
       >
         <div class="user-info">
           <div
-            class="user-color"
+            class="user-avatar"
             :style="{
               background:
                 'center / contain no-repeat url(' +
                 avatars.filter((av) => av.color === user.color)[0].avatar +
                 ')' +
                 user.color,
-              border: '0.4rem solid' + user.color,
+              border: 'groove' + user.color,
             }"
-          ></div>
-          <h3 class="user-name">{{ user.name }}</h3>
+          >
+            <div class="user-points" :style="{ border: 'outset' + user.color }">
+              {{ user.points }}
+            </div>
+          </div>
         </div>
         <div class="user-stat">
+          <h3 class="user-name">{{ user.name }}</h3>
           <div class="stat-block card-block">
-            <!-- <div>Карты</div> -->
             <img
               src="assets/game/wagon_cards/wagon-shirt.avif"
               alt="карта вагона"
@@ -32,7 +35,6 @@
             <div>{{ Object.values(user.hand.cards).reduce((sum, value) => sum + value, 0) }}</div>
           </div>
           <div class="stat-block route-block">
-            <!-- <div>Маршруты</div> -->
             <img
               src="assets/game/route_cards/route-shirt.avif"
               alt="карта маршрута"
@@ -41,8 +43,7 @@
             <div>{{ user.hand.shortRoute.length + (user.hand.longRoute === -1 ? 0 : 1) }}</div>
           </div>
           <div class="stat-block train-block">
-            <!-- <div>Вагоны</div> -->
-            <img src="assets/game/wagon-icon.svg" alt="вагон" class="card-shirt-icon" />
+            <WagonIcon :style="{ '--user-color': user.color }" class="card-shirt-icon" />
             <div>{{ user.hand.trains }}</div>
           </div>
         </div>
@@ -56,10 +57,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import avatars from '../../enums/avatars';
+import WagonIcon from './WagonIcon.vue';
 
 @Component({
   computed: { ...mapGetters(['getUsers', 'getTurn']) },
-  components: {},
+  components: { WagonIcon },
 })
 export default class UserSide extends Vue {
   @Prop({ default: 0 }) private timer!: number;
@@ -78,8 +80,9 @@ export default class UserSide extends Vue {
 
 <style lang="scss" scoped>
 .user-side {
-  padding-top: 3rem;
-  padding-left: 3rem;
+  padding: 1rem;
+  border: double;
+  border-radius: 2.5rem;
 }
 .user-list {
   display: flex;
@@ -90,6 +93,7 @@ export default class UserSide extends Vue {
   list-style: none;
 }
 .user-item {
+  width: 35rem;
   padding: 1rem;
   border: 0.1rem solid rgb(139, 89, 24);
   border-radius: 1rem;
@@ -107,30 +111,44 @@ export default class UserSide extends Vue {
   flex-direction: column;
   align-items: center;
 }
-.user-color {
+.user-avatar {
+  position: relative;
   width: 10rem;
   height: 10rem;
   border-radius: 50%;
 }
+.user-points {
+  position: absolute;
+  bottom: -1rem;
+  right: -1rem;
+  min-width: 3.5rem;
+  padding: 0.2rem;
+  text-align: center;
+  border-radius: 2rem;
+  background: rgb(223, 217, 209);
+}
+.user-name {
+  width: 100%;
+}
 .user-stat {
-  margin-left: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
 }
 .card-shirt-icon {
   width: 6rem;
   max-height: 3.5rem;
   border-radius: 0.5rem;
   border: 1px solid;
+  background: rgb(223, 217, 209);
 }
 .stat-block {
-  width: 10rem;
+  width: 7rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  column-gap: 1rem;
+  row-gap: 0.5rem;
   transition: 0.3s;
 }
 .stat-block:hover {
