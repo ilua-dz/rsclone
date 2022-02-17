@@ -16,7 +16,7 @@
         :railway="railway"
         :data-path="railway.id"
         :users="getUsers"
-        :class="{'route_available': !railway.status}"
+        :class="[railway.status ? 'route_builded' : 'route_available']"
         :style="{fill: railway.status ?
           getUsers.find((u) => u.name === railway.status).color
           : ''}"
@@ -97,11 +97,11 @@ export default class Map extends Vue {
 
   showChooseColorForMulti = false;
 
-  chosenColorForMulti!: typeOfCardsColor;
+  chosenColorForMulti: typeOfCardsColor = 'loco';
 
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
-    return this.getUsers[this.getTurn].name === this.getCurrentName;
+    return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName;
   }
 
   pickWay(e: MouseEvent):void {
@@ -113,8 +113,6 @@ export default class Map extends Vue {
           if (this.path) {
             const currentRoute = this.getRailwaysInfo.find((route) => route.id === this.path);
             if (currentRoute) {
-              console.log(currentRoute.color);
-              console.log(currentRoute.trainsAmount);
               if (currentRoute.color !== 'multi') {
                 this.showBuildWayModal = true;
               } else {

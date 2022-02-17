@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h3>Выбор цвета для постройки маршрута</h3>
+    <h3> {{ possibleCards.length > 0 ? heading.build : heading.fail }}</h3>
     <ul class="card-list">
       <li class="card"
       @click="chooseColor(card)"
@@ -46,6 +46,11 @@ export default class ChooseColorForMulti extends Vue {
   getUsers!:userInterface[];
 
   getCurrentName!: string;
+
+  heading = {
+    build: 'Выбор цвета для постройки маршрута',
+    fail: 'Не хватает карт для постройки',
+  }
 
   get currentWay(): railwayInfoInterface {
     return this.getRailwaysInfo.filter((route) => route.id === this.path)[0];

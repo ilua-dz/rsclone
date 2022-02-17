@@ -16,7 +16,7 @@
       <player-side />
     </div>
     <modal-window
-    v-if="showModal && getGameStatus && getTurn === -1"
+    v-if="showModal && getGameStatus && !currentUser.preTurn"
     :timer="prepareTimer"
     @close-modalWindow="showModal = false"
     >
@@ -40,6 +40,7 @@ import UserSide from './components/UI/UserSide.vue';
 import DeckSide from './components/UI/DeckSide.vue';
 import PlayerSide from './components/UI/PlayerSide.vue';
 import Storage from './components/localStorage/storage';
+import userInterface from './components/interface/user';
 
 @Component({
   components: {
@@ -77,10 +78,16 @@ export default class App extends Vue {
 
   showModal = true;
 
+  getUsers!:userInterface[];
+
   storage = new Storage();
 
   @Watch('getTurn') onTurnChange(): void {
     if (this.getTurn === -1) this.prepareTimer = 30;
+  }
+
+  get currentUser(): userInterface {
+    return this.getUsers.filter((user) => user.name === this.getCurrentName)[0];
   }
 
   created(): void {
@@ -113,7 +120,7 @@ export default class App extends Vue {
       if (route === 'long') this.$socket.emit('discardLongRoute', this.getCurrentName);
       else this.$socket.emit('discardShortRoute', this.getCurrentName, route);
     });
-    this.$socket.emit('userPrepared');
+    this.$socket.emit('userPrepared', this.getCurrentName);
   }
 }
 </script>

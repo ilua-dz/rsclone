@@ -33,6 +33,7 @@ export default {
     setCurrentColor(state: { users: [userInterface], currentColor: string }, color: string): void {
       state.currentColor = color;
     },
+
   },
   actions: {
     // SOCKET_createApp(ctx: any, data: { users: []; gameStatus: boolean }) {

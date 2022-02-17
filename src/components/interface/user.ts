@@ -2,6 +2,7 @@ interface userInterface {
   name: string;
   color: string;
   ready: boolean;
+  preTurn: boolean;
   points: number;
   hand: {
     longRoute: number | undefined;
