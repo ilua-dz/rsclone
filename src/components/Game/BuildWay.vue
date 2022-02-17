@@ -49,6 +49,8 @@ import typeOfCardsColor from '../interface/colorType';
 export default class BuildWay extends Vue {
   @Prop({ default: 0 }) private path!: string;
 
+  @Prop({ default: '' }) private chosenColor!: typeOfCardsColor;
+
   getRailwaysInfo!: railwayInfoInterface[];
 
   getUsers!:userInterface[];
@@ -98,6 +100,30 @@ export default class BuildWay extends Vue {
       } else {
         this.message = this.notEnoughMessage;
       }
+    } else {
+      this.playerHas = this.currentUser.hand.cards[this.chosenColor];
+      this.playerLoco = this.currentUser.hand.cards.loco;
+      if (this.playerHas >= this.trainsAmount && this.chosenColor !== 'loco') {
+        this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив ${this.trainsAmount}?`;
+        this.cardsToPay = { color: this.chosenColor, value: this.trainsAmount, loco: 0 };
+      } else if (
+        this.playerHas + this.playerLoco >= this.trainsAmount
+      && this.chosenColor !== 'loco'
+      ) {
+        this.cardsToPay = {
+          color: this.chosenColor,
+          value: this.playerHas,
+          loco: this.trainsAmount - this.playerHas,
+        };
+        this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив их и ${this.cardsToPay.loco} локомотив?`;
+      } else {
+        this.cardsToPay = {
+          color: this.chosenColor,
+          value: 0,
+          loco: this.trainsAmount,
+        };
+        this.message = `Построить маршрут потратив ${this.cardsToPay.loco} локомотивов?`;
+      }
     }
   }
 
@@ -114,32 +140,5 @@ export default class BuildWay extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
-.route-list{
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  list-style: none;
-}
-
-.route{
-  font-size: 1.6rem;
-  width: 22%;
-  background-color: rgb(129, 129, 129);
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &__long{
-    background-color: rgb(91, 144, 204);
-  }
-
-  &.discard{
-    filter: blur(.3rem);
-  }
-}
-
-.btn-prepare{
-  margin: 1rem auto;
-}
 
 </style>
