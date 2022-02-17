@@ -26,8 +26,18 @@
       @close-modalWindow="showBuildWayModal = false"
     >
       <build-way
+        :chosen-color="chosenColorForMulti"
         :path="path"
         @close-modal="showBuildWayModal = false"
+      />
+    </modal-window>
+    <modal-window v-if="showChooseColorForMulti"
+      @close-modalWindow="showChooseColorForMulti = false"
+    >
+      <choose-color-for-multi
+        :path="path"
+        @close-modal="showChooseColorForMulti = false"
+        @build-multi-way="buildMultiWay"
       />
     </modal-window>
   </div>
@@ -43,6 +53,8 @@ import userInterface from '../interface/user';
 import Railway from './Railway.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import BuildWay from '../Game/BuildWay.vue';
+import ChooseColorForMulti from '../Game/ChooseColorForMulti.vue';
+import typeOfCardsColor from '../interface/colorType';
 
 @Component({
   computed: {
@@ -61,6 +73,7 @@ import BuildWay from '../Game/BuildWay.vue';
     Railway,
     ModalWindow,
     BuildWay,
+    ChooseColorForMulti,
   },
 })
 export default class Map extends Vue {
@@ -82,6 +95,10 @@ export default class Map extends Vue {
 
   showBuildWayModal = false;
 
+  showChooseColorForMulti = false;
+
+  chosenColorForMulti!: typeOfCardsColor;
+
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
     return this.getUsers[this.getTurn].name === this.getCurrentName;
@@ -98,7 +115,11 @@ export default class Map extends Vue {
             if (currentRoute) {
               console.log(currentRoute.color);
               console.log(currentRoute.trainsAmount);
-              this.showBuildWayModal = true;
+              if (currentRoute.color !== 'multi') {
+                this.showBuildWayModal = true;
+              } else {
+                this.showChooseColorForMulti = true;
+              }
             } else {
               console.log('Error: cant find this route in base');
             }
@@ -108,6 +129,11 @@ export default class Map extends Vue {
         }
       }
     }
+  }
+
+  buildMultiWay(color: typeOfCardsColor): void {
+    this.chosenColorForMulti = color;
+    this.showBuildWayModal = true;
   }
 }
 </script>
