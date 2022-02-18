@@ -59,19 +59,36 @@
       </ul>
       <p v-else>Игроков пока нет...</p>
     </div>
+    <div class="result-table" v-if="getResult.length">
+      <h2>Результаты последней игры:</h2>
+      <ol class="result-list">
+        <li
+        :key="user.name"
+        v-for="user in getResult"
+        class="result-item">
+          <span class="result-name"> {{ user.name }}</span>
+          <span class="result-points">{{ user. points }}</span>
+        </li>
+      </ol>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
 import ColorButton from './ColorButton/ColorButton.vue';
 import userInterface from './interface/user';
 import Storage from './localStorage/storage';
 import Btn from './Button/Btn.vue';
+import resultInterface from './interface/result';
 
 const storage = new Storage();
 
 @Component({
+  computed: {
+    ...mapGetters(['getUsers', 'getCurrentName', 'getResult']),
+  },
   components: {
     'color-button': ColorButton,
     Btn,
@@ -79,6 +96,8 @@ const storage = new Storage();
 })
 export default class Lobby extends Vue {
   @Prop({ default: [] }) private users!: userInterface[];
+
+  getResult!: resultInterface[];
 
   loginTitle = 'Введите своё имя';
 
@@ -170,7 +189,8 @@ export default class Lobby extends Vue {
 }
 
 .lobby,
-.new-user {
+.new-user,
+.result-table {
   color: #221e1d;
   padding: 2.5rem;
   border-radius: 2rem;

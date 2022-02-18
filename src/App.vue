@@ -7,7 +7,7 @@
       @set-new-color="setColor"
       v-show="!getGameStatus"
     />
-    <div v-if="getGameStatus" class="game">
+    <div v-if="getGameStatus && checkUserInPlayerList" class="game">
       <div class="game-main">
         <user-side />
         <Map />
@@ -15,8 +15,17 @@
       </div>
       <player-side />
     </div>
+    <div
+    v-if="!checkUserInPlayerList"
+    class="game-already-start">
+      К сожалению игра уже началась. Ждите завершения.
+    </div>
     <modal-window
-    v-if="showModal && getGameStatus && !currentUser.preTurn"
+    v-if="showModal
+    && checkUserInPlayerList
+    && getGameStatus
+    && !currentUser.preTurn
+    "
     :timer="prepareTimer"
     @close-modalWindow="showModal = false"
     >
@@ -88,6 +97,10 @@ export default class App extends Vue {
 
   get currentUser(): userInterface {
     return this.getUsers.filter((user) => user.name === this.getCurrentName)[0];
+  }
+
+  get checkUserInPlayerList(): boolean {
+    return this.getUsers.includes(this.currentUser);
   }
 
   created(): void {

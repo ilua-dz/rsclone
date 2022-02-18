@@ -1,4 +1,5 @@
 import gameDeckInterface from '@/components/interface/gameDeck';
+import resultInterface from '@/components/interface/result';
 
 export default {
   state: {
@@ -6,6 +7,7 @@ export default {
     gameTurn: -1,
     gameDeck: {},
     turnWeight: 0,
+    result: [],
   },
   mutations: {
     SOCKET_createApp(
@@ -14,18 +16,21 @@ export default {
         gameTurn: number;
         gameDeck: gameDeckInterface;
         turnWeight: number;
+        result: resultInterface[];
       },
       data: {
         gameStatus: boolean;
         gameTurn: number;
         gameDeck: gameDeckInterface;
         turnWeight: number;
+        result: resultInterface[];
       },
     ): void {
       state.gameStatus = data.gameStatus;
       state.gameTurn = data.gameTurn;
       state.gameDeck = data.gameDeck;
       state.turnWeight = data.turnWeight;
+      state.result = data.result;
     },
     SOCKET_updateGameStatus(state: { gameStatus: boolean }, gameStatus: boolean): void {
       state.gameStatus = gameStatus;
@@ -48,5 +53,8 @@ export default {
     getCardDeck: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.deck,
     getCardTable: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.table,
     getTurnWeight: (state: { turnWeight: number }): number => state.turnWeight,
+    getResult: (state: {
+      result: resultInterface[]
+    }): resultInterface[] => state.result.sort((a, b) => b.points - a.points),
   },
 };
