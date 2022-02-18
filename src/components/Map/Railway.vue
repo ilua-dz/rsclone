@@ -59,6 +59,11 @@ export default class Railway extends Vue {
     cursor: pointer;
     fill: transparent;
   }
+
+  &_builded {
+    pointer-events: none;
+    stroke: rgb(0, 0, 0);
+  }
 }
 
 .hovered {

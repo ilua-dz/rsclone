@@ -97,7 +97,7 @@ export default class DeckSide extends Vue {
 
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
-    return this.getUsers[this.getTurn].name === this.getCurrentName;
+    return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName;
   }
 
   pickRoute(): void {

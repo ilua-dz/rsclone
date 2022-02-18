@@ -74,7 +74,7 @@ export default class UserSide extends Vue {
   getTurn!: number;
 
   get activePlayer(): userInterface {
-    return this.getUsers[this.getTurn];
+    return this.getUsers[this.getTurn % this.getUsers.length];
   }
 
   avatars = avatars;

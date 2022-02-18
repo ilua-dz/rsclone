@@ -87,7 +87,9 @@ export default class BuildWay extends Vue {
     if (this.trainColor !== 'multi') {
       this.playerHas = this.currentUser.hand.cards[this.trainColor];
       this.playerLoco = this.currentUser.hand.cards.loco;
-      if (this.playerHas >= this.trainsAmount) {
+      if (this.currentUser.hand.trains < this.trainsAmount) {
+        this.message = this.notEnoughMessage;
+      } else if (this.playerHas >= this.trainsAmount) {
         this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив ${this.trainsAmount}?`;
         this.cardsToPay = { color: this.trainColor, value: this.trainsAmount, loco: 0 };
       } else if (this.playerHas + this.playerLoco >= this.trainsAmount) {
@@ -103,7 +105,9 @@ export default class BuildWay extends Vue {
     } else {
       this.playerHas = this.currentUser.hand.cards[this.chosenColor];
       this.playerLoco = this.currentUser.hand.cards.loco;
-      if (this.playerHas >= this.trainsAmount && this.chosenColor !== 'loco') {
+      if (this.currentUser.hand.trains < this.trainsAmount) {
+        this.message = this.notEnoughMessage;
+      } else if (this.playerHas >= this.trainsAmount && this.chosenColor !== 'loco') {
         this.message = `У вас ${this.playerHas} вагонов нужного цвета. Построить путь, потратив ${this.trainsAmount}?`;
         this.cardsToPay = { color: this.chosenColor, value: this.trainsAmount, loco: 0 };
       } else if (
@@ -132,7 +136,7 @@ export default class BuildWay extends Vue {
   }
 
   acceptBuild(): void {
-    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay);
+    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay, this.currentWay.points);
     this.$socket.emit('endOfTurn');
     this.$emit('close-modal');
   }
