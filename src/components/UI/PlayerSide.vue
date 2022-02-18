@@ -27,20 +27,23 @@
         ></div>
       </li>
     </ul>
-    <ul class="player-box player-card">
-      <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand">
-        <div
-          class="card"
-          :style="{
-            background:
-              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-          }"
-        ></div>
-        <div class="card-value">
-          {{ card[1] }}
-        </div>
-      </li>
-    </ul>
+    <!-- <ul class="player-box player-card"> -->
+      <transition-group name="slideInLeft" tag="ul" class="player-box player-card">
+        <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand"
+        v-show="card[1] > 0">
+          <div
+            class="card"
+            :style="{
+              background:
+                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+            }"
+          ></div>
+          <div class="card-value">
+            {{ card[1] }}
+          </div>
+        </li>
+      </transition-group>
+    <!-- </ul> -->
   </div>
 </template>
 
@@ -77,7 +80,8 @@ export default class PlayerSide extends Vue {
   get cardsInHand(): [string, number][] {
     const cards = this.currentUser()?.hand.cards;
     if (!cards) return [];
-    const arrayOfCards = Object.entries(cards).filter((card) => card[1] > 0);
+    // const arrayOfCards = Object.entries(cards).filter((card) => card[1] > 0);
+    const arrayOfCards = Object.entries(cards);
     return arrayOfCards;
   }
 
@@ -112,6 +116,7 @@ export default class PlayerSide extends Vue {
 }
 .player-box__item {
   width: 6.5rem;
+  transition: all 0.5s;
 }
 
 .card {
@@ -130,6 +135,7 @@ export default class PlayerSide extends Vue {
   }
 }
 .player-card {
+  position: relative;
   width: 50%;
   padding-right: 10.5rem;
   justify-content: flex-end;
@@ -151,5 +157,19 @@ export default class PlayerSide extends Vue {
   background: rgb(41, 41, 41);
   color: yellow;
   text-shadow: 0 0 3px white, 0 0 5px white;
+}
+
+.slideInLeft{
+  &-move{
+    transition: all 0.5s;
+  }
+  &-enter-active {
+    transition: all 0.5s ease-in-out;
+    position: relative;
+  }
+  &-enter {
+    transform: translateY(-100%);
+  }
+
 }
 </style>
