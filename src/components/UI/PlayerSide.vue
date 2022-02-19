@@ -33,6 +33,7 @@
         </div>
       </li>
     </ul>
+<<<<<<< HEAD
     <transition-group name="slideInLeft" tag="ul" class="player-box player-card">
       <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand" v-show="card[1] > 0">
         <div
@@ -47,6 +48,25 @@
         </div>
       </li>
     </transition-group>
+=======
+    <!-- <ul class="player-box player-card"> -->
+      <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
+        <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
+        v-show="card[1] > 0">
+          <div
+            class="card"
+            :style="{
+              background:
+                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+            }"
+          ></div>
+          <div class="card-value">
+            {{ card[1] }}
+          </div>
+        </li>
+      </transition-group>
+    <!-- </ul> -->
+>>>>>>> feat: lobby player list trnsition
   </div>
 </template>
 
@@ -174,13 +194,18 @@ export default class PlayerSide extends Vue {
   }
 }
 
+<<<<<<< HEAD
 .slideInLeft {
   &-move {
+=======
+.slide-down{
+  &-move{
+>>>>>>> feat: lobby player list trnsition
     transition: all 0.5s;
   }
   &-enter-active {
     transition: all 0.5s ease-in-out;
-    position: relative;
+    position: absolute;
   }
   &-enter {
     transform: translateY(-100%);
