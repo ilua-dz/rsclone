@@ -28,8 +28,8 @@
       </li>
     </ul>
     <!-- <ul class="player-box player-card"> -->
-      <transition-group name="slideInLeft" tag="ul" class="player-box player-card">
-        <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand"
+      <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
+        <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
         v-show="card[1] > 0">
           <div
             class="card"
@@ -159,17 +159,16 @@ export default class PlayerSide extends Vue {
   text-shadow: 0 0 3px white, 0 0 5px white;
 }
 
-.slideInLeft{
+.slide-down{
   &-move{
     transition: all 0.5s;
   }
   &-enter-active {
     transition: all 0.5s ease-in-out;
-    position: relative;
+    position: absolute;
   }
   &-enter {
     transform: translateY(-100%);
   }
-
 }
 </style>
