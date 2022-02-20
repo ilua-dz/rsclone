@@ -1,21 +1,29 @@
 <template>
   <aside class="deck-side">
-    <div class="deck deck-route">
-      <div class="deck-back"></div>
-      <div
-        class="deck-action"
-        v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
-        @click="pickRoute"
-      >
-        Выбрать маршруты
+    <div class="deck-route">
+      <h4 class="deck-title">Колода маршрутов</h4>
+
+      <div class="deck" :class="{ active: checkActive }">
+        <div class="deck-back"></div>
+        <div
+          class="deck-action"
+          v-if="checkActive && getRouteDeck.length && getTurnWeight === 0"
+          @click="pickRoute"
+        ></div>
       </div>
-      <div class="deck-length">{{ getRouteDeck.length }}</div>
+      <div class="deck-length">
+        <div
+          class="left-of"
+          :style="{ height: Math.floor((getRouteDeck.length / 40) * 100) + '%' }"
+        ></div>
+      </div>
     </div>
     <ul class="table-card">
       <li
         :key="index"
         v-for="(card, index) in getCardTable"
         class="deck"
+        :class="{ active: checkActive }"
         :data-color="card"
         :data-index="index"
         :style="{
@@ -27,17 +35,26 @@
           class="deck-action"
           v-if="checkActive && (card !== 'loco' || (card === 'loco' && getTurnWeight === 0))"
           @click="pickCardTable"
-        >
-          Взять карту
-        </div>
+        ></div>
       </li>
     </ul>
-    <div class="deck deck-card">
-      <div class="deck-back">колода</div>
-      <div class="deck-action"
-      v-if="checkActive && getCardDeck.length > 0"
-      @click="pickCardDeck">Взять карту</div>
-      <div class="deck-length"> {{ getCardDeck.length }}</div>
+    <div class="deck-card">
+      <h4 class="deck-title">Колода вагонов</h4>
+
+      <div class="deck" :class="{ active: checkActive }">
+        <div class="deck-back"></div>
+        <div
+          class="deck-action"
+          v-if="checkActive && getCardDeck.length > 0"
+          @click="pickCardDeck"
+        ></div>
+      </div>
+      <div class="deck-length">
+        <div
+          class="left-of"
+          :style="{ height: Math.floor((getCardDeck.length / 110) * 100) + '%' }"
+        ></div>
+      </div>
     </div>
     <modal-window v-if="showRoutesModal" :timer="modalTimer">
       <Prepare
@@ -144,9 +161,9 @@ export default class DeckSide extends Vue {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  gap: 1rem;
   border: double;
   border-radius: 2.5rem;
+  box-shadow: var(--any-table-shadow);
   background: rgb(212, 212, 212);
 }
 .deck {
@@ -158,6 +175,7 @@ export default class DeckSide extends Vue {
   overflow: hidden;
   position: relative;
   transition: 0.3s;
+  box-shadow: 3px -4px 5px 2px rgba(0, 0, 0, 0.5);
 
   &-back {
     width: 100%;
@@ -170,48 +188,57 @@ export default class DeckSide extends Vue {
     position: absolute;
     top: 0;
     left: 0;
-    background: #0e2e3a5b;
-    width: 80%;
+    width: 100%;
     height: 100%;
-    transform: translateY(100%);
     z-index: 1;
-    transition: all 0.3s;
     cursor: pointer;
   }
   &-length {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #0e2e3a5b;
-    width: 20%;
-    height: 100%;
-    transform: translateY(100%);
-    z-index: 1;
+    background: black;
+    width: 2rem;
+    display: flex;
+    align-items: end;
+    border-radius: 2.5rem;
+    border-style: inset;
+    border-color: black;
     transition: all 0.3s;
-  }
+    box-shadow: 3px -4px 5px 2px rgba(0, 0, 0, 0.5);
 
-  &:hover .deck-action,
-  &:hover .deck-length {
-    transform: translateY(0);
+    .left-of {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background-color: rgb(251, 255, 0);
+    }
   }
-
-  &:hover {
+  &-title {
+    text-align: center;
+    writing-mode: vertical-rl;
+    height: 10rem;
+    transform: rotate(180deg);
+    text-shadow: 0 0 0px black, 0 0 0px black, 0 0 10px white;
+  }
+  &.active:hover {
     z-index: 5;
-    transform: rotate(-5deg) scale(1.05);
+    transform: rotate(-3deg) scale(1.05);
     box-shadow: 0 0 1rem 0.3rem white;
   }
-  &:active {
-    transform: rotate(5deg) scale(1.05);
+  &.active:active {
+    transform: rotate(3deg) scale(1.05);
   }
 }
 
 .deck-route {
+  display: flex;
+  gap: 2rem;
   .deck-back {
     background-image: url('/assets/game/route_cards/route-shirt.avif');
   }
 }
 
 .deck-card {
+  display: flex;
+  gap: 2rem;
   .deck-back {
     background-image: url('/assets/game/wagon_cards/wagon-shirt.avif');
   }
@@ -219,10 +246,15 @@ export default class DeckSide extends Vue {
 
 .table-card {
   list-style: none;
-  width: 100%;
+  width: 95%;
+  padding: 0.9rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   row-gap: 0.3rem;
+  border: groove;
+  border-radius: 2.5rem;
+  background: rgba($color: #000000, $alpha: 0.4);
+  box-shadow: var(--any-table-shadow);
 }
 </style>
