@@ -165,7 +165,7 @@ const taskInfo = [
     points: 10,
   },
   {
-    cities: ['Venizia', 'Constantinople'],
+    cities: ['Venezia', 'Constantinople'],
     id: 33,
     points: 10,
   },

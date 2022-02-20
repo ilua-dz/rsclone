@@ -19,7 +19,7 @@
       <li
         class="route player-box__item"
         :key="task.id"
-        v-for="task in currentTasks"
+        v-for="(task, index) in currentTasks"
         :data-route="task.id"
       >
         <div
@@ -28,6 +28,7 @@
             complete: completedTasks.find((completedTask) => completedTask.id === task.id),
           }"
           @mouseover="showRouteInfo(task.cities)"
+          @mouseleave="hideRouteInfo"
         >
           {{ task.points }}
         </div>
@@ -37,6 +38,7 @@
             background: `center / contain no-repeat url(./assets/game/route_cards/${
               task.id + 1
             }.png)`,
+            '--card-num': index,
           }"
         ></div>
       </li>
@@ -67,7 +69,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
-import City from '../Map/City.vue';
 import userInterface from '../interface/user';
 import taskInterface from '../interface/taskInterface';
 import taskInfo from '../../store/user/taskInfo';
@@ -121,10 +122,11 @@ export default class PlayerSide extends Vue {
   }
 
   showRouteInfo(cities: string[]): void {
-    console.log(this.currentUser);
-    console.log(cities[0]);
-    this.$emit('show-route', cities);
-    // City.showCity(cities[0]);
+    this.$emit('showCities', cities);
+  }
+
+  hideRouteInfo(): void {
+    this.$emit('hideCities');
   }
 }
 </script>
@@ -228,7 +230,7 @@ export default class PlayerSide extends Vue {
     text-shadow: 0 0 3px red, 0 0 5px red;
     &:hover + .card {
       z-index: 1;
-      transform: scale(2) translateY(-10rem) rotate(90deg);
+      transform: scale(2) translate(calc(1rem - 3.25rem * var(--card-num)), -13rem) rotate(90deg);
     }
     &.complete {
       color: greenyellow;

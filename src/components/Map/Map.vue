@@ -27,7 +27,7 @@
         v-for="city in citiesInfo"
         :city="city"
         class="city-point"
-        ref="cityComponent"
+        :show="visibleCities.includes(city.name)"
       />
     </svg>
     <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
@@ -52,7 +52,7 @@
 
 <script lang="ts">
 // import Prop if i will use props
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
 import railwayInfoInterface from '../interface/railwayInfo';
@@ -89,8 +89,9 @@ import citiesInfo from '../../store/game/citiesInfo';
   },
 })
 export default class Map extends Vue {
-  // @Prop({ default: [] }) private railways!: railwayInterface[];
+  @Prop({ default: [] }) private visibleCities!: string[];
   // get mapGetters('getRailways') ,
+
   getRailways!: railwayInterface[];
 
   getRailwaysInfo!: railwayInfoInterface[];
@@ -148,10 +149,6 @@ export default class Map extends Vue {
   buildMultiWay(color: typeOfCardsColor): void {
     this.chosenColorForMulti = color;
     this.showBuildWayModal = true;
-  }
-
-  showCity(cities: string[]): void {
-    (this.$refs.cityComponent as City).showCity(cities[0]);
   }
 }
 </script>

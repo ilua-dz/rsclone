@@ -11,10 +11,10 @@
     <div v-if="getGameStatus && checkUserInPlayerList" class="game" v-cloak>
       <div class="game-main">
         <user-side />
-        <Map ref="map" />
-        <deck-side @show-route="showRoute" />
+        <Map :visibleCities="visibleCities" />
+        <deck-side />
       </div>
-      <player-side />
+      <player-side @showCities="showCities" @hideCities="hideCities" />
     </div>
     <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start">
       К сожалению игра уже началась. Ждите завершения.
@@ -57,7 +57,6 @@ import taskInterface from './components/interface/taskInterface';
     UserSide,
     DeckSide,
     PlayerSide,
-    // HelloWorld,
   },
 
   computed: {
@@ -89,6 +88,8 @@ export default class App extends Vue {
   getUsers!: userInterface[];
 
   storage = new Storage();
+
+  visibleCities: string[] = [];
 
   @Watch('getTurn') onTurnChange(): void {
     if (this.getTurn === -1) this.prepareTimer = 30;
@@ -135,9 +136,13 @@ export default class App extends Vue {
     this.$socket.emit('userPrepared', this.getCurrentName);
   }
 
-  // showRoute(cities: string[]): void {
-  //   this.$refs.map.;
-  // }
+  showCities(cities: string[]): void {
+    this.visibleCities = cities;
+  }
+
+  hideCities(): void {
+    this.visibleCities = [];
+  }
 }
 </script>
 
