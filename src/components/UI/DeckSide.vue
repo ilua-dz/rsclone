@@ -73,6 +73,7 @@ import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import Prepare from '../Game/Prepare.vue';
+import playSound from '../../utils/sounds/index';
 
 @Component({
   computed: {
@@ -118,6 +119,7 @@ export default class DeckSide extends Vue {
   }
 
   pickRoute(): void {
+    playSound('takeRouteCards');
     if (this.getRouteDeck.length > 0) {
       this.routesToChoose.push(...this.getRouteDeck.splice(-3));
       this.showRoutesModal = true;
@@ -135,6 +137,7 @@ export default class DeckSide extends Vue {
   }
 
   pickCardTable(e: MouseEvent): void {
+    playSound('takeCard');
     if (e.target instanceof Element) {
       const target = e.target.closest('.deck') || e.target;
       const color = target.getAttribute('data-color');
@@ -147,6 +150,7 @@ export default class DeckSide extends Vue {
   }
 
   pickCardDeck(): void {
+    playSound('takeCard');
     this.$socket.emit('pickCardDeck', this.getCurrentName);
     if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
   }

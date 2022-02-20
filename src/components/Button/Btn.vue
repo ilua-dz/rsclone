@@ -1,11 +1,18 @@
 <template>
-  <button class="btn" @click="method">
+  <button
+    class="btn"
+    @click="
+      method();
+      playButtonSound();
+    "
+  >
     {{ title }}
   </button>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import playSound from '../../utils/sounds/index';
 
 @Component({
   components: {},
@@ -14,6 +21,10 @@ export default class Btn extends Vue {
   @Prop({ default: '' }) private title!: string;
 
   @Prop({ default: '' }) private method!: () => void;
+
+  playButtonSound = (): void => {
+    playSound('button');
+  };
 }
 </script>
 
