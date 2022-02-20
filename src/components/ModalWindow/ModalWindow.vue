@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" >
+  <transition name="modal" appear="appear">
     <div
       v-if="show"
       class="modal-overlay"

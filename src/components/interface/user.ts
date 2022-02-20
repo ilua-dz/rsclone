@@ -1,12 +1,15 @@
+import taskInterface from './taskInterface';
+
 interface userInterface {
   name: string;
   color: string;
   ready: boolean;
-  preTurn: boolean;
   points: number;
+  preTurn: boolean;
   hand: {
-    longRoute: number | undefined;
-    shortRoute: number[];
+    currentTasks: taskInterface[] ;
+    // longRoute: taskInterface | null;
+    // shortRoute: taskInterface[];
     trains: number;
     cards: {
       purple: number;
@@ -20,6 +23,8 @@ interface userInterface {
       loco: number;
     };
     stations: number;
+    connected: Array<string[]>;
+    completedTasks: taskInterface[];
   };
 }
 

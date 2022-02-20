@@ -54,6 +54,7 @@ import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import BuildWay from '../Game/BuildWay.vue';
 import ChooseColorForMulti from '../Game/ChooseColorForMulti.vue';
 import typeOfCardsColor from '../interface/colorType';
+import taskInterface from '../interface/taskInterface';
 
 @Component({
   computed: {
@@ -65,6 +66,7 @@ import typeOfCardsColor from '../interface/colorType';
       'getTurn',
       'getTurnWeight',
       'getCurrentName',
+      'getCurrentTasks',
     ]),
   },
 
@@ -95,6 +97,8 @@ export default class Map extends Vue {
   showBuildWayModal = false;
 
   showChooseColorForMulti = false;
+
+  getCurrentTasks!: taskInterface[];
 
   chosenColorForMulti: typeOfCardsColor = 'loco';
 

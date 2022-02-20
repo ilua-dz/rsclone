@@ -1,9 +1,11 @@
 <template>
   <div class="game-player" :style="{ '--user-color': currentColor }">
     <ul class="player-box player-route">
+      <!--
       <li class="route route__long player-box__item" v-if="longRoute != -1">
         <div
           class="card"
+          :class="{complete: getCompletedTasks.includes(taskInfo[longRoute + 40])}"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' +
@@ -15,17 +17,19 @@
           {{ routesInfo.find((_route) => _route.id === +longRoute + 40).points }}
         </div>
       </li>
+      -->
       <li
         class="route player-box__item"
-        :key="route"
-        v-for="route in shortRoute"
-        :data-route="route"
+        :key="task.id"
+        v-for="task in currentTasks"
+        :data-route="task.id"
       >
         <div
           class="card"
+          :class="{complete: completeTasks.includes(task)}"
           :style="{
             background:
-              'center / contain no-repeat url(/assets/game/route_cards/' + (+route + 1) + '.avif)',
+              'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
           }"
         ></div>
         <div class="card-value">
@@ -52,7 +56,8 @@
     <!-- <ul class="player-box player-card"> -->
       <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
         <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
-        v-show="card[1] > 0">
+        v-show="card[1] > 0"
+        >
           <div
             class="card"
             :style="{
@@ -74,11 +79,19 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
+<<<<<<< HEAD
 import routesInfo from '../../store/game/routesInfo';
+=======
+import taskInterface from '../interface/taskInterface';
+import taskInfo from '../../store/user/taskInfo';
+>>>>>>> refactor tasks logic
 
 @Component({
   computed: {
-    ...mapGetters(['getUsers', 'getCurrentName']),
+    ...mapGetters([
+      'getUsers',
+      'getCurrentName',
+    ]),
   },
   components: {},
 })
@@ -87,24 +100,42 @@ export default class PlayerSide extends Vue {
 
   getUsers!: userInterface[];
 
+<<<<<<< HEAD
   routesInfo = routesInfo;
 
   currentUser(): userInterface | undefined {
+=======
+  taskInfo = taskInfo;
+
+  get currentUser(): userInterface | undefined {
+>>>>>>> refactor tasks logic
     return this.getUsers.find((u) => u.name === this.getCurrentName);
   }
 
-  get longRoute(): number | undefined {
-    const user = this.currentUser();
-    return user ? user.hand.longRoute : -1;
+  get currentTasks(): taskInterface[] | undefined {
+    return this.currentUser?.hand.currentTasks;
   }
 
-  get shortRoute(): number[] {
-    const user = this.currentUser();
-    return user ? user.hand.shortRoute : [];
+  get completeTasks(): taskInterface[] | undefined {
+    return this.currentUser?.hand.completedTasks;
   }
+
+  get completedTask(): taskInterface[] | undefined {
+    return this.currentUser?.hand.completedTasks;
+  }
+
+  // get longRoute(): number | undefined {
+  //   const user = this.currentUser();
+  //   return user ? user.hand.longRoute : -1;
+  // }
+
+  // get shortRoute(): number[] {
+  //   const user = this.currentUser();
+  //   return user ? user.hand.shortRoute : [];
+  // }
 
   get cardsInHand(): [string, number][] {
-    const cards = this.currentUser()?.hand.cards;
+    const cards = this.currentUser?.hand.cards;
     if (!cards) return [];
     // const arrayOfCards = Object.entries(cards).filter((card) => card[1] > 0);
     const arrayOfCards = Object.entries(cards);
@@ -112,7 +143,7 @@ export default class PlayerSide extends Vue {
   }
 
   get currentColor(): string {
-    const user = this.currentUser();
+    const user = this.currentUser;
     return user ? user.color : '';
   }
 }
@@ -151,7 +182,14 @@ export default class PlayerSide extends Vue {
   height: 10rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
+<<<<<<< HEAD
   transition: 0.3s;
+=======
+
+  &.complete {
+    border: 0.3rem solid rgb(63, 158, 50);
+  }
+>>>>>>> refactor tasks logic
 }
 
 .player-route {
