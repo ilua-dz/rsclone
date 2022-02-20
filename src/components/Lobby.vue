@@ -62,12 +62,9 @@
     <div class="result-table" v-if="getResult.length">
       <h2>Результаты последней игры:</h2>
       <ol class="result-list">
-        <li
-        :key="user.name"
-        v-for="user in getResult"
-        class="result-item">
+        <li :key="user.name" v-for="user in getResult" class="result-item">
           <span class="result-name"> {{ user.name }}</span>
-          <span class="result-points">{{ user. points }}</span>
+          <span class="result-points">{{ user.points }}</span>
         </li>
       </ol>
     </div>
@@ -174,8 +171,8 @@ export default class Lobby extends Vue {
 }
 
 .lobby-container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

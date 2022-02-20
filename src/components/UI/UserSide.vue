@@ -87,6 +87,7 @@ export default class UserSide extends Vue {
   border: double;
   border-radius: 2.5rem;
   background: rgb(212, 212, 212);
+  box-shadow: var(--any-table-shadow);
 }
 .user-list {
   display: flex;
@@ -105,7 +106,7 @@ export default class UserSide extends Vue {
   background: whitesmoke;
   box-shadow: 0 0 1rem 0.3rem white;
   &.active {
-    animation: blur 1.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    animation: blur 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) alternate infinite;
   }
 }
 .user-info {

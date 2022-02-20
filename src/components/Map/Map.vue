@@ -17,21 +17,20 @@
         :data-path="railway.id"
         :users="getUsers"
         :class="[railway.status ? 'route_builded' : 'route_available']"
-        :style="{fill: railway.status ?
-          getUsers.find((u) => u.name === railway.status).color
-          : ''}"
+        :style="{
+          fill: railway.status ? getUsers.find((u) => u.name === railway.status).color : '',
+        }"
       />
     </svg>
-    <modal-window v-if="showBuildWayModal"
-      @close-modalWindow="showBuildWayModal = false"
-    >
+    <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
       <build-way
         :chosen-color="chosenColorForMulti"
         :path="path"
         @close-modal="showBuildWayModal = false"
       />
     </modal-window>
-    <modal-window v-if="showChooseColorForMulti"
+    <modal-window
+      v-if="showChooseColorForMulti"
       @close-modalWindow="showChooseColorForMulti = false"
     >
       <choose-color-for-multi
@@ -85,7 +84,7 @@ export default class Map extends Vue {
 
   getTurn!: number;
 
-  getUsers!:userInterface[];
+  getUsers!: userInterface[];
 
   getCurrentName!: string;
 
@@ -104,7 +103,7 @@ export default class Map extends Vue {
     return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName;
   }
 
-  pickWay(e: MouseEvent):void {
+  pickWay(e: MouseEvent): void {
     if (this.checkActive && this.getTurnWeight === 0) {
       if (e.target instanceof Element) {
         const target = e.target.closest('.route');
@@ -141,9 +140,10 @@ export default class Map extends Vue {
   display: flex;
   align-items: flex-start;
   border-radius: 2rem;
-  border: 0.2rem solid rgb(139, 89, 24);
+  border: double;
   overflow: hidden;
   background: rgb(165, 165, 165);
+  box-shadow: var(--any-table-shadow);
   &__img {
     // max-width: 98vw;
     // height: min-content;
