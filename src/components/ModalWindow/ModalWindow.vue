@@ -76,6 +76,7 @@ export default class ModalWindow extends Vue {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.356) !important;
   border: none;
+  z-index: 50;
 }
 
 .modal {
@@ -87,6 +88,7 @@ export default class ModalWindow extends Vue {
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
+  z-index: 51;
 
   &-enter-active,
   &-leave-active {
