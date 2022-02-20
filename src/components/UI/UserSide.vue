@@ -31,7 +31,7 @@
           <h3 class="user-name">{{ user.name }}</h3>
           <div class="stat-block card-block">
             <img
-              src="assets/game/wagon_cards/wagon-shirt.avif"
+              src="../../assets/game/wagon_cards/wagon-shirt.png"
               alt="карта вагона"
               class="card-shirt-icon"
             />
@@ -39,7 +39,7 @@
           </div>
           <div class="stat-block route-block">
             <img
-              src="assets/game/route_cards/route-shirt.avif"
+              src="../../assets/game/route_cards/route-shirt.png"
               alt="карта маршрута"
               class="card-shirt-icon"
             />

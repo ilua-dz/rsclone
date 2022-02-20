@@ -30,7 +30,7 @@
           :class="{complete: completedTasks.find((completedTask) => completedTask.id === task.id)}"
           :style="{
             background:
-              'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
+              `center / contain no-repeat url(./assets/game/route_cards/${task.id + 1}.png)`,
           }"
         ></div>
       </li>
@@ -50,7 +50,7 @@
             class="card"
             :style="{
               background:
-                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+                `center / contain no-repeat url(./assets/game/wagon_cards/${card[0]}.png)`,
             }"
           ></div>
         </li>
@@ -135,7 +135,7 @@ export default class PlayerSide extends Vue {
   height: 100%;
   top: 0;
   left: 0;
-  background: center no-repeat url('/assets/game/table.jpg') var(--user-color);
+  background: center no-repeat url('../../assets/game/table.jpg') var(--user-color);
   background-blend-mode: multiply;
   filter: grayscale(50%);
   border-radius: 2rem;

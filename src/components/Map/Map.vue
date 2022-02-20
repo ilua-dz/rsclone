@@ -163,7 +163,7 @@ export default class Map extends Vue {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: center / cover no-repeat url('/assets/map/gamefield.jpg');
+  background: center / cover no-repeat url('../../assets/map/gamefield.jpg');
   filter: blur(10px);
 }
 </style>
