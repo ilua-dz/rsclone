@@ -13,9 +13,6 @@
               '.avif)',
           }"
         ></div>
-        <div class="card-value">
-          {{ routesInfo.find((_route) => _route.id === +longRoute + 40).points }}
-        </div>
       </li>
       -->
       <li
@@ -26,33 +23,17 @@
       >
         <div
           class="card"
-          :class="{complete: completeTasks.includes(task)}"
+          :class="{complete: completedTasks.includes(task)}"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
           }"
         ></div>
         <div class="card-value">
-          {{ routesInfo.find((_route) => _route.id === route).points }}
+          {{ task.points }}
         </div>
       </li>
     </ul>
-<<<<<<< HEAD
-    <transition-group name="slideInLeft" tag="ul" class="player-box player-card">
-      <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand" v-show="card[1] > 0">
-        <div
-          class="card"
-          :style="{
-            background:
-              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-          }"
-        ></div>
-        <div class="card-value">
-          {{ card[1] }}
-        </div>
-      </li>
-    </transition-group>
-=======
     <!-- <ul class="player-box player-card"> -->
       <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
         <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
@@ -71,7 +52,6 @@
         </li>
       </transition-group>
     <!-- </ul> -->
->>>>>>> feat: lobby player list trnsition
   </div>
 </template>
 
@@ -79,12 +59,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
-<<<<<<< HEAD
-import routesInfo from '../../store/game/routesInfo';
-=======
 import taskInterface from '../interface/taskInterface';
 import taskInfo from '../../store/user/taskInfo';
->>>>>>> refactor tasks logic
 
 @Component({
   computed: {
@@ -100,15 +76,9 @@ export default class PlayerSide extends Vue {
 
   getUsers!: userInterface[];
 
-<<<<<<< HEAD
-  routesInfo = routesInfo;
-
-  currentUser(): userInterface | undefined {
-=======
   taskInfo = taskInfo;
 
   get currentUser(): userInterface | undefined {
->>>>>>> refactor tasks logic
     return this.getUsers.find((u) => u.name === this.getCurrentName);
   }
 
@@ -116,11 +86,7 @@ export default class PlayerSide extends Vue {
     return this.currentUser?.hand.currentTasks;
   }
 
-  get completeTasks(): taskInterface[] | undefined {
-    return this.currentUser?.hand.completedTasks;
-  }
-
-  get completedTask(): taskInterface[] | undefined {
+  get completedTasks(): taskInterface[] | undefined {
     return this.currentUser?.hand.completedTasks;
   }
 
@@ -165,6 +131,9 @@ export default class PlayerSide extends Vue {
   display: flex;
   // flex-basis: 100%;
   padding: 1.5rem;
+  // border: double;
+  // background: linear-gradient(180deg, #e6d16c, var(--user-color));
+  // border-radius: 2.5rem;
   list-style: none;
   gap: 1rem;
 }
@@ -177,23 +146,23 @@ export default class PlayerSide extends Vue {
   height: 10rem;
   transition: all 0.5s;
 }
+
 .card {
   width: 16.2rem;
   height: 10rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
-<<<<<<< HEAD
-  transition: 0.3s;
-=======
+  transition: all 0.5s;
 
   &.complete {
     border: 0.3rem solid rgb(63, 158, 50);
   }
->>>>>>> refactor tasks logic
 }
-
 .player-route {
   width: 50%;
+  // border-top-right-radius: unset;
+  // border-bottom-right-radius: unset;
+  // border-right: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(45deg);
     &.browse {
@@ -206,11 +175,13 @@ export default class PlayerSide extends Vue {
   width: 50%;
   padding-right: 10.5rem;
   justify-content: flex-end;
+  // border-top-left-radius: unset;
+  // border-bottom-left-radius: unset;
+  // border-left: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(-45deg);
   }
 }
-
 .card-value {
   transform: rotate(0) translate(4.2rem, -3.5rem);
   width: max-content;
@@ -232,13 +203,8 @@ export default class PlayerSide extends Vue {
   }
 }
 
-<<<<<<< HEAD
-.slideInLeft {
-  &-move {
-=======
 .slide-down{
   &-move{
->>>>>>> feat: lobby player list trnsition
     transition: all 0.5s;
   }
   &-enter-active {
