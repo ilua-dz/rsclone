@@ -24,7 +24,7 @@
       >
         <div
           class="card"
-          :class="{ complete: completedTasks.includes(task) }"
+          :class="{complete: completedTasks.find((completedTask) => completedTask.id === task.id)}"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
