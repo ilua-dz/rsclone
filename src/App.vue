@@ -109,8 +109,6 @@ export default class App extends Vue {
   created(): void {
     if (this.storage.data.name) this.$store.commit('setCurrentName', this.storage.data.name);
     if (this.storage.data.color) this.$store.commit('setCurrentColor', this.storage.data.color);
-    console.log(this.getTurn);
-    console.log(this.getGameStatus);
   }
 
   addUser(name: string, usedColors: string[]): void {
@@ -177,7 +175,7 @@ body {
 }
 
 .preloader {
-  background-image: url('/assets/preloader_cut.gif');
+  background-image: url('./assets/preloader_cut.gif');
   background-color: #FFD5D3;
   background-size: unset;
   background-repeat: no-repeat;

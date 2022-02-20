@@ -27,7 +27,7 @@
         :data-color="card"
         :data-index="index"
         :style="{
-          background: 'center / contain no-repeat url(/assets/game/wagon_cards/' + card + '.avif)',
+          background: `center / contain no-repeat url(./assets/game/wagon_cards/${card}.png)`,
         }"
       >
         <div class="deck-back"></div>
@@ -259,7 +259,7 @@ export default class DeckSide extends Vue {
   display: flex;
   gap: 2rem;
   .deck-back {
-    background-image: url('/assets/game/route_cards/route-shirt.avif');
+    background-image: url('../../assets/game/route_cards/route-shirt.png');
   }
 }
 
@@ -267,7 +267,7 @@ export default class DeckSide extends Vue {
   display: flex;
   gap: 2rem;
   .deck-back {
-    background-image: url('/assets/game/wagon_cards/wagon-shirt.avif');
+    background-image: url('../../assets/game/wagon_cards/wagon-shirt.png');
   }
 }
 
