@@ -19,18 +19,26 @@
       <li
         class="route player-box__item"
         :key="task.id"
-        v-for="task in currentTasks"
+        v-for="(task, index) in currentTasks"
         :data-route="task.id"
       >
-        <div class="card-value">
+        <div
+          class="card-value"
+          :class="{
+            complete: completedTasks.find((completedTask) => completedTask.id === task.id),
+          }"
+          @mouseover="showRouteInfo(task.cities)"
+          @mouseleave="hideRouteInfo"
+        >
           {{ task.points }}
         </div>
         <div
           class="card"
-          :class="{complete: completedTasks.find((completedTask) => completedTask.id === task.id)}"
           :style="{
-            background:
-              `center / contain no-repeat url(./assets/game/route_cards/${task.id + 1}.png)`,
+            background: `center / contain no-repeat url(./assets/game/route_cards/${
+              task.id + 1
+            }.png)`,
+            '--card-num': index,
           }"
         ></div>
       </li>
@@ -42,19 +50,18 @@
         :key="index"
         v-for="(card, index) in cardsInHand"
         v-show="card[1] > 0"
-        >
-          <div class="card-value">
-            {{ card[1] }}
-          </div>
-          <div
-            class="card"
-            :style="{
-              background:
-                `center / contain no-repeat url(./assets/game/wagon_cards/${card[0]}.png)`,
-            }"
-          ></div>
-        </li>
-      </transition-group>
+      >
+        <div class="card-value">
+          {{ card[1] }}
+        </div>
+        <div
+          class="card"
+          :style="{
+            background: `center / contain no-repeat url(./assets/game/wagon_cards/${card[0]}.png)`,
+          }"
+        ></div>
+      </li>
+    </transition-group>
     <!-- </ul> -->
   </div>
 </template>
@@ -113,6 +120,14 @@ export default class PlayerSide extends Vue {
     const user = this.currentUser;
     return user ? user.color : '';
   }
+
+  showRouteInfo(cities: string[]): void {
+    this.$emit('showCities', cities);
+  }
+
+  hideRouteInfo(): void {
+    this.$emit('hideCities');
+  }
 }
 </script>
 
@@ -126,7 +141,6 @@ export default class PlayerSide extends Vue {
   justify-content: center;
   border: double;
   border-radius: 2.5rem;
-
   box-shadow: var(--any-table-shadow);
 }
 .table-background {
@@ -145,9 +159,6 @@ export default class PlayerSide extends Vue {
   display: flex;
   // flex-basis: 100%;
   padding: 1.5rem;
-  // border: double;
-  // background: linear-gradient(180deg, #e6d16c, var(--user-color));
-  // border-radius: 2.5rem;
   list-style: none;
   gap: 1rem;
 }
@@ -169,16 +180,9 @@ export default class PlayerSide extends Vue {
   border-radius: 1rem;
   transition: all 0.5s;
   position: relative;
-
-  &.complete {
-    border: 0.3rem solid rgb(63, 158, 50);
-  }
 }
 .player-route {
   width: 50%;
-  // border-top-right-radius: unset;
-  // border-bottom-right-radius: unset;
-  // border-right: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(45deg);
     &.browse {
@@ -191,9 +195,6 @@ export default class PlayerSide extends Vue {
   width: 50%;
   padding-right: 10.5rem;
   justify-content: flex-end;
-  // border-top-left-radius: unset;
-  // border-bottom-left-radius: unset;
-  // border-left: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(-45deg);
   }
@@ -219,7 +220,7 @@ export default class PlayerSide extends Vue {
   }
   &:hover + .card {
     z-index: 1;
-    transform: scale(1.2) translate(-2rem, -10rem) rotate(0deg) ;
+    transform: scale(1.2) translate(-2rem, -10rem) rotate(0deg);
   }
 }
 .route {
@@ -228,12 +229,15 @@ export default class PlayerSide extends Vue {
     color: red;
     text-shadow: 0 0 3px red, 0 0 5px red;
     &:hover + .card {
-    z-index: 1;
-    transform: scale(2) translateY(-10rem) rotate(90deg) ;
+      z-index: 1;
+      transform: scale(2) translate(calc(1rem - 3.25rem * var(--card-num)), -13rem) rotate(90deg);
+    }
+    &.complete {
+      color: greenyellow;
+      text-shadow: 0 0 3px greenyellow, 0 0 5px greenyellow;
     }
   }
 }
-
 .slide-down {
   &-move {
     transition: all 0.5s;

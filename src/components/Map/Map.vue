@@ -22,6 +22,13 @@
           fill: railway.status ? getUsers.find((u) => u.name === railway.status).color : '',
         }"
       />
+      <City
+        :key="city.id"
+        v-for="city in citiesInfo"
+        :city="city"
+        class="city-point"
+        :show="visibleCities.includes(city.name)"
+      />
     </svg>
     <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
       <build-way
@@ -45,17 +52,19 @@
 
 <script lang="ts">
 // import Prop if i will use props
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
 import railwayInfoInterface from '../interface/railwayInfo';
 import userInterface from '../interface/user';
 import Railway from './Railway.vue';
+import City from './City.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import BuildWay from '../Game/BuildWay.vue';
 import ChooseColorForMulti from '../Game/ChooseColorForMulti.vue';
 import typeOfCardsColor from '../interface/colorType';
 import taskInterface from '../interface/taskInterface';
+import citiesInfo from '../../store/game/citiesInfo';
 
 @Component({
   computed: {
@@ -73,14 +82,16 @@ import taskInterface from '../interface/taskInterface';
 
   components: {
     Railway,
+    City,
     ModalWindow,
     BuildWay,
     ChooseColorForMulti,
   },
 })
 export default class Map extends Vue {
-  // @Prop({ default: [] }) private railways!: railwayInterface[];
+  @Prop({ default: [] }) private visibleCities!: string[];
   // get mapGetters('getRailways') ,
+
   getRailways!: railwayInterface[];
 
   getRailwaysInfo!: railwayInfoInterface[];
@@ -102,6 +113,8 @@ export default class Map extends Vue {
   getCurrentTasks!: taskInterface[];
 
   chosenColorForMulti: typeOfCardsColor = 'loco';
+
+  citiesInfo = citiesInfo;
 
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
@@ -166,4 +179,11 @@ export default class Map extends Vue {
   background: center / cover no-repeat url('../../assets/map/gamefield.jpg');
   filter: blur(10px);
 }
+// .city-point {
+//   opacity: 0;
+//   transition: 0.5s;
+//   &.show {
+//     opacity: 1;
+//   }
+// }
 </style>

@@ -11,15 +11,12 @@
     <div v-if="getGameStatus && checkUserInPlayerList" class="game" v-cloak>
       <div class="game-main">
         <user-side />
-        <Map />
+        <Map :visibleCities="visibleCities" />
         <deck-side />
       </div>
-      <player-side />
+      <player-side @showCities="showCities" @hideCities="hideCities" />
     </div>
-    <div
-    v-if="getGameStatus && !checkUserInPlayerList"
-    class="game-already-start"
-    v-cloak>
+    <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start">
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window
@@ -33,8 +30,7 @@
         @close-modal="prepareTimer = 0.1"
       />
     </modal-window>
-    <div class="preloader" v-show="getTurn < -1 ">
-    </div>
+    <div class="preloader" v-show="getTurn < -1"></div>
   </div>
 </template>
 
@@ -61,7 +57,6 @@ import taskInterface from './components/interface/taskInterface';
     UserSide,
     DeckSide,
     PlayerSide,
-    // HelloWorld,
   },
 
   computed: {
@@ -93,6 +88,8 @@ export default class App extends Vue {
   getUsers!: userInterface[];
 
   storage = new Storage();
+
+  visibleCities: string[] = [];
 
   @Watch('getTurn') onTurnChange(): void {
     if (this.getTurn === -1) this.prepareTimer = 30;
@@ -138,6 +135,14 @@ export default class App extends Vue {
     });
     this.$socket.emit('userPrepared', this.getCurrentName);
   }
+
+  showCities(cities: string[]): void {
+    this.visibleCities = cities;
+  }
+
+  hideCities(): void {
+    this.visibleCities = [];
+  }
 }
 </script>
 
@@ -176,7 +181,7 @@ body {
 
 .preloader {
   background-image: url('./assets/preloader_cut.gif');
-  background-color: #FFD5D3;
+  background-color: #ffd5d3;
   background-size: unset;
   background-repeat: no-repeat;
   background-position: center center;
@@ -184,7 +189,7 @@ body {
   height: 100%;
 }
 .game-already-start {
-  background-color: #FFD5D3;
+  background-color: #ffd5d3;
   text-align: center;
   font-size: 4rem;
   width: 100%;
