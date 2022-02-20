@@ -15,19 +15,13 @@
       </div>
       <player-side />
     </div>
-    <div
-    v-if="!checkUserInPlayerList"
-    class="game-already-start">
+    <div v-if="!checkUserInPlayerList" class="game-already-start">
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window
-    v-if="showModal
-    && checkUserInPlayerList
-    && getGameStatus
-    && !currentUser.preTurn
-    "
-    :timer="prepareTimer"
-    @close-modalWindow="showModal = false"
+      v-if="showModal && checkUserInPlayerList && getGameStatus && !currentUser.preTurn"
+      :timer="prepareTimer"
+      @close-modalWindow="showModal = false"
     >
       <prepare
         :timer="prepareTimer"
@@ -88,7 +82,7 @@ export default class App extends Vue {
 
   showModal = true;
 
-  getUsers!:userInterface[];
+  getUsers!: userInterface[];
 
   storage = new Storage();
 
@@ -148,6 +142,7 @@ body {
   // width: 100vw;
   height: 100vh;
   padding: 0.2rem;
+  background: #8f8f8f;
 }
 
 #app {

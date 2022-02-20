@@ -1,5 +1,6 @@
 <template>
   <div class="game-player" :style="{ '--user-color': currentColor }">
+    <div class="table-background"></div>
     <ul class="player-box player-route">
       <!--
       <li class="route route__long player-box__item" v-if="longRoute != -1">
@@ -23,7 +24,7 @@
       >
         <div
           class="card"
-          :class="{complete: completedTasks.includes(task)}"
+          :class="{ complete: completedTasks.includes(task) }"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
@@ -35,22 +36,25 @@
       </li>
     </ul>
     <!-- <ul class="player-box player-card"> -->
-      <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
-        <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
+    <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
+      <li
+        class="player-box__item"
+        :key="index"
+        v-for="(card, index) in cardsInHand"
         v-show="card[1] > 0"
-        >
-          <div
-            class="card"
-            :style="{
-              background:
-                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-            }"
-          ></div>
-          <div class="card-value">
-            {{ card[1] }}
-          </div>
-        </li>
-      </transition-group>
+      >
+        <div
+          class="card"
+          :style="{
+            background:
+              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+          }"
+        ></div>
+        <div class="card-value">
+          {{ card[1] }}
+        </div>
+      </li>
+    </transition-group>
     <!-- </ul> -->
   </div>
 </template>
@@ -64,10 +68,7 @@ import taskInfo from '../../store/user/taskInfo';
 
 @Component({
   computed: {
-    ...mapGetters([
-      'getUsers',
-      'getCurrentName',
-    ]),
+    ...mapGetters(['getUsers', 'getCurrentName']),
   },
   components: {},
 })
@@ -117,6 +118,7 @@ export default class PlayerSide extends Vue {
 
 <style lang="scss" scoped>
 .game-player {
+  position: relative;
   width: 100%;
   height: 11rem;
   margin-top: 0.5rem;
@@ -124,8 +126,19 @@ export default class PlayerSide extends Vue {
   justify-content: center;
   border: double;
   border-radius: 2.5rem;
-  background: linear-gradient(180deg, #e6d16c, var(--user-color));
+
   box-shadow: var(--any-table-shadow);
+}
+.table-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: center no-repeat url('/assets/game/table.jpg') var(--user-color);
+  background-blend-mode: multiply;
+  filter: grayscale(50%);
+  border-radius: 2rem;
 }
 .player-box {
   display: flex;
@@ -203,8 +216,8 @@ export default class PlayerSide extends Vue {
   }
 }
 
-.slide-down{
-  &-move{
+.slide-down {
+  &-move {
     transition: all 0.5s;
   }
   &-enter-active {

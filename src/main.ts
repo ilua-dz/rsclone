@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 import Vue from 'vue';
 import VueSocketIO from 'vue-socket.io';
 import SocketIO from 'socket.io-client';
@@ -14,14 +15,14 @@ const URL = {
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: SocketIO(URL.heroku),
+    connection: SocketIO(URL.local),
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
       mutationPrefix: 'SOCKET_',
     },
     // options: { path: "/my-app/" }, //Optional options
-  }),
+  })
 );
 
 new Vue({

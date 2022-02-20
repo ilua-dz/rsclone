@@ -1,5 +1,6 @@
 <template>
   <div class="game-field">
+    <div class="background"></div>
     <svg
       class="game-field__img"
       xmlns="http://www.w3.org/2000/svg"
@@ -141,12 +142,12 @@ export default class Map extends Vue {
 
 <style lang="scss" scoped>
 .game-field {
+  position: relative;
   display: flex;
   align-items: flex-start;
   border-radius: 2rem;
   border: double;
   overflow: hidden;
-  background: rgb(165, 165, 165);
   box-shadow: var(--any-table-shadow);
   &__img {
     // max-width: 98vw;
@@ -154,5 +155,15 @@ export default class Map extends Vue {
     height: 85vh;
     // max-height: 82vh;
   }
+}
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: center / cover no-repeat url('/assets/map/gamefield.jpg');
+  filter: blur(10px);
 }
 </style>
