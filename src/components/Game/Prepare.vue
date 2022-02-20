@@ -91,12 +91,9 @@ export default class Prepare extends Vue {
 
   acceptDiscard(): void {
     if (this.prepareTimer) clearInterval(this.prepareTimer);
-    console.log(this.discard);
     if (this.checkPickRoute) {
       this.$socket.emit('addShortRoute', this.getCurrentName, this.pickedRoutes);
-      this.discard.forEach((route) => {
-        this.$socket.emit('discardRoute', this.getCurrentName, route);
-      });
+      this.$emit('get-discarded', this.discard);
     } else {
       this.$emit('get-discarded', this.discard);
     }

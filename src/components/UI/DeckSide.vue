@@ -45,7 +45,7 @@
         <div class="deck-back"></div>
         <div
           class="deck-action"
-          v-if="checkActive && getCardDeck.length > 0"
+          v-if="checkActive && getCardDeck.length > 0 && getTurnWeight < 2"
           @click="pickCardDeck"
         ></div>
       </div>
@@ -74,6 +74,7 @@ import userInterface from '../interface/user';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import Prepare from '../Game/Prepare.vue';
 import playSound from '../../utils/sounds/index';
+import taskInterface from '../interface/taskInterface';
 
 @Component({
   computed: {
@@ -113,27 +114,43 @@ export default class DeckSide extends Vue {
 
   routesToChoose: number[] = [];
 
+  timerForWait = 200;
+
+  userReady = true;
+
+  setTimerForUser(): void {
+    this.userReady = false;
+    setTimeout(() => {
+      this.userReady = true;
+    }, this.timerForWait);
+  }
+
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
-    return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName;
+    return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName
+    && this.userReady;
   }
 
   pickRoute(): void {
     playSound('takeRouteCards');
     if (this.getRouteDeck.length > 0) {
       this.routesToChoose.push(...this.getRouteDeck.splice(-3));
+      console.log('pickRoute');
       this.showRoutesModal = true;
     }
     // TODO: socket emit split routes deck
     // TODO: routes to choose ->> shortRoutes in hand (in Prepare)
   }
 
-  discardRoute(array: Array<number>): void {
+  discardRoute(array: taskInterface[]): void {
     this.routesToChoose.splice(0);
     array.forEach((route) => {
-      this.$socket.emit('discardShortRoute', this.getCurrentName, route);
+      this.$socket.emit('discardRoute', this.getCurrentName, route);
     });
-    this.$socket.emit('endOfTurn');
+    this.setTimerForUser();
+    setTimeout(() => {
+      this.$socket.emit('endOfTurn');
+    }, this.timerForWait);
   }
 
   pickCardTable(e: MouseEvent): void {
@@ -144,7 +161,10 @@ export default class DeckSide extends Vue {
       if ((color === 'loco' && this.getTurnWeight === 0) || color !== 'loco') {
         const cardIndex = Number(target.getAttribute('data-index'));
         this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
-        if (color === 'loco' || this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+        this.setTimerForUser();
+        if (color === 'loco' || this.getTurnWeight > 0) {
+          this.$socket.emit('endOfTurn');
+        }
       }
     }
   }
@@ -152,7 +172,10 @@ export default class DeckSide extends Vue {
   pickCardDeck(): void {
     playSound('takeCard');
     this.$socket.emit('pickCardDeck', this.getCurrentName);
-    if (this.getTurnWeight === 1) this.$socket.emit('endOfTurn');
+    this.setTimerForUser();
+    if (this.getTurnWeight > 0) {
+      this.$socket.emit('endOfTurn');
+    }
   }
 }
 </script>
