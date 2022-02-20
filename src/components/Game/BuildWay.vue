@@ -29,6 +29,8 @@ import userInterface from '../interface/user';
 import Btn from '../Button/Btn.vue';
 import railwayInfoInterface from '../interface/railwayInfo';
 import typeOfCardsColor from '../interface/colorType';
+import taskInterface from '../interface/taskInterface';
+// import testTask from './testTask';
 
 @Component({
   computed: {
@@ -40,6 +42,7 @@ import typeOfCardsColor from '../interface/colorType';
       'getTurn',
       'getTurnWeight',
       'getCurrentName',
+      'getCurrentTasks',
     ]),
   },
   components: {
@@ -56,6 +59,8 @@ export default class BuildWay extends Vue {
   getUsers!:userInterface[];
 
   getCurrentName!: string;
+
+  getCurrentTasks!: taskInterface[];
 
   message = '';
 
@@ -77,6 +82,10 @@ export default class BuildWay extends Vue {
 
   get trainsAmount(): number {
     return this.currentWay.trainsAmount;
+  }
+
+  get cities(): string[] {
+    return this.currentWay.cities;
   }
 
   get currentUser(): userInterface {
@@ -136,7 +145,11 @@ export default class BuildWay extends Vue {
   }
 
   acceptBuild(): void {
-    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay, this.currentWay.points);
+    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay, this.currentWay.points, this.cities);
+    // this.getCurrentTasks.forEach((task) => {
+    //   console.log(`task ${task.id} with cities ${task.cities}
+    // completed ---- ${testTask(task.cities, this.currentUser.hand.connected)}`);
+    // });
     this.$socket.emit('endOfTurn');
     this.$emit('close-modal');
   }

@@ -50,6 +50,7 @@ import DeckSide from './components/UI/DeckSide.vue';
 import PlayerSide from './components/UI/PlayerSide.vue';
 import Storage from './components/localStorage/storage';
 import userInterface from './components/interface/user';
+import taskInterface from './components/interface/taskInterface';
 
 @Component({
   components: {
@@ -128,10 +129,10 @@ export default class App extends Vue {
     });
   }
 
-  discardRoute(array: Array<string | number>): void {
+  discardRoute(array: taskInterface[]): void {
     array.forEach((route) => {
-      if (route === 'long') this.$socket.emit('discardLongRoute', this.getCurrentName);
-      else this.$socket.emit('discardShortRoute', this.getCurrentName, route);
+      // if (route === 'long') this.$socket.emit('discardLongRoute', this.getCurrentName);
+      this.$socket.emit('discardRoute', this.getCurrentName, route);
     });
     this.$socket.emit('userPrepared', this.getCurrentName);
   }

@@ -1,4 +1,4 @@
-const routesInfo = [
+const taskInfo = [
   {
     cities: ['Athina', 'Angora'],
     id: 0,
@@ -231,4 +231,4 @@ const routesInfo = [
   },
 ];
 
-export default routesInfo;
+export default taskInfo;

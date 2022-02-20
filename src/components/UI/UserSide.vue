@@ -43,7 +43,7 @@
               alt="карта маршрута"
               class="card-shirt-icon"
             />
-            <div>{{ user.hand.shortRoute.length + (user.hand.longRoute === -1 ? 0 : 1) }}</div>
+            <div>{{ user.hand.currentTasks.length }}</div>
           </div>
           <div class="stat-block train-block">
             <WagonIcon :style="{ '--user-color': user.color }" class="card-shirt-icon" />

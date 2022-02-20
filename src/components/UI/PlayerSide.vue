@@ -1,9 +1,11 @@
 <template>
   <div class="game-player" :style="{ '--user-color': currentColor }">
     <ul class="player-box player-route">
+      <!--
       <li class="route route__long player-box__item" v-if="longRoute != -1">
         <div
           class="card"
+          :class="{complete: getCompletedTasks.includes(taskInfo[longRoute + 40])}"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' +
@@ -11,42 +13,45 @@
               '.avif)',
           }"
         ></div>
-        <div class="card-value">
-          {{ routesInfo.find((_route) => _route.id === +longRoute + 40).points }}
-        </div>
       </li>
+      -->
       <li
         class="route player-box__item"
-        :key="route"
-        v-for="route in shortRoute"
-        :data-route="route"
+        :key="task.id"
+        v-for="task in currentTasks"
+        :data-route="task.id"
       >
         <div
           class="card"
+          :class="{complete: completedTasks.includes(task)}"
           :style="{
             background:
-              'center / contain no-repeat url(/assets/game/route_cards/' + (+route + 1) + '.avif)',
+              'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
           }"
         ></div>
         <div class="card-value">
-          {{ routesInfo.find((_route) => _route.id === route).points }}
+          {{ task.points }}
         </div>
       </li>
     </ul>
-    <transition-group name="slideInLeft" tag="ul" class="player-box player-card">
-      <li class="player-box__item" :key="card[0]" v-for="card in cardsInHand" v-show="card[1] > 0">
-        <div
-          class="card"
-          :style="{
-            background:
-              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-          }"
-        ></div>
-        <div class="card-value">
-          {{ card[1] }}
-        </div>
-      </li>
-    </transition-group>
+    <!-- <ul class="player-box player-card"> -->
+      <transition-group name="slide-down" tag="ul" class="player-box player-card" appear="appear">
+        <li class="player-box__item" :key="index" v-for="(card, index) in cardsInHand"
+        v-show="card[1] > 0"
+        >
+          <div
+            class="card"
+            :style="{
+              background:
+                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+            }"
+          ></div>
+          <div class="card-value">
+            {{ card[1] }}
+          </div>
+        </li>
+      </transition-group>
+    <!-- </ul> -->
   </div>
 </template>
 
@@ -54,11 +59,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
-import routesInfo from '../../store/game/routesInfo';
+import taskInterface from '../interface/taskInterface';
+import taskInfo from '../../store/user/taskInfo';
 
 @Component({
   computed: {
-    ...mapGetters(['getUsers', 'getCurrentName']),
+    ...mapGetters([
+      'getUsers',
+      'getCurrentName',
+    ]),
   },
   components: {},
 })
@@ -67,24 +76,32 @@ export default class PlayerSide extends Vue {
 
   getUsers!: userInterface[];
 
-  routesInfo = routesInfo;
+  taskInfo = taskInfo;
 
-  currentUser(): userInterface | undefined {
+  get currentUser(): userInterface | undefined {
     return this.getUsers.find((u) => u.name === this.getCurrentName);
   }
 
-  get longRoute(): number | undefined {
-    const user = this.currentUser();
-    return user ? user.hand.longRoute : -1;
+  get currentTasks(): taskInterface[] | undefined {
+    return this.currentUser?.hand.currentTasks;
   }
 
-  get shortRoute(): number[] {
-    const user = this.currentUser();
-    return user ? user.hand.shortRoute : [];
+  get completedTasks(): taskInterface[] | undefined {
+    return this.currentUser?.hand.completedTasks;
   }
+
+  // get longRoute(): number | undefined {
+  //   const user = this.currentUser();
+  //   return user ? user.hand.longRoute : -1;
+  // }
+
+  // get shortRoute(): number[] {
+  //   const user = this.currentUser();
+  //   return user ? user.hand.shortRoute : [];
+  // }
 
   get cardsInHand(): [string, number][] {
-    const cards = this.currentUser()?.hand.cards;
+    const cards = this.currentUser?.hand.cards;
     if (!cards) return [];
     // const arrayOfCards = Object.entries(cards).filter((card) => card[1] > 0);
     const arrayOfCards = Object.entries(cards);
@@ -92,7 +109,7 @@ export default class PlayerSide extends Vue {
   }
 
   get currentColor(): string {
-    const user = this.currentUser();
+    const user = this.currentUser;
     return user ? user.color : '';
   }
 }
@@ -114,6 +131,9 @@ export default class PlayerSide extends Vue {
   display: flex;
   // flex-basis: 100%;
   padding: 1.5rem;
+  // border: double;
+  // background: linear-gradient(180deg, #e6d16c, var(--user-color));
+  // border-radius: 2.5rem;
   list-style: none;
   gap: 1rem;
 }
@@ -126,16 +146,23 @@ export default class PlayerSide extends Vue {
   height: 10rem;
   transition: all 0.5s;
 }
+
 .card {
   width: 16.2rem;
   height: 10rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
-  transition: 0.3s;
-}
+  transition: all 0.5s;
 
+  &.complete {
+    border: 0.3rem solid rgb(63, 158, 50);
+  }
+}
 .player-route {
   width: 50%;
+  // border-top-right-radius: unset;
+  // border-bottom-right-radius: unset;
+  // border-right: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(45deg);
     &.browse {
@@ -148,11 +175,13 @@ export default class PlayerSide extends Vue {
   width: 50%;
   padding-right: 10.5rem;
   justify-content: flex-end;
+  // border-top-left-radius: unset;
+  // border-bottom-left-radius: unset;
+  // border-left: none;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(-45deg);
   }
 }
-
 .card-value {
   transform: rotate(0) translate(4.2rem, -3.5rem);
   width: max-content;
@@ -174,13 +203,13 @@ export default class PlayerSide extends Vue {
   }
 }
 
-.slideInLeft {
-  &-move {
+.slide-down{
+  &-move{
     transition: all 0.5s;
   }
   &-enter-active {
     transition: all 0.5s ease-in-out;
-    position: relative;
+    position: absolute;
   }
   &-enter {
     transform: translateY(-100%);

@@ -28,7 +28,7 @@
     </div>
     <div class="lobby">
       <h3>Список игроков:</h3>
-      <ul v-if="users.length !== 0">
+      <transition-group tag="ul" name="slide-down" v-if="users.length !== 0">
         <li
           :key="user.name"
           v-for="user in users"
@@ -56,7 +56,7 @@
             :method="toggleStatus"
           />
         </li>
-      </ul>
+      </transition-group>
       <p v-else>Игроков пока нет...</p>
     </div>
     <div class="result-table" v-if="getResult.length">
@@ -197,6 +197,9 @@ export default class Lobby extends Vue {
 
 .lobby {
   min-width: 70vw;
+  max-height: 50rem;
+  height: min-content;
+  transition: all 0.2s;
 }
 
 .new-user {
@@ -265,5 +268,19 @@ li {
 .invisible {
   opacity: 0;
   pointer-events: none;
+}
+.slide-down{
+  &-move{
+    transition: all 0.3s;
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
 }
 </style>
