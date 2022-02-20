@@ -4,7 +4,7 @@ import resultInterface from '@/components/interface/result';
 export default {
   state: {
     gameStatus: false,
-    gameTurn: -1,
+    gameTurn: -2,
     gameDeck: {},
     turnWeight: 0,
     result: [],

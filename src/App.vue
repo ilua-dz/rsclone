@@ -1,13 +1,14 @@
 <template>
   <div id="app">
     <Lobby
+      v-cloak
       :users="getUsers"
       @add-new-user="addUser"
       @toggle-status="toggleStatus"
       @set-new-color="setColor"
-      v-show="!getGameStatus"
+      v-show="!getGameStatus && getTurn !== -2"
     />
-    <div v-if="getGameStatus && checkUserInPlayerList" class="game">
+    <div v-if="getGameStatus && checkUserInPlayerList" class="game" v-cloak>
       <div class="game-main">
         <user-side />
         <Map />
@@ -17,7 +18,8 @@
     </div>
     <div
     v-if="getGameStatus && !checkUserInPlayerList"
-    class="game-already-start">
+    class="game-already-start"
+    v-cloak>
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window
@@ -31,6 +33,8 @@
         @close-modal="prepareTimer = 0.1"
       />
     </modal-window>
+    <div class="preloader" v-show="getTurn < -1 ">
+    </div>
   </div>
 </template>
 
@@ -80,6 +84,8 @@ export default class App extends Vue {
 
   getTurn!: number;
 
+  getGameStatus!: boolean;
+
   prepareTimer = 30;
 
   showModal = true;
@@ -103,6 +109,8 @@ export default class App extends Vue {
   created(): void {
     if (this.storage.data.name) this.$store.commit('setCurrentName', this.storage.data.name);
     if (this.storage.data.color) this.$store.commit('setCurrentColor', this.storage.data.color);
+    console.log(this.getTurn);
+    console.log(this.getGameStatus);
   }
 
   addUser(name: string, usedColors: string[]): void {
@@ -162,5 +170,29 @@ body {
 .game-main {
   display: flex;
   gap: 0.5rem;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.preloader {
+  background-image: url('/assets/preloader_cut.gif');
+  background-color: #FFD5D3;
+  background-size: unset;
+  background-repeat: no-repeat;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+}
+.game-already-start {
+  background-color: #FFD5D3;
+  text-align: center;
+  font-size: 4rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
