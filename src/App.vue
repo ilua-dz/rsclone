@@ -15,7 +15,9 @@
       </div>
       <player-side />
     </div>
-    <div v-if="!checkUserInPlayerList" class="game-already-start">
+    <div
+    v-if="getGameStatus && !checkUserInPlayerList"
+    class="game-already-start">
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window

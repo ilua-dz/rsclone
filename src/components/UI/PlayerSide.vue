@@ -22,17 +22,17 @@
         v-for="task in currentTasks"
         :data-route="task.id"
       >
+        <div class="card-value">
+          {{ task.points }}
+        </div>
         <div
           class="card"
-          :class="{ complete: completedTasks.includes(task) }"
+          :class="{complete: completedTasks.find((completedTask) => completedTask.id === task.id)}"
           :style="{
             background:
               'center / contain no-repeat url(/assets/game/route_cards/' + (task.id + 1) + '.avif)',
           }"
         ></div>
-        <div class="card-value">
-          {{ task.points }}
-        </div>
       </li>
     </ul>
     <!-- <ul class="player-box player-card"> -->
@@ -42,19 +42,19 @@
         :key="index"
         v-for="(card, index) in cardsInHand"
         v-show="card[1] > 0"
-      >
-        <div
-          class="card"
-          :style="{
-            background:
-              'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
-          }"
-        ></div>
-        <div class="card-value">
-          {{ card[1] }}
-        </div>
-      </li>
-    </transition-group>
+        >
+          <div class="card-value">
+            {{ card[1] }}
+          </div>
+          <div
+            class="card"
+            :style="{
+              background:
+                'center / contain no-repeat url(/assets/game/wagon_cards/' + card[0] + '.avif)',
+            }"
+          ></div>
+        </li>
+      </transition-group>
     <!-- </ul> -->
   </div>
 </template>
@@ -141,6 +141,7 @@ export default class PlayerSide extends Vue {
   border-radius: 2rem;
 }
 .player-box {
+  position: relative;
   display: flex;
   // flex-basis: 100%;
   padding: 1.5rem;
@@ -158,6 +159,7 @@ export default class PlayerSide extends Vue {
   width: 6.5rem;
   height: 10rem;
   transition: all 0.5s;
+  position: relative;
 }
 
 .card {
@@ -166,6 +168,7 @@ export default class PlayerSide extends Vue {
   border: 0.1rem solid black;
   border-radius: 1rem;
   transition: all 0.5s;
+  position: relative;
 
   &.complete {
     border: 0.3rem solid rgb(63, 158, 50);
@@ -196,7 +199,10 @@ export default class PlayerSide extends Vue {
   }
 }
 .card-value {
-  transform: rotate(0) translate(4.2rem, -3.5rem);
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  transform: rotate(0) translate(4.2rem, 0rem);
   width: max-content;
   min-width: 3.5rem;
   padding: 0.2rem 0.5rem 0.2rem 0.5rem;
@@ -206,13 +212,25 @@ export default class PlayerSide extends Vue {
   background: rgb(41, 41, 41);
   color: yellow;
   text-shadow: 0 0 3px white, 0 0 5px white;
+  transition: all 0.5s;
+  cursor: pointer;
+  &:hover {
+    background: rgb(87, 87, 87);
+  }
+  &:hover + .card {
+    z-index: 1;
+    transform: scale(1.2) translate(-2rem, -10rem) rotate(0deg) ;
+  }
 }
 .route {
   .card-value {
-    cursor: pointer;
-    transform: translate(8.6rem, -3.5rem);
+    transform: translate(8.6rem, 0rem);
     color: red;
     text-shadow: 0 0 3px red, 0 0 5px red;
+    &:hover + .card {
+    z-index: 1;
+    transform: scale(2) translateY(-10rem) rotate(90deg) ;
+    }
   }
 }
 
