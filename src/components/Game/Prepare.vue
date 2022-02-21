@@ -163,6 +163,16 @@ export default class Prepare extends Vue {
   height: 10rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+
+  &:hover {
+    z-index: 5;
+    transform: rotate(-3deg) scale(1.05);
+    box-shadow: 0 0 1rem 0.3rem white;
+  }
+  &:active {
+    transform: rotate(3deg) scale(1.05);
+  }
 
   &__long {
     background-color: rgb(91, 144, 204);

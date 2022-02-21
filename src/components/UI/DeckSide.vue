@@ -110,7 +110,7 @@ export default class DeckSide extends Vue {
 
   showRoutesModal = false;
 
-  modalTimer = 10;
+  modalTimer = 100;
 
   routesToChoose: number[] = [];
 
@@ -202,7 +202,7 @@ export default class DeckSide extends Vue {
   overflow: hidden;
   position: relative;
   transition: 0.3s;
-  box-shadow: 3px -4px 5px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--card-shadow);
 
   &-back {
     width: 100%;
@@ -229,7 +229,7 @@ export default class DeckSide extends Vue {
     border-style: inset;
     border-color: black;
     transition: all 0.3s;
-    box-shadow: 3px -4px 5px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--card-shadow);
 
     .left-of {
       width: 100%;

@@ -17,6 +17,7 @@
         :railway="railway"
         :data-path="railway.id"
         :users="getUsers"
+        :isUserActive="checkActive"
         :class="[railway.status ? 'route_builded' : 'route_available']"
         :style="{
           fill: railway.status ? getUsers.find((u) => u.name === railway.status).color : '',
