@@ -10,11 +10,14 @@
       "
     >
       <div class="modal">
-        <div v-if="timer"
-        class="modal-timer"
-        :style="{
-          width: `${timerWidth}%`, backgroundColor: `hsl(${110-timerWidth}, 82%, 39%)`
-          }"></div>
+        <div
+          v-if="timer"
+          class="modal-timer"
+          :style="{
+            width: `${timerWidth}%`,
+            backgroundColor: `hsl(${110 - timerWidth}, 82%, 39%)`,
+          }"
+        ></div>
         <slot>Default content</slot>
       </div>
     </div>
@@ -80,7 +83,7 @@ export default class ModalWindow extends Vue {
 }
 
 .modal {
-  padding: 3rem ;
+  padding: 2rem;
   border-radius: 1rem;
   background-color: rgb(202, 202, 202);
   position: absolute;
@@ -89,6 +92,8 @@ export default class ModalWindow extends Vue {
   transform: translate(-50%, -50%);
   overflow: hidden;
   z-index: 51;
+  box-shadow: var(--any-table-shadow);
+  border: 0.7rem outset;
 
   &-enter-active,
   &-leave-active {
@@ -101,7 +106,7 @@ export default class ModalWindow extends Vue {
     transform: scale(0.2) translate(0, 0);
   }
 
-  .modal-timer{
+  .modal-timer {
     position: absolute;
     top: 0;
     left: 0;

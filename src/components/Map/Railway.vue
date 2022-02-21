@@ -4,7 +4,7 @@
     :transform="transform"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
-    :class="{ hovered: isHover }"
+    :class="{ hovered: isHover && isUserActive }"
     :style="{ '--user-color': userColor }"
   >
     <Train :key="train.x" v-for="train in railway.train" :train="train" />
@@ -39,6 +39,8 @@ export default class Railway extends Vue {
 
   @Prop({ default: [] }) private users!: userInterface[];
 
+  @Prop({ default: [] }) private isUserActive!: boolean;
+
   transform = this.railway.transform;
 
   isHover = false;
@@ -56,7 +58,6 @@ export default class Railway extends Vue {
   transition: 0.3s ease-out;
 
   &_available {
-    cursor: pointer;
     fill: transparent;
   }
 
@@ -67,6 +68,7 @@ export default class Railway extends Vue {
 }
 
 .hovered {
+  cursor: pointer;
   fill: var(--user-color);
   filter: drop-shadow(5px 5px 15px var(--user-color));
   stroke: rgb(0, 0, 0);

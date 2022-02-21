@@ -5,8 +5,11 @@
       <li class="card"
       @click="chooseColor(card)"
       :key="card"
-      v-for="card in possibleCards">
-        {{ card }}
+      v-for="card in possibleCards"
+      >
+        <div class="card-background" :style="{
+          background: `center / contain no-repeat url(./assets/game/wagon_cards/${card}.png)`,
+        }"></div>
       </li>
     </ul>
   </div>
@@ -93,18 +96,39 @@ export default class ChooseColorForMulti extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 2rem;
+}
 .card-list {
   display: flex;
-  width: 100%;
-  justify-content: space-between;
   list-style: none;
+  gap: 1rem;
 }
 
 .card {
-  font-size: 1.6rem;
-  width: 22%;
   background-color: rgb(129, 129, 129);
+  border: 0.1rem solid black;
+  border-radius: 1rem;
   cursor: pointer;
   transition: all 0.3s;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+   &:hover {
+    z-index: 5;
+    transform: rotate(3deg) scale(1.05);
+    box-shadow: 0 0 1rem 0.3rem white;
+  }
+  &:active {
+    transform: rotate(-3deg) scale(1.05);
+  }
+  &-background {
+    transform: rotate(270deg) scale(1.6);
+    width: 10rem;
+    height: 16.2rem;
+  }
 }
+
 </style>

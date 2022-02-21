@@ -1,29 +1,19 @@
 <template>
   <div class="content">
     <h3>Постройка маршрута</h3>
-    <p> {{ message }} </p>
+    <p>{{ message }}</p>
     <Btn
       v-if="message !== notEnoughMessage"
       title="Построить"
       :method="acceptBuild"
-      :class="[
-        'btn-accept' ,
-      ]"
+      :class="['btn-accept']"
     />
-    <Btn
-      :method="declineBuild"
-      title="Отмена"
-      :class="[
-        'btn-decline',
-      ]"
-    />
+    <Btn :method="declineBuild" title="Отмена" :class="['btn-decline']" />
   </div>
 </template>
 
 <script lang="ts">
-import {
-  Component, Vue, Prop,
-} from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import Btn from '../Button/Btn.vue';
@@ -56,7 +46,7 @@ export default class BuildWay extends Vue {
 
   getRailwaysInfo!: railwayInfoInterface[];
 
-  getUsers!:userInterface[];
+  getUsers!: userInterface[];
 
   getCurrentName!: string;
 
@@ -64,13 +54,13 @@ export default class BuildWay extends Vue {
 
   message = '';
 
-  notEnoughMessage= 'У вас не хватает вагонов для постройки маршрута';
+  notEnoughMessage = 'У вас не хватает вагонов для постройки маршрута';
 
   playerHas = 0;
 
   playerLoco = 0;
 
-  cardsToPay!: {color: typeOfCardsColor, value: number, loco: number} ;
+  cardsToPay!: { color: typeOfCardsColor; value: number; loco: number };
 
   get currentWay(): railwayInfoInterface {
     return this.getRailwaysInfo.filter((route) => route.id === this.path)[0];
@@ -121,7 +111,7 @@ export default class BuildWay extends Vue {
         this.cardsToPay = { color: this.chosenColor, value: this.trainsAmount, loco: 0 };
       } else if (
         this.playerHas + this.playerLoco >= this.trainsAmount
-      && this.chosenColor !== 'loco'
+        && this.chosenColor !== 'loco'
       ) {
         this.cardsToPay = {
           color: this.chosenColor,
@@ -140,12 +130,19 @@ export default class BuildWay extends Vue {
     }
   }
 
-  declineBuild():void {
+  declineBuild(): void {
     this.$emit('close-modal');
   }
 
   acceptBuild(): void {
-    this.$socket.emit('buildWay', this.getCurrentName, this.path, this.cardsToPay, this.currentWay.points, this.cities);
+    this.$socket.emit(
+      'buildWay',
+      this.getCurrentName,
+      this.path,
+      this.cardsToPay,
+      this.currentWay.points,
+      this.cities,
+    );
     // this.getCurrentTasks.forEach((task) => {
     //   console.log(`task ${task.id} with cities ${task.cities}
     // completed ---- ${testTask(task.cities, this.currentUser.hand.connected)}`);
@@ -157,5 +154,9 @@ export default class BuildWay extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+}
 </style>
