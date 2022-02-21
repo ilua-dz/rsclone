@@ -27,7 +27,7 @@
           :class="{
             complete: completedTasks.find((completedTask) => completedTask.id === task.id),
           }"
-          @mouseover="showRouteInfo(task.cities)"
+          @mouseover="showRouteInfo(task.cities), takeCardPlaySound()"
           @mouseleave="hideRouteInfo"
         >
           {{ task.points }}
@@ -51,7 +51,7 @@
         v-for="(card, index) in cardsInHand"
         v-show="card[1] > 0"
       >
-        <div class="card-value">
+        <div class="card-value" @mouseover="takeCardPlaySound">
           {{ card[1] }}
         </div>
         <div
@@ -67,17 +67,17 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import taskInterface from '../interface/taskInterface';
 import taskInfo from '../../store/user/taskInfo';
+import playSound from '../../utils/sounds/index';
 
 @Component({
   computed: {
-    ...mapGetters(['getUsers', 'getCurrentName']),
+    ...mapGetters(['getUsers', 'getCurrentName', 'getCompletedLength']),
   },
-  components: {},
 })
 export default class PlayerSide extends Vue {
   getCurrentName!: string;
@@ -85,6 +85,12 @@ export default class PlayerSide extends Vue {
   getUsers!: userInterface[];
 
   taskInfo = taskInfo;
+
+  playSound = playSound;
+
+  @Watch('getCompletedLength') onLengthChange(): void {
+    this.playSound('taskCompleted');
+  }
 
   get currentUser(): userInterface | undefined {
     return this.getUsers.find((u) => u.name === this.getCurrentName);
@@ -127,6 +133,10 @@ export default class PlayerSide extends Vue {
 
   hideRouteInfo(): void {
     this.$emit('hideCities');
+  }
+
+  takeCardPlaySound(): void {
+    this.playSound('takeCard');
   }
 }
 </script>
@@ -221,6 +231,7 @@ export default class PlayerSide extends Vue {
   &:hover + .card {
     z-index: 1;
     transform: scale(1.2) translate(-2rem, -10rem) rotate(0deg);
+    box-shadow: var(--card-shadow);
   }
 }
 .route {
@@ -231,6 +242,7 @@ export default class PlayerSide extends Vue {
     &:hover + .card {
       z-index: 1;
       transform: scale(2) translate(calc(1rem - 3.25rem * var(--card-num)), -13rem) rotate(90deg);
+      box-shadow: var(--card-shadow);
     }
     &.complete {
       color: greenyellow;

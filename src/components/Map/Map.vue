@@ -1,6 +1,7 @@
 <template>
   <div class="game-field">
     <div class="background"></div>
+    <p class="attention" v-if="checkActive">Ваш ход</p>
     <svg
       class="game-field__img"
       xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +52,6 @@
 </template>
 
 <script lang="ts">
-// import Prop if i will use props
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
@@ -160,13 +160,11 @@ export default class Map extends Vue {
   align-items: flex-start;
   border-radius: 2rem;
   border: double;
-  overflow: hidden;
+  // overflow: hidden;
   box-shadow: var(--any-table-shadow);
   &__img {
-    // max-width: 98vw;
-    // height: min-content;
     height: 85vh;
-    // max-height: 82vh;
+    border-radius: inherit;
   }
 }
 .background {
@@ -179,11 +177,18 @@ export default class Map extends Vue {
   background: center / cover no-repeat url('../../assets/map/gamefield.jpg');
   filter: blur(10px);
 }
-// .city-point {
-//   opacity: 0;
-//   transition: 0.5s;
-//   &.show {
-//     opacity: 1;
-//   }
-// }
+.attention {
+  position: absolute;
+  bottom: 2rem;
+  left: -14rem;
+  font-size: 3rem;
+  color: red;
+  text-shadow: 0 0 3px red;
+  animation: hide 0.6s ease-in-out alternate infinite;
+}
+@keyframes hide {
+  from {
+    opacity: 0;
+  }
+}
 </style>

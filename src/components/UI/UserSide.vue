@@ -105,8 +105,9 @@ export default class UserSide extends Vue {
   justify-content: center;
   background: whitesmoke;
   box-shadow: 0 0 1rem 0.3rem white;
+  box-shadow: var(--card-shadow);
   &.active {
-    animation: blur 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) alternate infinite;
+    animation: turnUp 0.6s ease-in-out alternate infinite;
   }
 }
 .user-info {
@@ -159,9 +160,10 @@ export default class UserSide extends Vue {
   transform: scale(2) rotate(10deg);
 }
 
-@keyframes blur {
+@keyframes turnUp {
   from {
-    box-shadow: 0 0 1rem 0.3rem rgb(58, 51, 51);
+    box-shadow: -2px 2px 5px 2px rgba(0, 0, 0, 0.5);;
+    transform: scale(1.02);
   }
 }
 </style>

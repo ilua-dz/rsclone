@@ -47,6 +47,7 @@ import PlayerSide from './components/UI/PlayerSide.vue';
 import Storage from './components/localStorage/storage';
 import userInterface from './components/interface/user';
 import taskInterface from './components/interface/taskInterface';
+import playSound from './utils/sounds';
 
 @Component({
   components: {
@@ -93,6 +94,7 @@ export default class App extends Vue {
 
   @Watch('getTurn') onTurnChange(): void {
     if (this.getTurn === -1) this.prepareTimer = 30;
+    playSound('gameTurn');
   }
 
   get currentUser(): userInterface {
