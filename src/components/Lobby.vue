@@ -251,10 +251,8 @@ ul {
 }
 li {
   display: flex;
-  // width: 800px;
   row-gap: 50px;
   justify-content: center;
-  // margin: 10px 0 0 80px;
   font-weight: bold;
   align-items: center;
   * {
@@ -276,11 +274,6 @@ li {
 
 .my-name {
   color: teal;
-
-  // .username {
-  //   display: inline-block;
-  //   margin-left: auto;
-  // }
 }
 .invisible {
   opacity: 0;

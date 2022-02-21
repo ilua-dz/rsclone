@@ -8,8 +8,6 @@ interface userInterface {
   preTurn: boolean;
   hand: {
     currentTasks: taskInterface[] ;
-    // longRoute: taskInterface | null;
-    // shortRoute: taskInterface[];
     trains: number;
     cards: {
       purple: number;

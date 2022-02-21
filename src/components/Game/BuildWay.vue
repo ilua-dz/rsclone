@@ -142,10 +142,6 @@ export default class BuildWay extends Vue {
       this.currentWay.points,
       this.cities,
     );
-    // this.getCurrentTasks.forEach((task) => {
-    //   console.log(`task ${task.id} with cities ${task.cities}
-    // completed ---- ${testTask(task.cities, this.currentUser.hand.connected)}`);
-    // });
     this.$socket.emit('endOfTurn');
     this.$emit('close-modal');
   }

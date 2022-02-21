@@ -26,19 +26,10 @@ export default {
       }
     },
   },
-  actions: {
-    // SOCKET_createApp(ctx: any, data: { users: []; gameStatus: boolean }) {
-    //   console.log(' data received: ', data);
-    // },
-    // SOCKET_addUser(ctx: any, data: { users: []; gameStatus: boolean }): void {
-    // },
-  },
   getters: {
     getRailways: (state: { railways: railwayInterface[] }): railwayInterface[] => state.railways,
 
     getRailwaysInfo: (state:
       { railwaysInfo: railwayInfoInterface[] }): railwayInfoInterface[] => state.railwaysInfo,
-    // getUsers: (state: { users: userInterface[] }): userInterface[] => state.users,
-    // getColors: (state: { users: userInterface[] }): string[] => state.users.map((u) => u.color),
   },
 };

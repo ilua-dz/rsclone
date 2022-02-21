@@ -91,7 +91,6 @@ import citiesInfo from '../../store/game/citiesInfo';
 })
 export default class Map extends Vue {
   @Prop({ default: [] }) private visibleCities!: string[];
-  // get mapGetters('getRailways') ,
 
   getRailways!: railwayInterface[];
 
@@ -161,7 +160,6 @@ export default class Map extends Vue {
   align-items: flex-start;
   border-radius: 2rem;
   border: double;
-  // overflow: hidden;
   width: 100%;
   box-shadow: var(--any-table-shadow);
   &__img {

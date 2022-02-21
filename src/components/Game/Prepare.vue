@@ -3,9 +3,6 @@
     <h3>Подготовка к игре</h3>
     <p>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</p>
     <ul class="route-list">
-      <!--
-      <li class="route route__long" v-if="!checkPickRoute">Маршрут номер {{ longRoute }}</li>
-    -->
       <li
         class="route"
         :key="task.id"
@@ -18,7 +15,6 @@
           }.png)`,
         }"
       >
-        <!-- Маршрут номер {{ task.id }} -->
       </li>
     </ul>
     <p class="attention">Примечание: за невыполненные карточки вы получите штраф.</p>
@@ -32,7 +28,6 @@ import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import Btn from '../Button/Btn.vue';
 import taskInterface from '../interface/taskInterface';
-// import Storage from '../localStorage/storage';
 
 @Component({
   computed: {
@@ -53,10 +48,6 @@ export default class Prepare extends Vue {
 
   getCurrentName!: string;
 
-  // storage = new Storage();
-
-  // userName = this.storage.data.name;
-
   discard: taskInterface[] = [];
 
   prepareTimer = setInterval(() => {
@@ -65,9 +56,6 @@ export default class Prepare extends Vue {
       this.acceptDiscard();
     }
   }, 100);
-
-  // mounted(): void {
-  // }
 
   get checkPickRoute(): boolean {
     return this.pickedRoutes.length > 0;
@@ -80,14 +68,6 @@ export default class Prepare extends Vue {
   get currentTasks(): taskInterface[] | undefined {
     return this.checkPickRoute ? this.pickedRoutes : this.currentUser?.hand.currentTasks;
   }
-
-  // get longRoute(): number | undefined {
-  //   return this.currentUser.hand.longRoute;
-  // }
-
-  // get shortRoute(): number[] {
-  //   return this.checkPickRoute ? this.pickedRoutes : this.currentUser.hand.shortRoute;
-  // }
 
   get cards(): Record<string, number> {
     return this.currentUser.hand.cards;
@@ -120,7 +100,6 @@ export default class Prepare extends Vue {
           const index = this.discard.indexOf(task);
           this.discard.splice(index, 1);
         } else {
-          // const value = Number(target.getAttribute('data-route'));
           const index = this.discard.indexOf(task);
           this.discard.splice(index, 1);
         }
@@ -129,7 +108,6 @@ export default class Prepare extends Vue {
         if (target.classList.contains('route__long')) {
           this.discard.push(task);
         } else {
-          // const value = Number(target.getAttribute('data-route'));
           this.discard.push(task);
         }
       }
@@ -156,11 +134,10 @@ export default class Prepare extends Vue {
 .route {
   font-size: 1.6rem;
   width: 22%;
-  // background-color: rgb(129, 129, 129);
   cursor: pointer;
   transition: all 0.3s;
-  width: 16.2rem;
-  height: 10rem;
+  width: 23.5rem;
+  height: 14.5rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);

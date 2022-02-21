@@ -8,7 +8,6 @@
 </template>
 
 <script lang="ts">
-// import Prop if i will use props
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import railwayInterface from '../interface/railway';
 

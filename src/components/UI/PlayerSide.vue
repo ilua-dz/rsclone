@@ -104,20 +104,9 @@ export default class PlayerSide extends Vue {
     return this.currentUser?.hand.completedTasks;
   }
 
-  // get longRoute(): number | undefined {
-  //   const user = this.currentUser();
-  //   return user ? user.hand.longRoute : -1;
-  // }
-
-  // get shortRoute(): number[] {
-  //   const user = this.currentUser();
-  //   return user ? user.hand.shortRoute : [];
-  // }
-
   get cardsInHand(): [string, number][] {
     const cards = this.currentUser?.hand.cards;
     if (!cards) return [];
-    // const arrayOfCards = Object.entries(cards).filter((card) => card[1] > 0);
     const arrayOfCards = Object.entries(cards);
     return arrayOfCards;
   }
@@ -167,7 +156,6 @@ export default class PlayerSide extends Vue {
 .player-box {
   position: relative;
   display: flex;
-  // flex-basis: 100%;
   padding: 1.5rem;
   list-style: none;
   gap: 1rem;

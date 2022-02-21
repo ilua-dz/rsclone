@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts">
-// import Prop if i will use props
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import railwayInterface from '../interface/railway';
 import userInterface from '../interface/user';
@@ -25,8 +24,6 @@ const storage = new Storage();
   components: {
     Train,
   },
-
-  // cssVars didn't work, so i use style at this moment
 
   computed: {
     cssVars() {

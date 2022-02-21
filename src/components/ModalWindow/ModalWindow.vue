@@ -39,8 +39,6 @@ export default class ModalWindow extends Vue {
 
   show = true;
 
-  // timerWidth = 0;
-
   mounted(): void {
     if (this.timer) this.currentTimer = this.timer;
     if (this.currentTimer > 0) {
@@ -64,7 +62,6 @@ export default class ModalWindow extends Vue {
   }
 
   closeModal(): void {
-    // this.show = false;
     this.$emit('close-modalWindow');
   }
 }

@@ -82,7 +82,7 @@ export default class App extends Vue {
 
   getGameStatus!: boolean;
 
-  prepareTimer = 3000000;
+  prepareTimer = 300;
 
   showModal = true;
 
@@ -154,7 +154,6 @@ export default class App extends Vue {
 @import './style/base/_typography.scss';
 
 body {
-  // width: 100vw;
   height: 100vh;
   padding: 0.2rem;
   background: #8f8f8f;

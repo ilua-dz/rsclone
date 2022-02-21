@@ -59,10 +59,6 @@ export default class ChooseColorForMulti extends Vue {
     return this.getRailwaysInfo.filter((route) => route.id === this.path)[0];
   }
 
-  // get trainColor(): typeOfCardsColor | 'multi' {
-  //   return this.currentWay.color;
-  // }
-
   get trainsAmount(): number {
     return this.currentWay.trainsAmount;
   }

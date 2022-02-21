@@ -135,7 +135,6 @@ export default class DeckSide extends Vue {
     playSound('takeRouteCards');
     if (this.getRouteDeck.length > 0) {
       this.routesToChoose.push(...this.getRouteDeck.splice(-3));
-      console.log('pickRoute');
       this.showRoutesModal = true;
     }
     // TODO: socket emit split routes deck
