@@ -1,12 +1,12 @@
 <template>
   <button
+    v-html="title"
     class="btn"
     @click="
       method();
       playButtonSound();
     "
   >
-    {{ title }}
   </button>
 </template>
 

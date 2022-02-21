@@ -7,14 +7,16 @@
     @click="toggleWindow">
       {{ minimized ? '▲' : '▼' }}
     </div>
-    <transition-group tag="ul" class="chat-field" name="slide-up">
+    <ul class="chat-field getHistory"
+      name="slide-up"
+      v-chat-scroll="{smooth: true}">
       <li class="chat-message"
       :key="index" v-for="(post, index) in getHistory">
       <span class="message-name"
       :class="{'my-name': checkMyName(post.name)}"
       >{{post.name}}</span>: {{ post.message }}
       </li>
-    </transition-group>
+    </ul>
     <div class="chat-form">
     <input
     type="text"
@@ -23,7 +25,7 @@
     placeholder="Напиши сообщение..."
     @keydown.enter="sendMessage">
     <Btn
-      title="⏎"
+      title="<i class='fa-solid fa-paper-plane'></i>"
       class="btn-accept"
       :method="sendMessage"
           />
@@ -34,8 +36,11 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import VueChatScroll from 'vue-chat-scroll';
 import Btn from '../Button/Btn.vue';
+import playSound from '../../utils/sounds';
 
+Vue.use(VueChatScroll);
 @Component({
   computed: {
     ...mapGetters([
@@ -63,7 +68,10 @@ export default class Chat extends Vue {
 
   unread = false;
 
+  playSound = playSound;
+
   @Watch('getHistory') onHistoryChange(): void {
+    this.playSound('message');
     if (this.getHistory.length > 0) {
       if (this.minimized) {
         this.unread = true;
@@ -89,7 +97,7 @@ export default class Chat extends Vue {
 
   sendMessage(): void {
     const name = this.getCurrentName || this.getId;
-    this.$socket.emit('sendMessage', { name, message: this.message });
+    if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
     this.message = '';
   }
 }
@@ -102,6 +110,7 @@ export default class Chat extends Vue {
   bottom: 0;
   left: 50%;
   width: 70rem;
+  height: 30%;
   transition: all 0.5s;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
