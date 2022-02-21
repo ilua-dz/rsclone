@@ -1,6 +1,6 @@
 <template>
   <use
-    xlink:href="/assets/map/city-marker.svg#point"
+    xlink:href="assets/map/city-marker.svg#point"
     :x="city.x"
     :y="city.y"
     style="transform: translate(-594px, -370px)"

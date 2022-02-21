@@ -162,8 +162,10 @@ export default class Map extends Vue {
   border-radius: 2rem;
   border: double;
   // overflow: hidden;
+  width: 100%;
   box-shadow: var(--any-table-shadow);
   &__img {
+    width: 100%;
     height: 85vh;
     border-radius: inherit;
   }
