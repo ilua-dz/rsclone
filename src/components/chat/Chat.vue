@@ -115,10 +115,12 @@ export default class Chat extends Vue {
   bottom: 0;
   left: 50%;
   width: 70rem;
-  height: 30%;
+  height: 29rem;
   transition: all 0.5s;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
+  border: 0.7rem outset;
+  border-bottom: none;
   transform: translateX(-50%);
   overflow: hidden;
 

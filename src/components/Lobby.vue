@@ -191,7 +191,7 @@ export default class Lobby extends Vue {
   align-items: center;
   justify-content: flex-start;
   row-gap: 2rem;
-  background: url('../../public/assets/lobby/start-page-bg.jpg') center;
+  background: center / cover no-repeat url('../../public/assets/lobby/start-page-bg.jpg');
 }
 
 .logo-img {
