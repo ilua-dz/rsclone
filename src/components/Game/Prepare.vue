@@ -1,20 +1,27 @@
 <template>
   <div class="content">
-    <h3>Подготовка</h3>
-    <h5>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</h5>
-    <ul class="route-list" >
-    <!--
+    <h3>Подготовка к игре</h3>
+    <p>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</p>
+    <ul class="route-list">
+      <!--
       <li class="route route__long" v-if="!checkPickRoute">Маршрут номер {{ longRoute }}</li>
     -->
-      <li class="route"
-      :key="task.id"
-      v-for="task in currentTasks"
-      @click="markToDiscard($event, task)"
-      :data-route="task.id">
-        Маршрут номер {{ task.id }}
+      <li
+        class="route"
+        :key="task.id"
+        v-for="task in currentTasks"
+        @click="markToDiscard($event, task)"
+        :data-route="task.id"
+        :style="{
+          background: `center / contain no-repeat url(./assets/game/route_cards/${
+            task.id + 1
+          }.png)`,
+        }"
+      >
+        <!-- Маршрут номер {{ task.id }} -->
       </li>
     </ul>
-    <p>Примечание: за невыполненные карточки вы получите штраф.</p>
+    <p class="attention">Примечание: за невыполненные карточки вы получите штраф.</p>
     <Btn title="Применить" class="btn-accept btn-prepare" :method="acceptDiscard" />
   </div>
 </template>
@@ -29,10 +36,7 @@ import taskInterface from '../interface/taskInterface';
 
 @Component({
   computed: {
-    ...mapGetters([
-      'getUsers',
-      'getCurrentName',
-    ]),
+    ...mapGetters(['getUsers', 'getCurrentName']),
   },
   components: {
     Btn,
@@ -135,19 +139,30 @@ export default class Prepare extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+
 .route-list {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  column-gap: 1rem;
   list-style: none;
 }
 
 .route {
   font-size: 1.6rem;
   width: 22%;
-  background-color: rgb(129, 129, 129);
+  // background-color: rgb(129, 129, 129);
   cursor: pointer;
   transition: all 0.3s;
+  width: 16.2rem;
+  height: 10rem;
+  border: 0.1rem solid black;
+  border-radius: 1rem;
 
   &__long {
     background-color: rgb(91, 144, 204);

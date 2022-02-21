@@ -193,6 +193,7 @@ export default class Lobby extends Vue {
   border-radius: 2rem;
   background-color: #eceae0;
   transition: 0.5s;
+  box-shadow: var(--any-table-shadow);
 }
 
 .lobby {
@@ -269,8 +270,8 @@ li {
   opacity: 0;
   pointer-events: none;
 }
-.slide-down{
-  &-move{
+.slide-down {
+  &-move {
     transition: all 0.3s;
   }
   &-enter-active,
