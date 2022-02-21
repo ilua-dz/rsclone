@@ -20,7 +20,6 @@ import Btn from '../Button/Btn.vue';
 import railwayInfoInterface from '../interface/railwayInfo';
 import typeOfCardsColor from '../interface/colorType';
 import taskInterface from '../interface/taskInterface';
-// import testTask from './testTask';
 
 @Component({
   computed: {

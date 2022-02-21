@@ -14,8 +14,8 @@
               @keypress.enter="addNewUser"
             />
             <div class="buttons">
-              <button class="btn" @click="addNewUser">Добавить</button>
-              <button class="btn" @click="clearInput">Очистить</button>
+              <button class="btn" @click="addNewUser(), playBtnSound()">Добавить</button>
+              <button class="btn" @click="clearInput(), playBtnSound()">Очистить</button>
             </div>
           </div>
         </div>
@@ -79,6 +79,7 @@ import userInterface from './interface/user';
 import Storage from './localStorage/storage';
 import Btn from './Button/Btn.vue';
 import resultInterface from './interface/result';
+import playSound from '../utils/sounds';
 
 const storage = new Storage();
 
@@ -157,6 +158,12 @@ export default class Lobby extends Vue {
     storage.data.name = this.userName;
     storage.saveData();
   }
+
+  playSound = playSound;
+
+  playBtnSound(): void {
+    this.playSound('button');
+  }
 }
 </script>
 
@@ -194,6 +201,8 @@ export default class Lobby extends Vue {
   background-color: #eceae0;
   transition: 0.5s;
   box-shadow: var(--any-table-shadow);
+  border: 0.7rem outset;
+
 }
 
 .lobby {
