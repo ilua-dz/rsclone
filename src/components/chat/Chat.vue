@@ -59,16 +59,20 @@ export default class Chat extends Vue {
 
   minimized = true;
 
+  getHistory!: [];
+
   unread = false;
 
   @Watch('getHistory') onHistoryChange(): void {
-    if (this.minimized) {
-      this.unread = true;
-    } else {
-      this.unread = true;
-      setTimeout(() => {
-        this.unread = false;
-      }, 800);
+    if (this.getHistory.length > 0) {
+      if (this.minimized) {
+        this.unread = true;
+      } else {
+        this.unread = true;
+        setTimeout(() => {
+          this.unread = false;
+        }, 800);
+      }
     }
   }
 
