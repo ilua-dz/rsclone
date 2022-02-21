@@ -157,7 +157,7 @@ export default class UserSide extends Vue {
 }
 .stat-block:hover {
   z-index: 5;
-  transform: scale(2) rotate(10deg);
+  transform: scale(1.2) rotate(3deg);
 }
 
 @keyframes turnUp {

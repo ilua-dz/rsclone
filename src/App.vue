@@ -16,7 +16,7 @@
       </div>
       <player-side @showCities="showCities" @hideCities="hideCities" />
     </div>
-    <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start">
+    <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start" v-cloak>
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window
@@ -82,7 +82,7 @@ export default class App extends Vue {
 
   getGameStatus!: boolean;
 
-  prepareTimer = 30;
+  prepareTimer = 3000000;
 
   showModal = true;
 
