@@ -123,6 +123,7 @@ export default class Chat extends Vue {
   border-bottom: none;
   transform: translateX(-50%);
   overflow: hidden;
+  box-shadow: var(--any-table-shadow);
 
   &.minimized {
     height: 3rem;
