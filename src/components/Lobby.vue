@@ -4,7 +4,7 @@
     <div class="new-user">
       <transition name="fade" mode="out-in">
         <div v-if="!arrayNames.includes(currentName)" class="input-field" key="edit">
-          <h2 class="title">{{ loginTitle }}</h2>
+          <h2 class="title">Добро пожаловать! <br>{{ loginTitle }}</h2>
           <div class="input-field">
             <input
               ref="nameInput"
@@ -68,6 +68,12 @@
         </li>
       </ol>
     </div>
+    <footer class="footer">
+      <a href="https://github.com/irnq" target="blank" class="footer-item">irnq</a>
+      <a href="https://github.com/ilua-dz" target="blank" class="footer-item">ilua-dz</a>
+      <a href="https://rs.school/js/" target="blank" class="footer-item rss-logo"></a>
+      <p class="footer-item">2022</p>
+    </footer>
   </div>
 </template>
 
@@ -213,7 +219,8 @@ export default class Lobby extends Vue {
 }
 
 .new-user {
-  height: 18rem;
+  padding-top: 1.5rem;
+  height: 20rem;
   input {
     padding: 0.5rem;
     text-align: center;
@@ -291,6 +298,47 @@ li {
   &-leave-to {
     opacity: 0;
     transform: translateY(-100%);
+  }
+}
+.footer {
+  width: 100%;
+  padding: 0 1%;
+  height: 5rem;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgba(255,255,255,0.1);
+  border-top: groove;
+  a {
+    text-decoration: none;
+    color: unset;
+  }
+  .footer-item {
+    margin: 0 2rem;
+    line-height: 100%;
+    padding: 0.6rem;
+    background: white;
+    border-radius: 1rem;
+    transition: 0.3s;
+    cursor: pointer;
+    border: 2px black solid;
+    &:hover {
+      transform: rotate(5deg);
+      box-shadow: var(--card-shadow);
+    }
+    &:active {
+      transform: rotate(-5deg);
+    }
+  }
+  .rss-logo {
+    margin-left: auto;
+    background: center / contain no-repeat url('https://rolling-scopes-school.github.io/ilua-dz-JSFE2021Q3/christmas-task/assets/svg/rs_school_js.svg') black;
+    background-size: 70%;
+    filter: invert(100%);
+    width: 9rem;
+    height: 3.5rem;
+    border: 2px white solid;
   }
 }
 </style>
