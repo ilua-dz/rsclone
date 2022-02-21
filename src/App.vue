@@ -31,6 +31,7 @@
       />
     </modal-window>
     <div class="preloader" v-show="getTurn < -1"></div>
+    <chat v-if="getTurn !== -2" v-cloak/>
   </div>
 </template>
 
@@ -44,6 +45,7 @@ import Prepare from './components/Game/Prepare.vue';
 import UserSide from './components/UI/UserSide.vue';
 import DeckSide from './components/UI/DeckSide.vue';
 import PlayerSide from './components/UI/PlayerSide.vue';
+import Chat from './components/chat/Chat.vue';
 import Storage from './components/localStorage/storage';
 import userInterface from './components/interface/user';
 import taskInterface from './components/interface/taskInterface';
@@ -58,6 +60,7 @@ import playSound from './utils/sounds';
     UserSide,
     DeckSide,
     PlayerSide,
+    Chat,
   },
 
   computed: {
@@ -169,6 +172,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .game-main {
