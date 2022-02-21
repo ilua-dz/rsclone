@@ -39,8 +39,10 @@ import { mapGetters } from 'vuex';
 import VueChatScroll from 'vue-chat-scroll';
 import Btn from '../Button/Btn.vue';
 import playSound from '../../utils/sounds';
+import Storage from '../localStorage/storage';
 
 Vue.use(VueChatScroll);
+
 @Component({
   computed: {
     ...mapGetters([
@@ -96,9 +98,12 @@ export default class Chat extends Vue {
   }
 
   sendMessage(): void {
-    const name = this.getCurrentName || this.getId;
-    if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
-    this.message = '';
+    const storage = new Storage();
+    if (storage.data.name) {
+      const name = this.getCurrentName || this.getId;
+      if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
+      this.message = '';
+    }
   }
 }
 </script>
