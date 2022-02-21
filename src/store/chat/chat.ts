@@ -24,8 +24,6 @@ export default {
       state: { history: { name: string, message: string }[] },
       incoming: { name: string, message: string },
     ): void {
-      console.log(incoming);
-      console.log(state.history);
       state.history.push(incoming);
     },
 
