@@ -18,17 +18,17 @@
       </li>
     </ul>
     <div class="chat-form">
-    <input
-    type="text"
-    class="chat-input"
-    v-model="message"
-    placeholder="Напиши сообщение..."
-    @keydown.enter="sendMessage">
-    <Btn
-      title="<i class='fa-solid fa-paper-plane'></i>"
-      class="btn-accept"
-      :method="sendMessage"
-          />
+      <input
+        type="text"
+        class="chat-input"
+        v-model="message"
+        placeholder="Напиши сообщение..."
+        @keydown.enter="sendMessage">
+        <Btn
+          title="<i class='fa-solid fa-paper-plane'></i>"
+          class="btn-accept"
+          :method="sendMessage"
+        />
     </div>
   </div>
 </template>
@@ -39,7 +39,6 @@ import { mapGetters } from 'vuex';
 import VueChatScroll from 'vue-chat-scroll';
 import Btn from '../Button/Btn.vue';
 import playSound from '../../utils/sounds';
-import Storage from '../localStorage/storage';
 
 Vue.use(VueChatScroll);
 
@@ -98,24 +97,24 @@ export default class Chat extends Vue {
   }
 
   sendMessage(): void {
-    const storage = new Storage();
-    if (storage.data.name) {
-      const name = this.getCurrentName || this.getId;
-      if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
-      this.message = '';
-    }
+    const name = this.getCurrentName || this.getId;
+    if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
+    this.message = '';
   }
 }
 </script>
 
 <style lang="scss">
 .chat-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: antiquewhite;
   position: absolute;
   bottom: 0;
   left: 50%;
   width: 70rem;
-  height: 29rem;
+  max-height: 30rem;
   transition: all 0.5s;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
@@ -124,6 +123,7 @@ export default class Chat extends Vue {
   transform: translateX(-50%);
   overflow: hidden;
   box-shadow: var(--any-table-shadow);
+  transition: height 0.5s;
 
   &.minimized {
     height: 3rem;
