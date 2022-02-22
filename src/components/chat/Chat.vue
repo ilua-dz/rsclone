@@ -14,7 +14,9 @@
       :key="index" v-for="(post, index) in getHistory">
       <span class="message-name"
       :class="{'my-name': checkMyName(post.name)}"
-      >{{post.name}}</span>: {{ post.message }}
+      >{{post.name === getId
+        ? `Guest_${post.name[0]}${post.name[4]}${post.name[post.name.length - 1]}`
+        : post.name}}</span>: {{ post.message }}
       </li>
     </ul>
     <div class="chat-form">
@@ -93,6 +95,7 @@ export default class Chat extends Vue {
   checkMyName(name: string): boolean {
     if (name === this.getCurrentName) return true;
     if (name === `Guest_${this.getId[0]}${this.getId[4]}${this.getId[this.getId.length - 1]}`) return true;
+    if (name === this.getId) return true;
     return false;
   }
 
@@ -114,7 +117,7 @@ export default class Chat extends Vue {
   bottom: 0;
   left: 50%;
   width: 70rem;
-  max-height: 30rem;
+  max-height: 60rem;
   transition: all 0.5s;
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
@@ -123,9 +126,9 @@ export default class Chat extends Vue {
   transform: translateX(-50%);
   overflow: hidden;
   box-shadow: var(--any-table-shadow);
-  transition: height 0.5s;
 
   &.minimized {
+    max-height: 3rem;
     height: 3rem;
     width: 20%;
     left: 50%;
