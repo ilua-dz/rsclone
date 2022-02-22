@@ -4,8 +4,8 @@
   >
     <div class="chat-minimize"
     :class="{unread}"
-    @click="toggleWindow">
-      {{ minimized ? '▲' : '▼' }}
+    @click="toggleWindow"
+    v-html="chatArrow">
     </div>
     <ul class="chat-field getHistory"
       name="slide-up"
@@ -73,6 +73,8 @@ export default class Chat extends Vue {
 
   playSound = playSound;
 
+  chatArrow = '<i class="fa-regular fa-messages"></i>';
+
   @Watch('getHistory') onHistoryChange(): void {
     this.playSound('message');
     if (this.getHistory.length > 0) {
@@ -90,6 +92,9 @@ export default class Chat extends Vue {
   toggleWindow():void {
     this.minimized = !this.minimized;
     this.unread = false;
+    this.chatArrow = this.minimized
+      ? '<i class="fa-regular fa-messages"></i>'
+      : '<i class="fa-regular fa-arrow-down-from-dotted-line"></i>';
   }
 
   checkMyName(name: string): boolean {
