@@ -111,7 +111,7 @@ export default class App extends Vue {
   created(): void {
     if (this.storage.data.name) this.$store.commit('setCurrentName', this.storage.data.name);
     if (this.storage.data.color) this.$store.commit('setCurrentColor', this.storage.data.color);
-    this.$socket.emit('setId', this.getCurrentName);
+    this.$socket.emit('setId', this.storage.data.name);
   }
 
   addUser(name: string, usedColors: string[]): void {
