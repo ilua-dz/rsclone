@@ -60,7 +60,7 @@
       <p v-else>Игроков пока нет...</p>
     </div>
     <div
-      v-if="getResult.length"
+      v-if="checkResultLength"
       class="result-table"
       :style="{
         maxHeight: displayResult ? '100rem' : '6rem',
@@ -141,6 +141,10 @@ export default class Lobby extends Vue {
   namePlaceholder = 'Введите своё имя';
 
   displayResult = false;
+
+  get checkResultLength(): boolean {
+    return this.getResult.length > 0;
+  }
 
   get arrayNames(): string[] {
     return this.users.map((user: userInterface) => user.name);

@@ -8,6 +8,7 @@ export default {
     gameDeck: {},
     turnWeight: 0,
     result: [],
+    turnToEnd: 9999,
   },
   mutations: {
     SOCKET_createApp(
@@ -17,6 +18,7 @@ export default {
         gameDeck: gameDeckInterface;
         turnWeight: number;
         result: resultInterface[];
+        turnToEnd: number;
       },
       data: {
         gameStatus: boolean;
@@ -24,6 +26,7 @@ export default {
         gameDeck: gameDeckInterface;
         turnWeight: number;
         result: resultInterface[];
+        turnToEnd: number;
       },
     ): void {
       state.gameStatus = data.gameStatus;
@@ -31,6 +34,7 @@ export default {
       state.gameDeck = data.gameDeck;
       state.turnWeight = data.turnWeight;
       state.result = data.result;
+      state.turnToEnd = data.turnToEnd;
     },
     SOCKET_updateGameStatus(state: { gameStatus: boolean }, gameStatus: boolean): void {
       state.gameStatus = gameStatus;
@@ -44,6 +48,9 @@ export default {
     SOCKET_preTurn(state: { gameDeck: gameDeckInterface }, gameDeck: gameDeckInterface): void {
       state.gameDeck = gameDeck;
     },
+    SOCKET_setTurnToEnd(state: { turnToEnd: number }, turnToEnd: number): void {
+      state.turnToEnd = turnToEnd;
+    },
   },
   actions: {},
   getters: {
@@ -53,6 +60,7 @@ export default {
     getCardDeck: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.deck,
     getCardTable: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.table,
     getTurnWeight: (state: { turnWeight: number }): number => state.turnWeight,
+    getTurnToEnd: (state: { turnToEnd: number }): number => state.turnToEnd,
     getResult: (state: {
       result: resultInterface[]
     }): resultInterface[] => state.result.sort((a, b) => b.points - a.points),
