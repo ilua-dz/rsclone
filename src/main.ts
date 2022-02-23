@@ -13,8 +13,8 @@ const URL = {
 
 Vue.use(
   new VueSocketIO({
-    debug: true,
-    connection: SocketIO(URL.local),
+    // debug: true,
+    connection: SocketIO(URL.heroku),
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
