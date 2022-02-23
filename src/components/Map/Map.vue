@@ -1,7 +1,10 @@
 <template>
   <div class="game-field">
     <div class="background"></div>
-    <p class="attention" v-if="checkActive">Ваш {{checkLastTurn ? 'последний ' : ''}}ход</p>
+    <p class="attention"
+    v-if="checkActive"
+    :class="{lastTurn: checkLastTurn}"
+    >Ваш {{checkLastTurn ? 'последний ' : ''}}ход</p>
     <svg
       class="game-field__img"
       xmlns="http://www.w3.org/2000/svg"
@@ -193,6 +196,9 @@ export default class Map extends Vue {
   color: red;
   text-shadow: 0 0 3px red;
   animation: hide 0.6s ease-in-out alternate infinite;
+  &.lastTurn {
+    transform: translateX(-15rem);
+  }
 }
 @keyframes hide {
   from {
