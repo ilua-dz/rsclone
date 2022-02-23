@@ -1,7 +1,7 @@
 <template>
   <div class="game-field">
     <div class="background"></div>
-    <p class="attention" v-if="checkActive">Ваш ход</p>
+    <p class="attention" v-if="checkActive">Ваш {{checkLastTurn ? 'последний ' : ''}}ход</p>
     <svg
       class="game-field__img"
       xmlns="http://www.w3.org/2000/svg"
@@ -76,6 +76,7 @@ import citiesInfo from '../../store/game/citiesInfo';
       'getUsers',
       'getTurn',
       'getTurnWeight',
+      'getTurnToEnd',
       'getCurrentName',
       'getCurrentTasks',
     ]),
@@ -98,6 +99,8 @@ export default class Map extends Vue {
 
   getTurn!: number;
 
+  getTurnToEnd!: number;
+
   getUsers!: userInterface[];
 
   getCurrentName!: string;
@@ -115,6 +118,10 @@ export default class Map extends Vue {
   chosenColorForMulti: typeOfCardsColor = 'loco';
 
   citiesInfo = citiesInfo;
+
+  get checkLastTurn(): boolean {
+    return this.getTurnToEnd - this.getTurn < this.getUsers.length;
+  }
 
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
