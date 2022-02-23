@@ -4,7 +4,7 @@
     <div class="new-user">
       <transition name="fade" mode="out-in">
         <div v-if="!arrayNames.includes(currentName)" class="input-field" key="edit">
-          <h2 class="title">Добро пожаловать! <br>{{ loginTitle }}</h2>
+          <h2 class="title">Добро пожаловать! <br />{{ loginTitle }}</h2>
           <div class="input-field">
             <input
               ref="nameInput"
@@ -59,14 +59,47 @@
       </transition-group>
       <p v-else>Игроков пока нет...</p>
     </div>
-    <div class="result-table" v-if="getResult.length">
-      <h2>Результаты последней игры:</h2>
-      <ol class="result-list">
-        <li :key="user.name" v-for="user in getResult" class="result-item">
-          <span class="result-name"> {{ user.name }}</span>
-          <span class="result-points">{{ user.points }}</span>
+    <div
+      v-if="getResult.length"
+      class="result-table"
+      :style="{
+        maxHeight: displayResult ? '100rem' : '6rem',
+      }"
+      @click="displayResult = !displayResult"
+    >
+      <div class="result-table-title">
+        <i
+          class="fa-solid"
+          :class="[
+            displayResult ? 'fa-arrow-down-from-dotted-line' : 'fa-arrow-up-from-dotted-line',
+          ]"
+        ></i>
+        <h2>Результаты последней игры</h2>
+        <i
+          class="fa-solid"
+          :class="[
+            displayResult ? 'fa-arrow-down-from-dotted-line' : 'fa-arrow-up-from-dotted-line',
+          ]"
+        ></i>
+      </div>
+      <ul class="result-list">
+        <li class="result-item">
+          <p class="result-num title">Место</p>
+          <p class="result-name title">Имя</p>
+          <p class="result-points title">Баллы за перегоны</p>
+          <p class="result-points title">Баллы за маршруты</p>
+          <p class="result-points title">Штрафы за маршруты</p>
+          <p class="result-points title">Сумма</p>
         </li>
-      </ol>
+        <li :key="user.name" v-for="(user, index) in getResult" class="result-item">
+          <p class="result-num title">{{ index + 1 }}</p>
+          <p class="result-name">{{ user.name }}</p>
+          <p class="result-points">{{ user.points }}</p>
+          <p class="result-points">{{ user.completedTasksPoints }}</p>
+          <p class="result-points">{{ user.incompletedTasksPoints }}</p>
+          <p class="result-points">{{ user.score }}</p>
+        </li>
+      </ul>
     </div>
     <footer class="footer">
       <a href="https://github.com/irnq" target="blank" class="footer-item">irnq</a>
@@ -106,6 +139,8 @@ export default class Lobby extends Vue {
   loginTitle = 'Введите своё имя';
 
   namePlaceholder = 'Введите своё имя';
+
+  displayResult = false;
 
   get arrayNames(): string[] {
     return this.users.map((user: userInterface) => user.name);
@@ -184,6 +219,7 @@ export default class Lobby extends Vue {
 }
 
 .lobby-container {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
@@ -208,7 +244,6 @@ export default class Lobby extends Vue {
   transition: 0.5s;
   box-shadow: var(--any-table-shadow);
   border: 0.7rem outset;
-
 }
 
 .lobby {
@@ -301,7 +336,7 @@ li {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-top: groove;
   a {
     text-decoration: none;
@@ -326,12 +361,56 @@ li {
   }
   .rss-logo {
     margin-left: auto;
-    background: center / contain no-repeat url('https://rolling-scopes-school.github.io/ilua-dz-JSFE2021Q3/christmas-task/assets/svg/rs_school_js.svg') black;
+    background: center / contain no-repeat
+      url('https://rolling-scopes-school.github.io/ilua-dz-JSFE2021Q3/christmas-task/assets/svg/rs_school_js.svg')
+      black;
     background-size: 70%;
     filter: invert(100%);
     width: 9rem;
     height: 3.5rem;
     border: 2px white solid;
   }
+}
+.result-table {
+  position: absolute;
+  bottom: 6rem;
+  overflow: hidden;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  &-title {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+}
+.result-list {
+  border: double;
+}
+.result-item {
+  display: flex;
+}
+.result-num,
+.result-name,
+.result-points {
+  display: inline-block;
+  padding: 0.5rem 0;
+  border: 2px solid black;
+  &.title {
+    text-shadow: 0 0 0px black, 0 0 1px black;
+  }
+}
+.result-num {
+  max-width: 6rem;
+}
+.result-name {
+  min-width: 30rem;
+  max-width: 40rem;
+}
+.result-points {
+  width: 17rem;
 }
 </style>
