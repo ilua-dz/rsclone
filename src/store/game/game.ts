@@ -63,6 +63,6 @@ export default {
     getTurnToEnd: (state: { turnToEnd: number }): number => state.turnToEnd,
     getResult: (state: {
       result: resultInterface[]
-    }): resultInterface[] => state.result.sort((a, b) => b.points - a.points),
+    }): resultInterface[] => state.result.sort((a, b) => b.score - a.score),
   },
 };
