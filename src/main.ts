@@ -14,7 +14,7 @@ const URL = {
 Vue.use(
   new VueSocketIO({
     // debug: true,
-    connection: SocketIO(URL.heroku),
+    connection: SocketIO(URL.local),
     vuex: {
       store,
       actionPrefix: 'SOCKET_',
