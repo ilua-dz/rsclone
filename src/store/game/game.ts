@@ -9,6 +9,7 @@ export default {
     turnWeight: 0,
     result: [],
     turnToEnd: 9999,
+    countOfGames: 0,
   },
   mutations: {
     SOCKET_createApp(
@@ -19,6 +20,7 @@ export default {
         turnWeight: number;
         result: resultInterface[];
         turnToEnd: number;
+        countOfGames: number;
       },
       data: {
         gameStatus: boolean;
@@ -27,6 +29,7 @@ export default {
         turnWeight: number;
         result: resultInterface[];
         turnToEnd: number;
+        countOfGames: number;
       },
     ): void {
       state.gameStatus = data.gameStatus;
@@ -35,6 +38,7 @@ export default {
       state.turnWeight = data.turnWeight;
       state.result = data.result;
       state.turnToEnd = data.turnToEnd;
+      state.countOfGames = data.countOfGames;
     },
     SOCKET_updateGameStatus(state: { gameStatus: boolean }, gameStatus: boolean): void {
       state.gameStatus = gameStatus;
@@ -61,8 +65,12 @@ export default {
     getCardTable: (state: { gameDeck: gameDeckInterface }): string[] => state.gameDeck.table,
     getTurnWeight: (state: { turnWeight: number }): number => state.turnWeight,
     getTurnToEnd: (state: { turnToEnd: number }): number => state.turnToEnd,
+    getCountOfGames: (state: { countOfGames: number }): number => (state.countOfGames
+      ? state.countOfGames : 0),
     getResult: (state: {
       result: resultInterface[]
-    }): resultInterface[] => state.result.sort((a, b) => b.score - a.score),
+    }): resultInterface[] => (state.result
+      ? state.result.sort((a, b) => b.score - a.score)
+      : []),
   },
 };

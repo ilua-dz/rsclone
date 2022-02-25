@@ -131,7 +131,7 @@ export default class Chat extends Vue {
   transform: translateX(-50%);
   overflow: hidden;
   box-shadow: var(--any-table-shadow);
-  z-index: 3;
+  z-index: 100;
 
   &.minimized {
     max-height: 3rem;

@@ -42,6 +42,7 @@ export default {
     getUsers: (state: { users: userInterface[] }): userInterface[] => state.users,
     getColors: (state: { users: userInterface[] }): string[] => state.users.map((u) => u.color),
     getCurrentName: (state: { currentName: string }): string => state.currentName,
+    getCurrentColor: (state: { currentColor: string }): string => state.currentColor,
     getCompletedLength: (state: { users: userInterface[], currentName: string }): number => state
       .users.filter((u) => u.name === state.currentName)[0].hand.completedTasks.length,
   },

@@ -5,7 +5,7 @@
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
     :class="{ hovered: isHover && isUserActive }"
-    :style="{ '--user-color': userColor }"
+    :style="{ '--user-color': getCurrentColor }"
   >
     <Train :key="train.x" v-for="train in railway.train" :train="train" />
   </g>
@@ -13,12 +13,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
 import userInterface from '../interface/user';
 import Train from './Train.vue';
-import Storage from '../localStorage/storage';
+// import Storage from '../localStorage/storage';
 
-const storage = new Storage();
+// const storage = new Storage();
 
 @Component({
   components: {
@@ -26,9 +27,7 @@ const storage = new Storage();
   },
 
   computed: {
-    cssVars() {
-      return {};
-    },
+    ...mapGetters(['getUsers', 'getCurrentColor', 'getCompletedLength']),
   },
 })
 export default class Railway extends Vue {
@@ -40,13 +39,21 @@ export default class Railway extends Vue {
 
   transform = this.railway.transform;
 
+  getUsers!: userInterface[];
+
+  getCurrentColor!: string
+
   isHover = false;
 
-  get userColor(): string {
-    let color = this.users.find((u) => u.name === storage.data.name)?.color;
-    if (!color) color = '';
-    return color;
-  }
+  // get currentUser(): userInterface | undefined {
+  //   return this.getUsers.find((u) => u.name === this.getCurrentName);
+  // }
+
+  // get userColor(): string {
+  //   let color = this.users.find((u) => u.name === storage.data.name)?.color;
+  //   if (!color) color = '';
+  //   return color;
+  // }
 }
 </script>
 
