@@ -74,7 +74,8 @@
             displayResult ? 'fa-arrow-down-from-dotted-line' : 'fa-arrow-up-from-dotted-line',
           ]"
         ></i>
-        <h2>Результаты последней игры</h2>
+        <h2>Результаты последней игры <span>
+        (Всего сыгранно: {{ getCountOfGames }})</span></h2>
         <i
           class="fa-solid"
           :class="[
@@ -124,7 +125,7 @@ const storage = new Storage();
 
 @Component({
   computed: {
-    ...mapGetters(['getUsers', 'getCurrentName', 'getResult']),
+    ...mapGetters(['getUsers', 'getCurrentName', 'getResult', 'getCountOfGames']),
   },
   components: {
     'color-button': ColorButton,
@@ -135,6 +136,8 @@ export default class Lobby extends Vue {
   @Prop({ default: [] }) private users!: userInterface[];
 
   getResult!: resultInterface[];
+
+  getCountOfGames!: number;
 
   loginTitle = 'Введите своё имя';
 
@@ -171,6 +174,9 @@ export default class Lobby extends Vue {
       this.userName = this.currentName;
       this.userReady = this.users.find((u) => u.name === this.userName)?.ready || false;
     }
+    setTimeout(() => {
+      console.log(this.getCountOfGames);
+    }, 2000);
   }
 
   addNewUser(): void {
