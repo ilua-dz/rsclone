@@ -174,9 +174,6 @@ export default class Lobby extends Vue {
       this.userName = this.currentName;
       this.userReady = this.users.find((u) => u.name === this.userName)?.ready || false;
     }
-    setTimeout(() => {
-      console.log(this.getCountOfGames);
-    }, 2000);
   }
 
   addNewUser(): void {
