@@ -8,13 +8,13 @@
       @set-new-color="setColor"
       v-show="!getGameStatus && getTurn !== -2"
     />
-    <div v-if="getGameStatus && checkUserInPlayerList" class="game" v-cloak>
+    <div v-if="getGameStatus" class="game" v-cloak>
       <div class="game-main">
         <user-side />
         <Map :visibleCities="visibleCities" />
         <deck-side />
       </div>
-      <player-side @showCities="showCities" @hideCities="hideCities" />
+      <player-side v-if="checkUserInPlayerList" @showCities="showCities" @hideCities="hideCities" />
     </div>
     <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start" v-cloak>
       К сожалению игра уже началась. Ждите завершения.
@@ -195,7 +195,10 @@ body {
   height: 100%;
 }
 .game-already-start {
-  background-color: #ffd5d3;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #ffd5d381;
   text-align: center;
   font-size: 4rem;
   width: 100%;
@@ -203,5 +206,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 80;
 }
 </style>
