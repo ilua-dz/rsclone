@@ -18,14 +18,12 @@
         ></div>
       </div>
     </div>
-    <ul class="table-card">
+    <ul class="table-card" ref="tableCards">
       <li
         :key="index"
         v-for="(card, index) in getCardTable"
         class="deck"
         :class="{ active: checkActive }"
-        :data-color="card"
-        :data-index="index"
         :style="{
           background: `center / contain no-repeat url(./assets/game/wagon_cards/${card}.png)`,
         }"
@@ -34,7 +32,7 @@
         <div
           class="deck-action"
           v-if="checkActive && (card !== 'loco' || (card === 'loco' && getTurnWeight === 0))"
-          @click="pickCardTable"
+          @click="pickCardTable(index)"
         ></div>
       </li>
     </ul>
@@ -127,8 +125,10 @@ export default class DeckSide extends Vue {
 
   get checkActive(): boolean {
     if (this.getTurn === -1) return false;
-    return this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName
-    && this.userReady;
+    return (
+      this.getUsers[this.getTurn % this.getUsers.length].name === this.getCurrentName
+      && this.userReady
+    );
   }
 
   pickRoute(): void {
@@ -152,18 +152,14 @@ export default class DeckSide extends Vue {
     }, this.timerForWait);
   }
 
-  pickCardTable(e: MouseEvent): void {
-    playSound('takeCard');
-    if (e.target instanceof Element) {
-      const target = e.target.closest('.deck') || e.target;
-      const color = target.getAttribute('data-color');
-      if ((color === 'loco' && this.getTurnWeight === 0) || color !== 'loco') {
-        const cardIndex = Number(target.getAttribute('data-index'));
-        this.$socket.emit('pickCardTable', this.getCurrentName, cardIndex, color);
-        this.setTimerForUser();
-        if (color === 'loco' || this.getTurnWeight > 0) {
-          this.$socket.emit('endOfTurn');
-        }
+  pickCardTable(cardNumber: number): void {
+    const color = this.getCardTable[cardNumber];
+    if ((color === 'loco' && this.getTurnWeight === 0) || color !== 'loco') {
+      this.$socket.emit('pickCardTable', this.getCurrentName, cardNumber, color);
+      playSound('takeCard');
+      this.setTimerForUser();
+      if (color === 'loco' || this.getTurnWeight > 0) {
+        this.$socket.emit('endOfTurn');
       }
     }
   }
@@ -175,6 +171,25 @@ export default class DeckSide extends Vue {
     if (this.getTurnWeight > 0) {
       this.$socket.emit('endOfTurn');
     }
+  }
+
+  enableKeyboardControls(): void {
+    document.addEventListener('keydown', (e) => {
+      if (this.checkActive) {
+        if (e.code.startsWith('Digit')) {
+          const cardNum = +e.code.slice(-1);
+          if (cardNum <= this.getCardTable.length) {
+            this.pickCardTable(cardNum - 1);
+          }
+        }
+        if (e.code === 'KeyW') this.pickCardDeck();
+        if (e.code === 'KeyR') this.pickRoute();
+      }
+    });
+  }
+
+  created(): void {
+    this.enableKeyboardControls();
   }
 }
 </script>

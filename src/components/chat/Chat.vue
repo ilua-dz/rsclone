@@ -25,6 +25,8 @@
         class="chat-input"
         v-model="message"
         placeholder="Напиши сообщение..."
+        ref="chatInput"
+        @keydown="preventGameActions"
         @keydown.enter="sendMessage">
         <Btn
           title="<i class='fa-solid fa-paper-plane'></i>"
@@ -43,6 +45,9 @@ import Btn from '../Button/Btn.vue';
 import playSound from '../../utils/sounds';
 
 Vue.use(VueChatScroll);
+const preventGameActions = (e: KeyboardEvent): void => {
+  if (e.code !== 'Tab') e.stopImmediatePropagation();
+};
 
 @Component({
   computed: {
@@ -65,15 +70,19 @@ export default class Chat extends Vue {
 
   getId!: string;
 
-  minimized = true;
-
   getHistory!: [];
 
   unread = false;
 
+  minimized = true;
+
   playSound = playSound;
 
+  preventGameActions = preventGameActions;
+
   chatArrow = '<i class="fa-regular fa-messages"></i>';
+
+  chatInputRef = (): HTMLElement => this.$refs.chatInput as HTMLElement;
 
   @Watch('getHistory') onHistoryChange(): void {
     this.playSound('message');
@@ -91,6 +100,8 @@ export default class Chat extends Vue {
 
   toggleWindow():void {
     this.minimized = !this.minimized;
+    if (!this.minimized) this.chatInputRef().focus();
+    if (this.minimized) this.chatInputRef().blur();
     this.unread = false;
     this.chatArrow = this.minimized
       ? '<i class="fa-regular fa-messages"></i>'
@@ -108,6 +119,15 @@ export default class Chat extends Vue {
     const name = this.getCurrentName || this.getId;
     if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
     this.message = '';
+  }
+
+  created(): void {
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Tab') {
+        this.toggleWindow();
+        e.preventDefault();
+      }
+    });
   }
 }
 </script>
