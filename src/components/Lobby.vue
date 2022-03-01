@@ -74,8 +74,9 @@
             displayResult ? 'fa-arrow-down-from-dotted-line' : 'fa-arrow-up-from-dotted-line',
           ]"
         ></i>
-        <h2>Результаты последней игры <span>
-        (Всего сыграно: {{ getCountOfGames }})</span></h2>
+        <h2>
+          Результаты последней игры <span> (Всего сыграно: {{ getCountOfGames }})</span>
+        </h2>
         <i
           class="fa-solid"
           :class="[
@@ -105,6 +106,12 @@
     <footer class="footer">
       <a href="https://github.com/irnq" target="blank" class="footer-item">irnq</a>
       <a href="https://github.com/ilua-dz" target="blank" class="footer-item">ilua-dz</a>
+      <a
+        href="https://medium.com/@ilua.dzuin/ticket-to-ride-web-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F-%D0%BD%D0%B0%D1%81%D1%82%D0%BE%D0%BB%D1%8C%D0%BD%D0%BE%D0%B9-%D0%B8%D0%B3%D1%80%D1%8B-85fbe710b131"
+        target="blank"
+        class="footer-item"
+        ><i class="fa-brands fa-medium"></i> <i class="fa-regular fa-square-info"></i
+      ></a>
       <a href="https://rs.school/js/" target="blank" class="footer-item rss-logo"></a>
       <p class="footer-item">2022</p>
     </footer>
