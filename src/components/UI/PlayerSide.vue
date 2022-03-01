@@ -165,7 +165,6 @@ export default class PlayerSide extends Vue {
   flex-wrap: wrap;
 }
 .player-box__item {
-  width: 6.5rem;
   height: 10rem;
   transition: all 0.5s;
   position: relative;
@@ -187,14 +186,20 @@ export default class PlayerSide extends Vue {
       transform: translate(300%, -4rem) scale(1.5);
     }
   }
+  .player-box__item {
+    width: 6.5rem;
+  }
 }
 .player-card {
   position: relative;
   width: 50%;
-  padding-right: 10.5rem;
+  padding-right: 11.5rem;
   justify-content: flex-end;
   .card {
     transform: translateY(-2rem) rotateX(45deg) rotate(-45deg);
+  }
+  .player-box__item {
+    width: 5.5rem;
   }
 }
 .card-value {

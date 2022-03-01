@@ -75,7 +75,7 @@
           ]"
         ></i>
         <h2>Результаты последней игры <span>
-        (Всего сыгранно: {{ getCountOfGames }})</span></h2>
+        (Всего сыграно: {{ getCountOfGames }})</span></h2>
         <i
           class="fa-solid"
           :class="[
