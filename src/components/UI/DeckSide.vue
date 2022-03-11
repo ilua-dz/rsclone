@@ -54,12 +54,14 @@
         ></div>
       </div>
     </div>
-    <modal-window v-if="showRoutesModal" :timer="modalTimer">
+    <modal-window v-if="showRoutesModal" :timer="modalTimer" :sideModal="true">
       <Prepare
         :picked-routes="routesToChoose"
         :timer="modalTimer"
         @get-discarded="discardRoute"
         @close-modal="showRoutesModal = false"
+        @showCities="showCities"
+        @hideCities="hideCities"
       />
     </modal-window>
   </aside>
@@ -108,7 +110,7 @@ export default class DeckSide extends Vue {
 
   showRoutesModal = false;
 
-  modalTimer = 100;
+  modalTimer = 180;
 
   routesToChoose: number[] = [];
 
@@ -186,6 +188,14 @@ export default class DeckSide extends Vue {
         if (e.code === 'KeyR') this.pickRoute();
       }
     });
+  }
+
+  showCities(cities: string[]): void {
+    this.$emit('showCities', cities);
+  }
+
+  hideCities(): void {
+    this.$emit('hideCities');
   }
 
   created(): void {

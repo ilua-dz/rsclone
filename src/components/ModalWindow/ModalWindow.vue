@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal" appear="appear">
+  <transition :name="sideModal ? 'side-modal' : 'modal'" appear="appear">
     <div
       v-if="show"
       class="modal-overlay"
@@ -9,7 +9,8 @@
         }
       "
     >
-      <div class="modal">
+      <div
+      :class="sideModal ? 'side-modal' : 'modal'">
         <div
           v-if="timer"
           class="modal-timer"
@@ -34,6 +35,8 @@ import {
 })
 export default class ModalWindow extends Vue {
   @Prop({ default: 0 }) private timer!: number;
+
+  @Prop({ default: false }) private sideModal!: boolean;
 
   currentTimer = 0;
 
@@ -74,7 +77,8 @@ export default class ModalWindow extends Vue {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.356) !important;
+  // background-color: rgba(0, 0, 0, 0.356) !important;
+  background-color: transparent;
   border: none;
   z-index: 50;
 }
@@ -102,13 +106,43 @@ export default class ModalWindow extends Vue {
     opacity: 0;
     transform: scale(0.2) translate(0, 0);
   }
+}
 
-  .modal-timer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 3px;
-    transition: all 0.3s;
+.side-modal {
+  padding: 2rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  background-color: rgb(202, 202, 202);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  z-index: 51;
+  box-shadow: var(--any-table-shadow);
+  border: 0.7rem outset;
+  border-left: none;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease-in-out;
   }
+
+  &-enter,
+  &-leave-to {
+    transform: translateX(-100%);
+  }
+}
+
+.modal-timer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  transition: all 0.3s;
 }
 </style>
