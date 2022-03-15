@@ -12,15 +12,20 @@
       <div class="game-main">
         <user-side />
         <Map :visibleCities="visibleCities" />
-        <deck-side />
+        <deck-side
+        @showCities="showCities"
+        @hideCities="hideCities"/>
       </div>
-      <player-side v-if="checkUserInPlayerList" @showCities="showCities" @hideCities="hideCities" />
+      <player-side v-if="checkUserInPlayerList"
+      @showCities="showCities"
+      @hideCities="hideCities" />
     </div>
     <div v-if="getGameStatus && !checkUserInPlayerList" class="game-already-start" v-cloak>
       К сожалению игра уже началась. Ждите завершения.
     </div>
     <modal-window
       v-if="showModal && checkUserInPlayerList && getGameStatus && !currentUser.preTurn"
+      :sideModal="true"
       :timer="prepareTimer"
       @close-modalWindow="showModal = false"
     >
@@ -28,6 +33,8 @@
         :timer="prepareTimer"
         @get-discarded="discardRoute"
         @close-modal="prepareTimer = 0.1"
+        @showCities="showCities"
+        @hideCities="hideCities"
       />
     </modal-window>
     <div class="preloader" v-show="getTurn < -1"></div>
@@ -85,7 +92,7 @@ export default class App extends Vue {
 
   getGameStatus!: boolean;
 
-  prepareTimer = 300;
+  prepareTimer = 180;
 
   showModal = true;
 
@@ -96,7 +103,7 @@ export default class App extends Vue {
   visibleCities: string[] = [];
 
   @Watch('getTurn') onTurnChange(): void {
-    if (this.getTurn === -1) this.prepareTimer = 30;
+    if (this.getTurn === -1) this.prepareTimer = 180;
     playSound('gameTurn');
   }
 

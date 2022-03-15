@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <h3>Подготовка к игре</h3>
+    <h3> {{checkPickRoute ? 'Взятие маршрутов' : 'Подготовка к игре' }}</h3>
     <p>Вы можете сбросить маршруты, но должны оставить минимум {{ checkPickRoute ? 1 : 2 }}</p>
     <ul class="route-list">
       <li
@@ -8,6 +8,8 @@
         :key="task.id"
         v-for="task in currentTasks"
         @click="markToDiscard($event, task)"
+        @mouseover="showRouteInfo(task.cities), takeCardPlaySound()"
+        @mouseleave="hideRouteInfo"
         :data-route="task.id"
         :style="{
           background: `center / contain no-repeat url(./assets/game/route_cards/${
@@ -28,6 +30,7 @@ import { mapGetters } from 'vuex';
 import userInterface from '../interface/user';
 import Btn from '../Button/Btn.vue';
 import taskInterface from '../interface/taskInterface';
+import playSound from '../../utils/sounds/index';
 
 @Component({
   computed: {
@@ -49,6 +52,8 @@ export default class Prepare extends Vue {
   getCurrentName!: string;
 
   discard: taskInterface[] = [];
+
+  playSound = playSound;
 
   prepareTimer = setInterval(() => {
     this.currentTimer -= 0.1;
@@ -113,6 +118,18 @@ export default class Prepare extends Vue {
       }
     }
   }
+
+  showRouteInfo(cities: string[]): void {
+    this.$emit('showCities', cities);
+  }
+
+  hideRouteInfo(): void {
+    this.$emit('hideCities');
+  }
+
+  takeCardPlaySound(): void {
+    this.playSound('takeCard');
+  }
 }
 </script>
 
@@ -125,8 +142,11 @@ export default class Prepare extends Vue {
 
 .route-list {
   display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
   width: 100%;
-  justify-content: space-between;
+  gap: 2.5rem;
+  align-items: center;
   column-gap: 1rem;
   list-style: none;
 }
@@ -136,8 +156,8 @@ export default class Prepare extends Vue {
   width: 22%;
   cursor: pointer;
   transition: all 0.3s;
-  width: 23.5rem;
-  height: 14.5rem;
+  width: 21.15rem;
+  height: 13.05rem;
   border: 0.1rem solid black;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
