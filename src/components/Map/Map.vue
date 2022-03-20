@@ -38,7 +38,6 @@
         :show="visibleCities.includes(city.name)"
       />
     </svg>
-    <p>{{getCities.length}}</p>
     <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
       <build-way
         :chosen-color="chosenColorForMulti"
