@@ -20,7 +20,7 @@ Vue.use(
       actionPrefix: 'SOCKET_',
       mutationPrefix: 'SOCKET_',
     },
-  })
+  }),
 );
 
 new Vue({
