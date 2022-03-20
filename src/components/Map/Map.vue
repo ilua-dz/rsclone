@@ -29,12 +29,16 @@
       />
       <City
         :key="city.id"
-        v-for="city in citiesInfo"
+        v-for="city in getCities"
+        :data-city="city.id"
         :city="city"
-        class="city-point"
+        :isUserActive="checkActive"
+        :class="[city.status ? 'station_builded' : 'station_available']"
+        :style="{ fill: city.status ? getUsers.find((u) => u.name === city.status).color : '' }"
         :show="visibleCities.includes(city.name)"
       />
     </svg>
+    <p>{{getCities.length}}</p>
     <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
       <build-way
         :chosen-color="chosenColorForMulti"
@@ -52,11 +56,33 @@
         @build-multi-way="buildMultiWay"
       />
     </modal-window>
+    <modal-window
+      v-if="showStationChooseRoute"
+      @close-modalWindow="showStationChooseRoute = false"
+      :sideModal="true"
+    >
+      <build-station
+        :city="city"
+        @close-modal="showStationChooseRoute = false"
+      />
+    </modal-window>
+    <modal-window
+      v-if="showDenyStations"
+      @close-modalWindow="showDenyStations = false"
+    >
+      <deny-station
+        @close-modal="showDenyStations = false"
+      />
+    </modal-window>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+} from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
 import railwayInfoInterface from '../interface/railwayInfo';
@@ -66,9 +92,12 @@ import City from './City.vue';
 import ModalWindow from '../ModalWindow/ModalWindow.vue';
 import BuildWay from '../Game/BuildWay.vue';
 import ChooseColorForMulti from '../Game/ChooseColorForMulti.vue';
+import BuildStation from '../Game/BuildStation.vue';
+import DenyStation from '../Game/DenyStation.vue';
 import typeOfCardsColor from '../interface/colorType';
 import taskInterface from '../interface/taskInterface';
-import citiesInfo from '../../store/game/citiesInfo';
+// import citiesInfo from '../../store/game/citiesInfo';
+import ICity from '../interface/ICity';
 
 @Component({
   computed: {
@@ -82,6 +111,7 @@ import citiesInfo from '../../store/game/citiesInfo';
       'getTurnToEnd',
       'getCurrentName',
       'getCurrentTasks',
+      'getCities',
     ]),
   },
 
@@ -90,6 +120,8 @@ import citiesInfo from '../../store/game/citiesInfo';
     City,
     ModalWindow,
     BuildWay,
+    BuildStation,
+    DenyStation,
     ChooseColorForMulti,
   },
 })
@@ -99,6 +131,8 @@ export default class Map extends Vue {
   getRailways!: railwayInterface[];
 
   getRailwaysInfo!: railwayInfoInterface[];
+
+  getCities!: ICity[];
 
   getTurn!: number;
 
@@ -112,18 +146,28 @@ export default class Map extends Vue {
 
   path!: string;
 
+  city!: number;
+
   showBuildWayModal = false;
 
   showChooseColorForMulti = false;
+
+  showStationChooseRoute = false;
+
+  showDenyStations = false;
 
   getCurrentTasks!: taskInterface[];
 
   chosenColorForMulti: typeOfCardsColor = 'loco';
 
-  citiesInfo = citiesInfo;
+  // citiesInfo = citiesInfo;
 
   get checkLastTurn(): boolean {
     return this.getTurnToEnd - this.getTurn < this.getUsers.length;
+  }
+
+  get currentUser(): userInterface | undefined {
+    return this.getUsers.find((u) => u.name === this.getCurrentName);
   }
 
   get checkActive(): boolean {
@@ -134,22 +178,34 @@ export default class Map extends Vue {
   pickWay(e: MouseEvent): void {
     if (this.checkActive && this.getTurnWeight === 0) {
       if (e.target instanceof Element) {
-        const target = e.target.closest('.route');
+        const target = e.target.closest('.route') || e.target.closest('.city-point');
         if (target) {
-          this.path = target.getAttribute('data-path') || '';
-          if (this.path) {
-            const currentRoute = this.getRailwaysInfo.find((route) => route.id === this.path);
-            if (currentRoute) {
-              if (currentRoute.color !== 'multi') {
-                this.showBuildWayModal = true;
+          if (target.classList.contains('route')) {
+            this.path = target.getAttribute('data-path') || '';
+            if (this.path) {
+              const currentRoute = this.getRailwaysInfo.find((route) => route.id === this.path);
+              if (currentRoute) {
+                if (currentRoute.color !== 'multi') {
+                  this.showBuildWayModal = true;
+                } else {
+                  this.showChooseColorForMulti = true;
+                }
               } else {
-                this.showChooseColorForMulti = true;
+                console.log('Error: cant find this route in base');
               }
             } else {
-              console.log('Error: cant find this route in base');
+              console.log('Error: wrong path');
             }
           } else {
-            console.log('Error: wrong path');
+            this.city = Number(target.getAttribute('data-city')) || -1;
+            if (this.city) {
+              const currentCity = this.getCities.find((city) => city.id === this.city);
+              if (this.currentUser?.hand.stations === 0) {
+                this.showDenyStations = true;
+              } else if (currentCity) {
+                this.showStationChooseRoute = true;
+              }
+            }
           }
         }
       }

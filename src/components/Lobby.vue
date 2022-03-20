@@ -119,7 +119,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+} from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import ColorButton from './ColorButton/ColorButton.vue';
 import userInterface from './interface/user';
@@ -168,6 +173,11 @@ export default class Lobby extends Vue {
     let color = this.users.find((u) => u.name === this.currentName)?.color;
     if (!color) color = '';
     return color;
+  }
+
+  @Watch('currentColor') onColorChange(): void {
+    storage.data.color = this.currentColor;
+    storage.saveData();
   }
 
   userName = '';
