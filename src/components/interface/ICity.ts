@@ -3,5 +3,6 @@ export default interface ICity {
   name: string;
   x: string;
   y: string;
+  status: string;
 // eslint-disable-next-line semi
 }

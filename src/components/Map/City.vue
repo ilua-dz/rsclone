@@ -5,17 +5,18 @@
     :y="city.y"
     @mouseover="isHover = true"
     @mouseleave="isHover = false"
-    :style="{ '--user-color': getCurrentColor }"
+    :style="{'--user-color': getCurrentColor}"
     style="transform: translate(-594px, -370px)"
     class="city-point"
     :class="{ show , hovered: isHover && isUserActive}"
-    fill="white"
   />
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
+import ICity from '../interface/ICity';
+import userInterface from '../interface/user';
 
 @Component({
   computed: {
@@ -23,7 +24,7 @@ import { mapGetters } from 'vuex';
   },
 })
 export default class City extends Vue {
-  @Prop({ default: [] }) private city!: { x: string; y: string; id: number; name: string };
+  @Prop({ default: [] }) private city!: ICity;
 
   @Prop({ default: [] }) show!: boolean;
 
@@ -31,19 +32,33 @@ export default class City extends Vue {
 
   getCurrentColor!: string
 
+  getUsers!: userInterface[];
+
   isHover = false;
 }
 </script>
 
 <style lang="scss" scoped>
+.station {
+  &_available {
+    fill: transparent;
+  }
+
+  &_builded {
+    pointer-events: none;
+    stroke: #000;
+  }
+}
+
 .city-point {
-  opacity: 0;
+  opacity: 0.8;
   transition: 0.5s;
-  filter: drop-shadow(0px 0px 20px red) drop-shadow(0px 0px 20px red);
-  fill: yellow;
   &.show {
-    opacity: 0.8;
+    opacity: 0.9;
+    fill: yellow;
+    filter: drop-shadow(0px 0px 20px red) drop-shadow(0px 0px 20px red);
     animation: city-animation 0.4s alternate infinite;
+    stroke: #000;
   }
 }
 
@@ -51,8 +66,8 @@ export default class City extends Vue {
   opacity: 0.8;
   cursor: pointer;
   fill: var(--user-color);
-  filter: drop-shadow(0px 0px 20px var(--user-color));
-  stroke: rgb(0, 0, 0);
+  stroke: #000;
+  filter: drop-shadow(0px 0px 20px var(--user-color)) drop-shadow(0px 0px 20px red);
 }
 
 @keyframes city-animation {

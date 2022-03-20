@@ -29,13 +29,16 @@
       />
       <City
         :key="city.id"
-        v-for="city in citiesInfo"
+        v-for="city in getCities"
         :data-city="city.id"
         :city="city"
         :isUserActive="checkActive"
+        :class="[city.status ? 'station_builded' : 'station_available']"
+        :style="{ fill: city.status ? getUsers.find((u) => u.name === city.status).color : '' }"
         :show="visibleCities.includes(city.name)"
       />
     </svg>
+    <p>{{getCities.length}}</p>
     <modal-window v-if="showBuildWayModal" @close-modalWindow="showBuildWayModal = false">
       <build-way
         :chosen-color="chosenColorForMulti"
@@ -75,7 +78,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+} from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import railwayInterface from '../interface/railway';
 import railwayInfoInterface from '../interface/railwayInfo';
@@ -89,7 +96,8 @@ import BuildStation from '../Game/BuildStation.vue';
 import DenyStation from '../Game/DenyStation.vue';
 import typeOfCardsColor from '../interface/colorType';
 import taskInterface from '../interface/taskInterface';
-import citiesInfo from '../../store/game/citiesInfo';
+// import citiesInfo from '../../store/game/citiesInfo';
+import ICity from '../interface/ICity';
 
 @Component({
   computed: {
@@ -103,6 +111,7 @@ import citiesInfo from '../../store/game/citiesInfo';
       'getTurnToEnd',
       'getCurrentName',
       'getCurrentTasks',
+      'getCities',
     ]),
   },
 
@@ -122,6 +131,8 @@ export default class Map extends Vue {
   getRailways!: railwayInterface[];
 
   getRailwaysInfo!: railwayInfoInterface[];
+
+  getCities!: ICity[];
 
   getTurn!: number;
 
@@ -149,7 +160,7 @@ export default class Map extends Vue {
 
   chosenColorForMulti: typeOfCardsColor = 'loco';
 
-  citiesInfo = citiesInfo;
+  // citiesInfo = citiesInfo;
 
   get checkLastTurn(): boolean {
     return this.getTurnToEnd - this.getTurn < this.getUsers.length;
@@ -188,7 +199,7 @@ export default class Map extends Vue {
           } else {
             this.city = Number(target.getAttribute('data-city')) || -1;
             if (this.city) {
-              const currentCity = this.citiesInfo.find((city) => city.id === this.city);
+              const currentCity = this.getCities.find((city) => city.id === this.city);
               if (this.currentUser?.hand.stations === 0) {
                 this.showDenyStations = true;
               } else if (currentCity) {

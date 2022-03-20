@@ -51,6 +51,8 @@ export default class CardsForStation extends Vue {
 
   getCurrentName!: string;
 
+  cardsToPay!: { color: typeOfCardsColor; value: number; loco: number };
+
   heading = {
     build: 'Выбор цвета для постройки станции',
     fail: 'Не хватает карт для постройки',
@@ -82,8 +84,15 @@ export default class CardsForStation extends Vue {
   }
 
   chooseColor(color: typeOfCardsColor): void {
+    this.cardsToPay = {
+      color,
+      value: this.cardsAmount,
+      loco: this.cardsAmount - this.currentUser.hand.cards[color],
+    };
+    if (this.cardsToPay.loco < 0) this.cardsToPay.loco = 0;
     this.$emit('close-modal');
-    this.$emit('build-build', color);
+    this.$emit('build-build', this.cardsToPay);
+    this.$socket.emit('endOfTurn');
   }
 }
 </script>

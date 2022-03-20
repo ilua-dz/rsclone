@@ -19,7 +19,7 @@
     >
       <cards-for-station
         @close-modal="showChooseCards = false"
-        @build-build="buildThis(color)"
+        @build-build="buildThis"
       />
     </modal-window>
   </div>
@@ -105,8 +105,9 @@ export default class BuildStation extends Vue {
     this.showChooseCards = true;
   }
 
-  buildThis(color: typeOfCardsColor): void {
-    this.$socket.emit('buildStation', this.getCurrentName, this.currentCity, this.chosenRoute, color);
+  buildThis(cardsToPay: { color: typeOfCardsColor; value: number; loco: number }): void {
+    this.$socket.emit('buildStation', this.getCurrentName, this.currentCity.id, this.chosenRoute, cardsToPay);
+    this.$emit('close-modal');
   }
 }
 
