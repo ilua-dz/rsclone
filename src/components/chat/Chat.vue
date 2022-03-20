@@ -1,0 +1,228 @@
+<template>
+  <div class="chat-window"
+  :class="{minimized}"
+  >
+    <div class="chat-minimize"
+    :class="{unread}"
+    @click="toggleWindow"
+    v-html="chatArrow">
+    </div>
+    <ul class="chat-field getHistory"
+      name="slide-up"
+      v-chat-scroll="{smooth: true}">
+      <li class="chat-message"
+      :key="index" v-for="(post, index) in getHistory">
+      <span class="message-name"
+      :class="{'my-name': checkMyName(post.name)}"
+      >{{post.name === getId
+        ? `Guest_${post.name[0]}${post.name[4]}${post.name[post.name.length - 1]}`
+        : post.name}}</span>: {{ post.message }}
+      </li>
+    </ul>
+    <div class="chat-form">
+      <input
+        type="text"
+        class="chat-input"
+        v-model="message"
+        placeholder="Напиши сообщение..."
+        ref="chatInput"
+        @keydown="preventGameActions"
+        @keydown.enter="sendMessage">
+        <Btn
+          title="<i class='fa-solid fa-paper-plane'></i>"
+          class="btn-accept"
+          :method="sendMessage"
+        />
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { mapGetters } from 'vuex';
+import VueChatScroll from 'vue-chat-scroll';
+import Btn from '../Button/Btn.vue';
+import playSound from '../../utils/sounds';
+
+Vue.use(VueChatScroll);
+const preventGameActions = (e: KeyboardEvent): void => {
+  if (e.code !== 'Tab') e.stopImmediatePropagation();
+};
+
+@Component({
+  computed: {
+    ...mapGetters([
+      'getUsers',
+      'getCurrentName',
+      'getCompletedLength',
+      'getHistory',
+      'getId',
+    ]),
+  },
+  components: {
+    Btn,
+  },
+})
+export default class Chat extends Vue {
+  message = '';
+
+  getCurrentName!:string;
+
+  getId!: string;
+
+  getHistory!: [];
+
+  unread = false;
+
+  minimized = true;
+
+  playSound = playSound;
+
+  preventGameActions = preventGameActions;
+
+  chatArrow = '<i class="fa-regular fa-messages"></i>';
+
+  chatInputRef = (): HTMLElement => this.$refs.chatInput as HTMLElement;
+
+  @Watch('getHistory') onHistoryChange(): void {
+    this.playSound('message');
+    if (this.getHistory.length > 0) {
+      if (this.minimized) {
+        this.unread = true;
+      } else {
+        this.unread = true;
+        setTimeout(() => {
+          this.unread = false;
+        }, 800);
+      }
+    }
+  }
+
+  toggleWindow():void {
+    this.minimized = !this.minimized;
+    if (!this.minimized) this.chatInputRef().focus();
+    if (this.minimized) this.chatInputRef().blur();
+    this.unread = false;
+    this.chatArrow = this.minimized
+      ? '<i class="fa-regular fa-messages"></i>'
+      : '<i class="fa-regular fa-arrow-down-from-dotted-line"></i>';
+  }
+
+  checkMyName(name: string): boolean {
+    if (name === this.getCurrentName) return true;
+    if (name === `Guest_${this.getId[0]}${this.getId[4]}${this.getId[this.getId.length - 1]}`) return true;
+    if (name === this.getId) return true;
+    return false;
+  }
+
+  sendMessage(): void {
+    const name = this.getCurrentName || this.getId;
+    if (this.message) this.$socket.emit('sendMessage', { name, message: this.message });
+    this.message = '';
+  }
+
+  created(): void {
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Tab') {
+        this.toggleWindow();
+        e.preventDefault();
+      }
+    });
+  }
+}
+</script>
+
+<style lang="scss">
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: antiquewhite;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 70rem;
+  max-height: 60rem;
+  transition: all 0.5s;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  border: 0.7rem outset;
+  border-bottom: none;
+  transform: translateX(-50%);
+  overflow: hidden;
+  box-shadow: var(--any-table-shadow);
+  z-index: 100;
+
+  &.minimized {
+    max-height: 3rem;
+    height: 3rem;
+    width: 20%;
+    left: 50%;
+  }
+
+  .chat-minimize {
+    height: 3rem;
+    width: 100%;
+    cursor: pointer;
+    background-color: antiquewhite;
+    transition: all 0.5s;
+
+    &.unread {
+      animation: pulseUnread 0.4s ease-in-out alternate infinite;
+    }
+  }
+  .chat-form {
+    padding: 0 3rem;
+    display: flex;
+    justify-content: center;
+  }
+  .chat-input{
+    border: 2px solid gray ;
+    width: 70rem;
+  }
+  .chat-field {
+    padding: 0 3rem;
+    list-style: none;
+    max-height: 20rem;
+    overflow-y: auto;
+  }
+
+  .chat-message {
+    font-size: 2rem;
+    padding: 0.2rem;
+    text-align: left;
+    .message-name {
+      font-weight: 600;
+      font-size: 2.5rem;
+    &.my-name {
+     color: #00912b;
+    }
+   }
+  }
+
+  .slide-up {
+  &-move {
+    transition: all 0.3s;
+  }
+  &-enter-active,
+  &-leave-active {
+    transition: all 0.3s ease-in-out;
+  }
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(100%);
+    }
+  }
+}
+
+@keyframes pulseUnread {
+  0% {
+    background-color: antiquewhite;
+  }
+  100% {
+    background-color: rgb(243, 181, 47);
+  }
+}
+
+</style>

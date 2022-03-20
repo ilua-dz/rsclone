@@ -1,0 +1,29 @@
+:root {
+  --any-table-shadow: 7px -4px 12px 2px rgba(0, 0, 0, 0.5);
+  --card-shadow: 3px -4px 5px 2px rgba(0, 0, 0, 0.5);
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%; //1rem=10px;
+  scroll-behavior: smooth;
+
+  @media only screen and (max-width: 1600px) {
+    font-size: 50%;
+  }
+}
+body {
+  position: relative;
+}
+
+button {
+  cursor: pointer;
+}
