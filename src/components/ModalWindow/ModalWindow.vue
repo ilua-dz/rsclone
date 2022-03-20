@@ -74,7 +74,7 @@ export default class ModalWindow extends Vue {
 .modal-overlay {
   top: 0;
   left: 0;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   // background-color: rgba(0, 0, 0, 0.356) !important;
@@ -87,7 +87,7 @@ export default class ModalWindow extends Vue {
   padding: 2rem;
   border-radius: 1rem;
   background-color: rgb(202, 202, 202);
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -113,7 +113,7 @@ export default class ModalWindow extends Vue {
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
   background-color: rgb(202, 202, 202);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   height: 100%;

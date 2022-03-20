@@ -103,7 +103,10 @@ export default class App extends Vue {
   visibleCities: string[] = [];
 
   @Watch('getTurn') onTurnChange(): void {
-    if (this.getTurn === -1) this.prepareTimer = 180;
+    if (this.getTurn === -1) {
+      this.prepareTimer = 180;
+      this.showModal = true;
+    }
     playSound('gameTurn');
   }
 
